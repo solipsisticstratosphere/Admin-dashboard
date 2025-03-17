@@ -1,0 +1,148 @@
+/* LoginPage.module.css */
+.container {
+  display: flex;
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+
+.leftSection {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  background-color: #ffffff;
+  padding: 2rem;
+}
+
+.logoContainer {
+  padding: 1rem 0;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.logoIcon {
+  margin-right: 0.5rem;
+  color: #4caf78;
+  background-color: #e6f5ec;
+  padding: 0.5rem;
+  border-radius: 8px;
+}
+
+.contentContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1;
+  padding: 2rem 0;
+}
+
+.pillImage {
+  width: 240px;
+  height: 240px;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240"><circle cx="120" cy="120" r="110" fill="%23F5F5F5" stroke="%23DDDDDD" stroke-width="2"/><line x1="40" y1="120" x2="200" y2="120" stroke="%23DDDDDD" stroke-width="2"/></svg>');
+  background-repeat: no-repeat;
+  background-position: center;
+  margin-bottom: 2rem;
+}
+
+.tagline {
+  max-width: 600px;
+}
+
+.tagline h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #333;
+  line-height: 1.2;
+}
+
+.highlight {
+  color: #4caf78;
+}
+
+.rightSection {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  background-color: #f9fafb;
+}
+
+.formContainer {
+  width: 100%;
+  max-width: 400px;
+  padding: 1rem;
+}
+
+.formGroup {
+  margin-bottom: 1.5rem;
+}
+
+.input,
+.inputError {
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border 0.3s;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #4caf78;
+}
+
+.inputError {
+  border-color: #e53e3e;
+}
+
+.errorMessage {
+  color: #e53e3e;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
+.loginButton {
+  width: 100%;
+  padding: 1rem;
+  background-color: #4caf78;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.loginButton:hover {
+  background-color: #3d9e67;
+}
+
+.loginButton:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .leftSection {
+    padding-bottom: 1rem;
+  }
+
+  .tagline h1 {
+    font-size: 2rem;
+  }
+}
