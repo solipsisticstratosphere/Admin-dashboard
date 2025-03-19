@@ -2,7 +2,26 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { loginValidation } from "../../utils/validations";
+import { gql, useMutation, ApolloError } from "@apollo/client";
+import { toast } from "react-toastify";
+import logo from "../../assets/images/logo.png";
 import styles from "./LoginPage.module.css";
+import { useAuth } from "../../context/AuthContext";
+
+const LOGIN_MUTATION = gql`
+  mutation Login($loginInput: LoginInput!) {
+    login(loginInput: $loginInput) {
+      accessToken
+      user {
+        id
+        email
+        firstName
+        lastName
+      }
+    }
+  }
+`;
+
 type FormData = {
   email: string;
   password: string;
@@ -10,6 +29,9 @@ type FormData = {
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
+  const { login: authLogin } = useAuth();
+  const [login, { loading }] = useMutation(LOGIN_MUTATION);
+
   const {
     register,
     handleSubmit,
@@ -19,32 +41,29 @@ const LoginPage: React.FC = () => {
     mode: "onBlur",
   });
 
-  const loginUser = async (data: FormData): Promise<boolean> => {
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      if (
-        data.email === "admin@email.com" &&
-        data.password === "admin@email.com"
-      ) {
-        return true;
-      }
-      return false;
-    } catch (error) {
-      console.error(error);
-      return false;
-    }
-  };
-
   const onSubmit = async (data: FormData) => {
     try {
-      const isSuccess = await loginUser(data);
-      if (isSuccess) {
-        navigate("/home");
-      } else {
-        alert("Login failed. Please check your credentials.");
+      const response = await login({
+        variables: {
+          loginInput: {
+            email: data.email,
+            password: data.password,
+          },
+        },
+      });
+
+      if (response.data?.login) {
+        authLogin(response.data.login.accessToken, response.data.login.user);
+        navigate("/dashboard");
       }
-    } catch (error) {
-      console.error(error);
+    } catch (err: unknown) {
+      // Type guard for Apollo errors
+      const apolloError = err as ApolloError;
+      const errorMessage =
+        apolloError.graphQLErrors?.[0]?.message ||
+        apolloError.networkError?.message ||
+        "Something went wrong during login";
+      toast.error(errorMessage);
     }
   };
 
@@ -53,16 +72,18 @@ const LoginPage: React.FC = () => {
       <div className={styles.leftSection}>
         <div className={styles.logoContainer}>
           <div className={styles.logo}>
-            <span className={styles.logoIcon}>💊</span>
+            <span className={styles.logoIcon}>
+              <img src={logo} alt="logo" className={styles.booksIcon} />
+            </span>
             <span>E-Pharmacy</span>
           </div>
         </div>
         <div className={styles.contentContainer}>
-          <div className={styles.pillImage}></div>
           <div className={styles.tagline}>
             <h1>
-              Your medication, delivered Say goodbye to all{" "}
-              <span className={styles.highlight}>your healthcare worries</span>{" "}
+              Your medication, delivered
+              <div className={styles.pillImage}></div> Say goodbye to all{" "}
+              <span className={styles.highlight}>your healthcare</span> worries
               with us
             </h1>
           </div>
@@ -104,14 +125,15 @@ const LoginPage: React.FC = () => {
               <button
                 type="submit"
                 className={styles.loginButton}
-                disabled={isSubmitting}
+                disabled={isSubmitting || loading}
               >
-                {isSubmitting ? "Processing..." : "Log in"}
+                {isSubmitting || loading ? "Processing..." : "Log in"}
               </button>
             </div>
           </form>
         </div>
       </div>
+      <div className={styles.decorativeElements}></div>
     </div>
   );
 };
