@@ -1,8 +1,8 @@
-import { Injectable } from "@nestjs/common";
-import { PrismaService } from "../prisma/prisma.service";
-import { User } from "@prisma/client";
-import * as bcrypt from "bcrypt";
-import { User as UserEntity } from "./entities/user.entity";
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { User } from '@prisma/client';
+import * as bcrypt from 'bcrypt';
+import { User as UserEntity } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
@@ -22,10 +22,7 @@ export class UsersService {
     return user;
   }
 
-  async validateUser(
-    email: string,
-    password: string,
-  ): Promise<UserEntity | null> {
+  async validateUser(email: string, password: string): Promise<UserEntity | null> {
     const user = await this.findOne(email);
     if (!user) return null;
 

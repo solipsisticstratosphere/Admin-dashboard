@@ -9,6 +9,7 @@
     "seed": "ts-node src/seed.ts",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "fix:line-endings": "node fix-line-endings.js",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
@@ -50,6 +51,7 @@
     "prisma": "^6.5.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
+    "ts-morph": "^25.0.1",
     "typeorm": "^0.3.21"
   },
   "devDependencies": {

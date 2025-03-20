@@ -25,3 +25,55 @@ model User {
 
   @@map("users")
 }
+
+model Customer {
+  id           Int           @id @default(autoincrement())
+  photo        String?
+  name         String
+  email        String        @unique
+  spent        String
+  phone        String
+  address      String
+  registerDate DateTime      @default(now())
+  country      String?       @default("Ukraine")
+  transactions Transaction[]
+
+  @@map("customers")
+}
+
+model Product {
+  id       Int     @id @default(autoincrement())
+  photo    String?
+  name     String
+  supplier String
+  stock    String
+  price    String
+  category String
+
+  @@map("products")
+}
+
+model Supplier {
+  id       Int      @id @default(autoincrement())
+  name     String
+  address  String
+  supplier String
+  date     DateTime @default(now())
+  amount   String
+  status   String
+
+  @@map("suppliers")
+}
+
+model Transaction {
+  id         Int       @id @default(autoincrement())
+  name       String
+  amount     String
+  type       String
+  email      String?
+  customerId Int?
+  customer   Customer? @relation(fields: [customerId], references: [id])
+  createdAt  DateTime  @default(now())
+
+  @@map("transactions")
+}

@@ -1,13 +1,13 @@
-import { Injectable, UnauthorizedException } from "@nestjs/common";
-import { PassportStrategy } from "@nestjs/passport";
-import { ExtractJwt, Strategy } from "passport-jwt";
-import { ConfigService } from "@nestjs/config";
-import { PrismaService } from "../../prisma/prisma.service";
-import { JwtPayload } from "../types/jwt-payload.type";
-import { User } from "../../users/entities/user.entity";
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { PassportStrategy } from '@nestjs/passport';
+import { ExtractJwt, Strategy } from 'passport-jwt';
+import { ConfigService } from '@nestjs/config';
+import { PrismaService } from '../../prisma/prisma.service';
+import { JwtPayload } from '../types/jwt-payload.type';
+import { User } from '../../users/entities/user.entity';
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy, "jwt") {
+export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(
     private configService: ConfigService,
     private prismaService: PrismaService,
@@ -15,8 +15,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, "jwt") {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey:
-        configService.get<string>("JWT_ACCESS_SECRET") || "fallback_secret",
+      secretOrKey: configService.get<string>('JWT_ACCESS_SECRET') || 'fallback_secret',
     });
   }
 

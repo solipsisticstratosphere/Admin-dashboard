@@ -1,7 +1,33 @@
 import React from "react";
 import styles from "./Dashboard.module.css";
+import { Link } from "react-router-dom";
+import { useQuery } from "@apollo/client";
+import { GET_DASHBOARD_DATA } from "../../graphql/queries";
+import { DashboardQueryResult } from "../../graphql/types";
 
 const Dashboard: React.FC = () => {
+  const { loading, error, data } =
+    useQuery<DashboardQueryResult>(GET_DASHBOARD_DATA);
+
+  if (loading) {
+    return <div className={styles.loading}>Loading dashboard data...</div>;
+  }
+
+  if (error) {
+    return (
+      <div className={styles.error}>
+        Failed to load dashboard data. Please try again later.
+        <p>{error.message}</p>
+      </div>
+    );
+  }
+
+  if (!data?.dashboard) {
+    return <div className={styles.error}>No dashboard data available</div>;
+  }
+
+  const { stats, recentCustomers, transactions } = data.dashboard;
+
   return (
     <div className={styles.dashboard}>
       <div className={styles.statsContainer}>
@@ -24,7 +50,7 @@ const Dashboard: React.FC = () => {
             </div>
             <div className={styles.statTitle}>All products</div>
           </div>
-          <div className={styles.statValue}>8,430</div>
+          <div className={styles.statValue}>{stats.totalProducts}</div>
         </div>
 
         <div className={styles.statCard}>
@@ -45,7 +71,7 @@ const Dashboard: React.FC = () => {
             </div>
             <div className={styles.statTitle}>All suppliers</div>
           </div>
-          <div className={styles.statValue}>211</div>
+          <div className={styles.statValue}>{stats.totalSuppliers}</div>
         </div>
 
         <div className={styles.statCard}>
@@ -68,7 +94,7 @@ const Dashboard: React.FC = () => {
             </div>
             <div className={styles.statTitle}>All customers</div>
           </div>
-          <div className={styles.statValue}>140</div>
+          <div className={styles.statValue}>{stats.totalCustomers}</div>
         </div>
       </div>
 
@@ -82,39 +108,32 @@ const Dashboard: React.FC = () => {
                   <th>Name</th>
                   <th>Email</th>
                   <th>Spent</th>
+                  <th>Country</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>
-                    <div className={styles.customerName}>
-                      <div className={styles.avatar}></div>
-                      <span>Alex Shatov</span>
-                    </div>
-                  </td>
-                  <td>alexshatov@gmail.com</td>
-                  <td>2,890.66</td>
-                </tr>
-                <tr>
-                  <td>
-                    <div className={styles.customerName}>
-                      <div className={styles.avatar}></div>
-                      <span>Philip Harbach</span>
-                    </div>
-                  </td>
-                  <td>philip.h@gmail.com</td>
-                  <td>2,767.04</td>
-                </tr>
-                <tr>
-                  <td>
-                    <div className={styles.customerName}>
-                      <div className={styles.avatar}></div>
-                      <span>Mirko Fisuk</span>
-                    </div>
-                  </td>
-                  <td>mirkofisuk@gmail.com</td>
-                  <td>2,996.00</td>
-                </tr>
+                {recentCustomers.map((customer) => (
+                  <tr key={customer.id}>
+                    <td>
+                      <div className={styles.customerName}>
+                        <div
+                          className={styles.avatar}
+                          style={{
+                            backgroundImage: customer.photo
+                              ? `url(${customer.photo})`
+                              : "none",
+                          }}
+                        ></div>
+                        <Link to={`/customers/${customer.id}`}>
+                          {customer.name}
+                        </Link>
+                      </div>
+                    </td>
+                    <td>{customer.email}</td>
+                    <td>{customer.spent}</td>
+                    <td>{customer.country}</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
@@ -124,32 +143,38 @@ const Dashboard: React.FC = () => {
           <h2 className={styles.cardTitle}>Income/Expenses</h2>
           <div className={styles.cardContent}>
             <div className={styles.transactionsList}>
-              <div className={styles.transaction}>
-                <div className={styles.transactionInfo}>
-                  <div className={styles.transactionTag}>Today</div>
-                  <div className={styles.transactionType}>Income</div>
-                  <div className={styles.transactionDesc}>
-                    Cruip.com Market Ltd
+              {transactions.map((transaction) => (
+                <div key={transaction.id} className={styles.transaction}>
+                  <div className={styles.transactionInfo}>
+                    {transaction.email && (
+                      <div className={styles.transactionEmail}>
+                        {transaction.email}
+                      </div>
+                    )}
+                    <div
+                      className={`${styles.transactionType} ${
+                        styles[transaction.type.toLowerCase()]
+                      }`}
+                    >
+                      {transaction.type}
+                    </div>
+                    <div className={styles.transactionDesc}>
+                      {transaction.name}
+                    </div>
+                  </div>
+                  <div
+                    className={`${styles.transactionAmount} ${
+                      transaction.amount.startsWith("+")
+                        ? styles.positive
+                        : transaction.amount.startsWith("-")
+                        ? styles.negative
+                        : ""
+                    }`}
+                  >
+                    {transaction.amount}
                   </div>
                 </div>
-                <div className={styles.transactionAmount}>+249.88</div>
-              </div>
-
-              <div className={styles.transaction}>
-                <div className={styles.transactionInfo}>
-                  <div className={styles.transactionType}>Expense</div>
-                  <div className={styles.transactionDesc}>Qonto billing</div>
-                </div>
-                <div className={styles.transactionAmount}>-49.88</div>
-              </div>
-
-              <div className={styles.transaction}>
-                <div className={styles.transactionInfo}>
-                  <div className={styles.transactionType}>Income</div>
-                  <div className={styles.transactionDesc}>Market Cap Ltd</div>
-                </div>
-                <div className={styles.transactionAmount}>+1,200.88</div>
-              </div>
+              ))}
             </div>
           </div>
         </div>

@@ -6,8 +6,11 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
+import { ApolloProvider } from "@apollo/client";
+import { client } from "../../apollo/client";
 import LoginPage from "../../pages/LoginPage/LoginPage";
 import Dashboard from "../../pages/Dashboard/Dashboard";
+import CustomerDetails from "../../pages/CustomerDetails/CustomerDetails";
 import SharedLayout from "../SharedLayout/SharedLayout";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -21,23 +24,29 @@ const SuppliersPage = () => <div>Suppliers Page</div>;
 const App: React.FC = () => {
   return (
     <>
-      <Router>
-        <Routes>
-          <Route path="/" element={<LoginPage />} />
+      <ApolloProvider client={client}>
+        <Router>
+          <Routes>
+            <Route path="/" element={<LoginPage />} />
 
-          {/* Protected routes */}
-          <Route path="/" element={<SharedLayout />}>
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="orders" element={<OrdersPage />} />
-            <Route path="products" element={<ProductsPage />} />
-            <Route path="customers" element={<CustomersPage />} />
-            <Route path="suppliers" element={<SuppliersPage />} />
-          </Route>
+            {/* Protected routes */}
+            <Route path="/" element={<SharedLayout />}>
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route
+                path="customers/:customerId"
+                element={<CustomerDetails />}
+              />
+              <Route path="orders" element={<OrdersPage />} />
+              <Route path="products" element={<ProductsPage />} />
+              <Route path="customers" element={<CustomersPage />} />
+              <Route path="suppliers" element={<SuppliersPage />} />
+            </Route>
 
-          {/* Redirect to login for any other routes */}
-          <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
-      </Router>
+            {/* Redirect to login for any other routes */}
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
+        </Router>
+      </ApolloProvider>
       <ToastContainer />
     </>
   );

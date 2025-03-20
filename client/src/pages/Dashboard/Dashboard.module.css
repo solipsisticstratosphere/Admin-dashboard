@@ -1,97 +1,93 @@
 .dashboard {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
+  padding: 24px;
+  background-color: #f8f9fa;
+  min-height: 100vh;
 }
 
 .statsContainer {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  margin-bottom: 24px;
 }
 
 .statCard {
-  background-color: #fff;
-  border-radius: 8px;
-  padding: 16px;
-  flex: 1;
-  min-width: 200px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  border: 1px solid #eaecef;
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .statHeader {
   display: flex;
   align-items: center;
-  margin-bottom: 8px;
+  margin-bottom: 16px;
 }
 
 .statIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background-color: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16px;
+}
+
+.statIcon svg {
   width: 24px;
   height: 24px;
-  color: #4caf78;
-  margin-right: 8px;
+  color: #6c757d;
 }
 
 .statTitle {
-  color: #6b7280;
   font-size: 14px;
+  color: #6c757d;
 }
 
 .statValue {
   font-size: 24px;
   font-weight: 600;
-  color: #1f2937;
+  color: #212529;
 }
 
 .dashboardGrid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
   gap: 24px;
 }
 
 .dashboardCard {
-  background-color: #fff;
-  border-radius: 8px;
-  padding: 16px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  border: 1px solid #eaecef;
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .cardTitle {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
-  color: #1f2937;
-  margin-top: 0;
-  margin-bottom: 16px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid #eaecef;
+  color: #212529;
+  margin-bottom: 24px;
 }
 
-.cardContent {
-  min-height: 300px;
-}
-
-/* Customers Table Styles */
 .customersTable {
   width: 100%;
   border-collapse: collapse;
 }
 
-.customersTable th {
+.customersTable th,
+.customersTable td {
+  padding: 12px;
   text-align: left;
-  padding: 12px 8px;
-  font-size: 12px;
-  color: #6b7280;
-  font-weight: 500;
-  text-transform: uppercase;
-  border-bottom: 1px solid #eaecef;
+  border-bottom: 1px solid #e9ecef;
 }
 
-.customersTable td {
-  padding: 12px 8px;
-  border-bottom: 1px solid #eaecef;
-  color: #1f2937;
+.customersTable th {
+  font-weight: 600;
+  color: #6c757d;
+  font-size: 14px;
 }
 
 .customerName {
@@ -103,11 +99,12 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background-color: #e5e7eb;
-  margin-right: 8px;
+  background-color: #e9ecef;
+  margin-right: 12px;
+  background-size: cover;
+  background-position: center;
 }
 
-/* Transactions Styles */
 .transactionsList {
   display: flex;
   flex-direction: column;
@@ -117,8 +114,10 @@
 .transaction {
   display: flex;
   justify-content: space-between;
-  padding: 12px 8px;
-  border-bottom: 1px solid #eaecef;
+  align-items: center;
+  padding: 16px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
 }
 
 .transactionInfo {
@@ -127,27 +126,81 @@
   gap: 4px;
 }
 
-.transactionTag {
+.transactionEmail {
   font-size: 12px;
-  color: #6b7280;
-  font-weight: 500;
+  color: #6c757d;
 }
 
 .transactionType {
   font-size: 14px;
-  color: #1f2937;
   font-weight: 500;
+  color: #212529;
+}
+
+.transactionType.income {
+  color: #198754;
+}
+
+.transactionType.expense {
+  color: #dc3545;
+}
+
+.transactionType.error {
+  color: #ffc107;
 }
 
 .transactionDesc {
   font-size: 14px;
-  color: #4b5563;
+  color: #6c757d;
 }
 
 .transactionAmount {
   font-size: 16px;
+  font-weight: 600;
+}
+
+.transactionAmount.positive {
+  color: #198754;
+}
+
+.transactionAmount.negative {
+  color: #dc3545;
+}
+
+.loading,
+.error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  font-size: 16px;
+  color: #6c757d;
+}
+
+.error {
+  color: #dc3545;
+}
+
+.apiToggle {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}
+
+.toggleButton {
+  background-color: #f3f4f6;
+  border: 1px solid #d1d5db;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
   font-weight: 500;
-  color: #1f2937;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.toggleButton:hover {
+  background-color: #e5e7eb;
 }
 
 /* Responsive adjustments */

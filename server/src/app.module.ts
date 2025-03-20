@@ -1,12 +1,13 @@
-import { Module } from "@nestjs/common";
-import { GraphQLModule } from "@nestjs/graphql";
-import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
-import { ConfigModule } from "@nestjs/config";
-import { join } from "path";
-import { UsersModule } from "./users/users.module";
-import { AuthModule } from "./auth/auth.module";
-import { PrismaModule } from "./prisma/prisma.module";
-import { Request } from "express";
+import { Module } from '@nestjs/common';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { ConfigModule } from '@nestjs/config';
+import { join } from 'path';
+import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
+import { PrismaModule } from './prisma/prisma.module';
+import { Request } from 'express';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 interface GqlContext {
   req: Request;
@@ -19,13 +20,21 @@ interface GqlContext {
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      autoSchemaFile: join(process.cwd(), "src/graphql/schema.gql"),
+      autoSchemaFile: join(process.cwd(), 'src/graphql/schema.gql'),
       sortSchema: true,
-      context: ({ req }): GqlContext => ({ req }),
+      context: ({ req }) => ({ req }),
+      playground: true,
+      introspection: true,
+      debug: true,
+      definitions: {
+        path: join(process.cwd(), 'src/graphql/graphql.ts'),
+        outputAs: 'class',
+      },
     }),
     PrismaModule,
     UsersModule,
     AuthModule,
+    DashboardModule,
   ],
 })
 export class AppModule {}

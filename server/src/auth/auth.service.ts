@@ -1,17 +1,13 @@
-import {
-  Injectable,
-  UnauthorizedException,
-  ForbiddenException,
-} from "@nestjs/common";
-import { JwtService } from "@nestjs/jwt";
-import { LoginInput } from "./dto/login.input";
-import { AuthResponse } from "./dto/auth.response";
-import { RegisterInput } from "./dto/register.input";
-import { PrismaService } from "../prisma/prisma.service";
-import * as bcrypt from "bcrypt";
-import { ConfigService } from "@nestjs/config";
-import { JwtPayload } from "./types/jwt-payload.type";
-import { User } from "../users/entities/user.entity";
+import { Injectable, UnauthorizedException, ForbiddenException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { LoginInput } from './dto/login.input';
+import { AuthResponse } from './dto/auth.response';
+import { RegisterInput } from './dto/register.input';
+import { PrismaService } from '../prisma/prisma.service';
+import * as bcrypt from 'bcrypt';
+import { ConfigService } from '@nestjs/config';
+import { JwtPayload } from './types/jwt-payload.type';
+import { User } from '../users/entities/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -30,7 +26,7 @@ export class AuthService {
     });
 
     if (userExists) {
-      throw new ForbiddenException("Email already exists");
+      throw new ForbiddenException('Email already exists');
     }
 
     // Hash password
@@ -74,14 +70,14 @@ export class AuthService {
     });
 
     if (!user) {
-      throw new UnauthorizedException("Invalid email or password");
+      throw new UnauthorizedException('Invalid email or password');
     }
 
     // Validate password
     const passwordValid = await bcrypt.compare(password, user.password);
 
     if (!passwordValid) {
-      throw new UnauthorizedException("Invalid email or password");
+      throw new UnauthorizedException('Invalid email or password');
     }
 
     const tokens = await this.getTokens(user.id, user.email);
@@ -112,22 +108,19 @@ export class AuthService {
     return true;
   }
 
-  async refreshTokens(
-    userId: number,
-    refreshToken: string,
-  ): Promise<AuthResponse> {
+  async refreshTokens(userId: number, refreshToken: string): Promise<AuthResponse> {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
     });
 
     if (!user || !user.refreshToken) {
-      throw new ForbiddenException("Access Denied");
+      throw new ForbiddenException('Access Denied');
     }
 
     const refreshTokenMatches = user.refreshToken === refreshToken;
 
     if (!refreshTokenMatches) {
-      throw new ForbiddenException("Access Denied");
+      throw new ForbiddenException('Access Denied');
     }
 
     const tokens = await this.getTokens(user.id, user.email);
@@ -149,10 +142,7 @@ export class AuthService {
     };
   }
 
-  private async updateRefreshToken(
-    userId: number,
-    refreshToken: string,
-  ): Promise<void> {
+  private async updateRefreshToken(userId: number, refreshToken: string): Promise<void> {
     await this.prisma.user.update({
       where: { id: userId },
       data: { refreshToken },
@@ -167,12 +157,12 @@ export class AuthService {
 
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(payload, {
-        secret: this.configService.get<string>("JWT_ACCESS_SECRET"),
-        expiresIn: "15m",
+        secret: this.configService.get<string>('JWT_ACCESS_SECRET'),
+        expiresIn: '15m',
       }),
       this.jwtService.signAsync(payload, {
-        secret: this.configService.get<string>("JWT_REFRESH_SECRET"),
-        expiresIn: "7d",
+        secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
+        expiresIn: '7d',
       }),
     ]);
 

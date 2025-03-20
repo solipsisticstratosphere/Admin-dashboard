@@ -1,10 +1,7 @@
 {
-  "prettier/prettier": [
-    "error",
-    {
-      "parser": "flow",
-      "singleQuote": true,
-      "endOfLine": "auto"
-    }
-  ]
+  "singleQuote": true,
+  "trailingComma": "all",
+  "endOfLine": "auto",
+  "printWidth": 100,
+  "tabWidth": 2
 }

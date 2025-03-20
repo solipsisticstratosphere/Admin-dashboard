@@ -8,6 +8,43 @@ type AuthResponse {
   user: User!
 }
 
+type Customer {
+  address: String!
+  country: String!
+  email: String!
+  id: Int!
+  name: String!
+  phone: String!
+  photo: String
+  registerDate: DateTime!
+  spent: String!
+}
+
+type CustomerDetails {
+  address: String!
+  country: String!
+  email: String!
+  id: Int!
+  name: String!
+  phone: String!
+  photo: String
+  registerDate: DateTime!
+  spent: String!
+  transactions: [Transaction!]!
+}
+
+type DashboardData {
+  recentCustomers: [Customer!]!
+  stats: DashboardStats!
+  transactions: [Transaction!]!
+}
+
+type DashboardStats {
+  totalCustomers: Int!
+  totalProducts: Int!
+  totalSuppliers: Int!
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
@@ -26,6 +63,8 @@ type Mutation {
 }
 
 type Query {
+  customerDetails(customerId: Int!): CustomerDetails
+  dashboard: DashboardData!
   me: User!
 }
 
@@ -34,6 +73,16 @@ input RegisterInput {
   firstName: String
   lastName: String
   password: String!
+}
+
+type Transaction {
+  amount: String!
+  createdAt: DateTime
+  customerId: Int
+  email: String
+  id: Int!
+  name: String!
+  type: String!
 }
 
 type User {
