@@ -8,6 +8,7 @@
   "scripts": {
     "seed": "ts-node src/seed.ts",
     "seed:orders": "ts-node src/seed-orders.ts",
+    "seed:products": "ts-node src/seed-products.ts",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "fix:line-endings": "node fix-line-endings.js",

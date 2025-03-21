@@ -8,6 +8,15 @@
 /* tslint:disable */
 /* eslint-disable */
 
+export class CreateProductInput {
+    category: string;
+    name: string;
+    photo: string;
+    price: string;
+    stock: string;
+    suppliers: string;
+}
+
 export class LoginInput {
     email: string;
     password: string;
@@ -18,6 +27,15 @@ export class RegisterInput {
     firstName?: Nullable<string>;
     lastName?: Nullable<string>;
     password: string;
+}
+
+export class UpdateProductInput {
+    category?: Nullable<string>;
+    name?: Nullable<string>;
+    photo?: Nullable<string>;
+    price?: Nullable<string>;
+    stock?: Nullable<string>;
+    suppliers?: Nullable<string>;
 }
 
 export class AuthResponse {
@@ -64,6 +82,10 @@ export class DashboardStats {
 }
 
 export abstract class IMutation {
+    abstract createProduct(input: CreateProductInput): Product | Promise<Product>;
+
+    abstract deleteProduct(id: string): boolean | Promise<boolean>;
+
     abstract login(loginInput: LoginInput): AuthResponse | Promise<AuthResponse>;
 
     abstract logout(): boolean | Promise<boolean>;
@@ -71,6 +93,8 @@ export abstract class IMutation {
     abstract refreshTokens(): AuthResponse | Promise<AuthResponse>;
 
     abstract register(registerInput: RegisterInput): AuthResponse | Promise<AuthResponse>;
+
+    abstract updateProduct(id: string, input: UpdateProductInput): Nullable<Product> | Promise<Nullable<Product>>;
 }
 
 export class Order {
@@ -89,10 +113,29 @@ export class OrdersResponse {
     totalCount: number;
 }
 
+export class Product {
+    category: string;
+    id: string;
+    name: string;
+    photo: string;
+    price: string;
+    stock: string;
+    suppliers: string;
+}
+
+export class ProductsResponse {
+    categories: string[];
+    products: Product[];
+}
+
 export abstract class IQuery {
     abstract customerDetails(customerId: number): Nullable<CustomerDetails> | Promise<Nullable<CustomerDetails>>;
 
     abstract dashboard(): DashboardData | Promise<DashboardData>;
+
+    abstract getProduct(id: string): Nullable<Product> | Promise<Nullable<Product>>;
+
+    abstract getProducts(): ProductsResponse | Promise<ProductsResponse>;
 
     abstract me(): User | Promise<User>;
 

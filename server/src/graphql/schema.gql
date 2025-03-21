@@ -8,6 +8,15 @@ type AuthResponse {
   user: User!
 }
 
+input CreateProductInput {
+  category: String!
+  name: String!
+  photo: String!
+  price: String!
+  stock: String!
+  suppliers: String!
+}
+
 type Customer {
   address: String!
   country: String!
@@ -56,10 +65,13 @@ input LoginInput {
 }
 
 type Mutation {
+  createProduct(input: CreateProductInput!): Product!
+  deleteProduct(id: String!): Boolean!
   login(loginInput: LoginInput!): AuthResponse!
   logout: Boolean!
   refreshTokens: AuthResponse!
   register(registerInput: RegisterInput!): AuthResponse!
+  updateProduct(id: String!, input: UpdateProductInput!): Product
 }
 
 type Order {
@@ -78,9 +90,26 @@ type OrdersResponse {
   totalCount: Int!
 }
 
+type Product {
+  category: String!
+  id: ID!
+  name: String!
+  photo: String!
+  price: String!
+  stock: String!
+  suppliers: String!
+}
+
+type ProductsResponse {
+  categories: [String!]!
+  products: [Product!]!
+}
+
 type Query {
   customerDetails(customerId: Int!): CustomerDetails
   dashboard: DashboardData!
+  getProduct(id: String!): Product
+  getProducts: ProductsResponse!
   me: User!
   orders: OrdersResponse!
 }
@@ -100,6 +129,15 @@ type Transaction {
   id: Int!
   name: String!
   type: String!
+}
+
+input UpdateProductInput {
+  category: String
+  name: String
+  photo: String
+  price: String
+  stock: String
+  suppliers: String
 }
 
 type User {

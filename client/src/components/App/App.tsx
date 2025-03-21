@@ -12,12 +12,12 @@ import LoginPage from "../../pages/LoginPage/LoginPage";
 import Dashboard from "../../pages/Dashboard/Dashboard";
 import CustomerDetails from "../../pages/CustomerDetails/CustomerDetails";
 import Orders from "../../pages/Orders/Orders";
+import ProductList from "../../pages/ProductList";
 import SharedLayout from "../SharedLayout/SharedLayout";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // Placeholder components for other routes
-const ProductsPage = () => <div>Products Page</div>;
 const CustomersPage = () => <div>Customers Page</div>;
 const SuppliersPage = () => <div>Suppliers Page</div>;
 
@@ -37,7 +37,7 @@ const App: React.FC = () => {
                 element={<CustomerDetails />}
               />
               <Route path="orders" element={<Orders />} />
-              <Route path="products" element={<ProductsPage />} />
+              <Route path="products" element={<ProductList />} />
               <Route path="customers" element={<CustomersPage />} />
               <Route path="suppliers" element={<SuppliersPage />} />
             </Route>
