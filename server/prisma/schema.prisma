@@ -77,3 +77,16 @@ model Transaction {
 
   @@map("transactions")
 }
+
+model Order {
+  id        Int      @id @default(autoincrement())
+  photo     String?
+  name      String
+  address   String
+  products  String
+  price     String
+  status    String
+  order_date String
+
+  @@map("orders")
+}

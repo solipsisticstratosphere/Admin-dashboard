@@ -62,10 +62,27 @@ type Mutation {
   register(registerInput: RegisterInput!): AuthResponse!
 }
 
+type Order {
+  address: String!
+  id: Int!
+  name: String!
+  order_date: String!
+  photo: String
+  price: String!
+  products: String!
+  status: String!
+}
+
+type OrdersResponse {
+  items: [Order!]!
+  totalCount: Int!
+}
+
 type Query {
   customerDetails(customerId: Int!): CustomerDetails
   dashboard: DashboardData!
   me: User!
+  orders: OrdersResponse!
 }
 
 input RegisterInput {

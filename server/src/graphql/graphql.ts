@@ -73,12 +73,30 @@ export abstract class IMutation {
     abstract register(registerInput: RegisterInput): AuthResponse | Promise<AuthResponse>;
 }
 
+export class Order {
+    address: string;
+    id: number;
+    name: string;
+    order_date: string;
+    photo?: Nullable<string>;
+    price: string;
+    products: string;
+    status: string;
+}
+
+export class OrdersResponse {
+    items: Order[];
+    totalCount: number;
+}
+
 export abstract class IQuery {
     abstract customerDetails(customerId: number): Nullable<CustomerDetails> | Promise<Nullable<CustomerDetails>>;
 
     abstract dashboard(): DashboardData | Promise<DashboardData>;
 
     abstract me(): User | Promise<User>;
+
+    abstract orders(): OrdersResponse | Promise<OrdersResponse>;
 }
 
 export class Transaction {

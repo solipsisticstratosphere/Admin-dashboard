@@ -52,3 +52,21 @@ export const GET_CUSTOMER_DETAILS = gql`
     }
   }
 `;
+
+export const GET_ORDERS = gql`
+  query GetOrders {
+    orders {
+      items {
+        id
+        photo
+        name
+        address
+        products
+        price
+        status
+        order_date
+      }
+      totalCount
+    }
+  }
+`;

@@ -1,0 +1,290 @@
+.ordersPage {
+  padding: 20px;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #212529;
+}
+
+.filterSection {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 10px;
+}
+
+.searchInput {
+  width: 200px;
+  padding: 10px 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  font-size: 14px;
+  outline: none;
+}
+
+.searchInput:focus {
+  border-color: #6c757d;
+}
+
+.filterButton {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.filterIcon {
+  margin-right: 4px;
+}
+
+.tableSection {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.tableHeader {
+  padding: 15px 20px;
+  border-bottom: 1px solid #f0f0f0;
+  background-color: white;
+}
+
+.tableTitle {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+  margin: 0;
+}
+
+.tableContainer {
+  overflow-x: auto;
+}
+
+.ordersTable {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.ordersTable th,
+.ordersTable td {
+  padding: 15px 20px;
+  text-align: left;
+  border-bottom: 1px solid #f0f0f0;
+  position: relative;
+}
+
+.ordersTable th {
+  font-weight: 500;
+  color: #333;
+  background-color: #ecf9eb;
+  font-size: 14px;
+  border-bottom: none;
+}
+
+.ordersTable th:not(:last-child)::after,
+.ordersTable td:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background-color: #f0f0f0;
+}
+
+.ordersTable th:not(:last-child)::after {
+  background-color: transparent;
+}
+
+.orderRow:hover {
+  background-color: #f8f9fa;
+}
+
+.customerInfo {
+  display: flex;
+  align-items: center;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+.customerName {
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.statusBadge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.completed {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.processing {
+  background-color: #cff4fc;
+  color: #055160;
+}
+
+.cancelled {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.confirmed {
+  background-color: #d1ecf1;
+  color: #0c5460;
+}
+
+.shipped {
+  background-color: #d4d9f6;
+  color: #2a3173;
+}
+
+.delivered {
+  background-color: #d4e6f6;
+  color: #265e86;
+}
+
+/* Стили для пагинации */
+.paginationContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px 0;
+  gap: 8px;
+}
+
+.pageButton {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #e0e0e0;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  padding: 0;
+  margin: 0 4px;
+}
+
+.pageButton:hover {
+  background-color: #b8e4c9;
+}
+
+.pageButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.activePageDot {
+  background-color: #4caf50;
+}
+
+.paginationInfo {
+  margin-top: 12px;
+  text-align: center;
+  font-size: 14px;
+  color: #6c757d;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+  font-size: 18px;
+  color: #6c757d;
+}
+
+.error {
+  padding: 20px;
+  background-color: #f8d7da;
+  color: #721c24;
+  border-radius: 8px;
+}
+
+.noOrdersCell {
+  text-align: center;
+  padding: 20px;
+}
+
+@media (max-width: 1024px) {
+  .ordersTable {
+    font-size: 14px;
+  }
+
+  .ordersTable th,
+  .ordersTable td {
+    padding: 10px 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .tableWrapper {
+    overflow-x: auto;
+  }
+
+  .ordersTable {
+    min-width: 700px;
+  }
+
+  .paginationContainer {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 640px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .searchContainer {
+    width: 100%;
+    margin-top: 16px;
+  }
+
+  .ordersCard {
+    padding: 16px;
+  }
+
+  .pageButton {
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+}

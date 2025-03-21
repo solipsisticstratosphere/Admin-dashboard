@@ -26,6 +26,22 @@ export interface Transaction {
   createdAt?: string;
 }
 
+export interface Order {
+  id: number;
+  photo: string | null;
+  name: string;
+  address: string;
+  products: string;
+  price: string;
+  status: string;
+  order_date: string;
+}
+
+export interface OrdersResponse {
+  items: Order[];
+  totalCount: number;
+}
+
 export interface DashboardData {
   stats: DashboardStats;
   recentCustomers: Customer[];
@@ -42,4 +58,8 @@ export interface DashboardQueryResult {
 
 export interface CustomerDetailsQueryResult {
   customerDetails: CustomerDetails;
+}
+
+export interface OrdersQueryResult {
+  orders: OrdersResponse;
 }

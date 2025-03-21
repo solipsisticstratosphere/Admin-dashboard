@@ -8,10 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { Request } from 'express';
 import { DashboardModule } from './dashboard/dashboard.module';
-
-interface GqlContext {
-  req: Request;
-}
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
   imports: [
@@ -22,7 +19,7 @@ interface GqlContext {
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/graphql/schema.gql'),
       sortSchema: true,
-      context: ({ req }) => ({ req }),
+      context: ({ req }: { req: Request }) => ({ req }),
       playground: true,
       introspection: true,
       debug: true,
@@ -35,6 +32,7 @@ interface GqlContext {
     UsersModule,
     AuthModule,
     DashboardModule,
+    OrdersModule,
   ],
 })
 export class AppModule {}
