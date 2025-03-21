@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
 export const GET_PRODUCTS = gql`
-  query GetProducts {
-    getProducts {
+  query GetProducts($filters: ProductFilterInput) {
+    getProducts(filters: $filters) {
       products {
         id
         photo

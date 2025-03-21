@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { Prisma } from '@prisma/client';
 
 export type Product = {
   id: string;
@@ -15,14 +16,66 @@ export type Product = {
 export type CreateProductInput = Omit<Product, 'id'>;
 export type UpdateProductInput = Partial<CreateProductInput>;
 
+export type FilterProductsParams = {
+  name?: string;
+  category?: string;
+  suppliers?: string;
+  minPrice?: string;
+  maxPrice?: string;
+};
+
 @Injectable()
 export class ProductsService {
   private readonly logger = new Logger(ProductsService.name);
 
   constructor(private prisma: PrismaService) {}
 
-  async getAllProducts(): Promise<Product[]> {
-    const products = await this.prisma.product.findMany();
+  async getAllProducts(filters?: FilterProductsParams): Promise<Product[]> {
+    const { name, category, suppliers, minPrice, maxPrice } = filters || {};
+
+    // Build where conditions based on provided filters
+    const where: Prisma.ProductWhereInput = {};
+
+    if (name) {
+      where.name = {
+        contains: name,
+        mode: 'insensitive',
+      };
+    }
+
+    if (category) {
+      where.category = category;
+    }
+
+    if (suppliers) {
+      where.supplier = {
+        contains: suppliers,
+        mode: 'insensitive',
+      };
+    }
+
+    if (minPrice || maxPrice) {
+      where.price = {};
+
+      if (minPrice) {
+        // Using gte (greater than or equal)
+        where.price.gte = minPrice;
+      }
+
+      if (maxPrice) {
+        // Using lte (less than or equal)
+        where.price.lte = maxPrice;
+      }
+    }
+
+    // Get products sorted by createdAt (newest first)
+    const products = await this.prisma.product.findMany({
+      where,
+      orderBy: {
+        id: 'desc', // Sort by ID descending as a proxy for creation time
+      },
+    });
+
     return products.map((product) => ({
       id: product.id.toString(),
       photo: product.photo || '',
@@ -67,29 +120,19 @@ export class ProductsService {
     try {
       this.logger.log(`Attempting to create product with data: ${JSON.stringify(productData)}`);
 
-      // First, check if there's an exact name match
-      const nameMatch = await this.prisma.product.findFirst({
-        where: { name: productData.name },
-      });
-
-      if (nameMatch) {
-        this.logger.warn(`Product with name "${productData.name}" already exists`);
-        throw new Error(`Product with name "${productData.name}" already exists`);
-      }
-
-      // Then check for combination of name + supplier
-      const nameAndSupplierMatch = await this.prisma.product.findFirst({
+      // Check for duplicate product (exact same name and supplier combination)
+      const existingProduct = await this.prisma.product.findFirst({
         where: {
           AND: [{ name: productData.name }, { supplier: productData.suppliers }],
         },
       });
 
-      if (nameAndSupplierMatch) {
+      if (existingProduct) {
         this.logger.warn(
           `Product with name "${productData.name}" and supplier "${productData.suppliers}" already exists`,
         );
         throw new Error(
-          `Product with name "${productData.name}" and supplier "${productData.suppliers}" already exists`,
+          `Product with name "${productData.name}" from supplier "${productData.suppliers}" already exists`,
         );
       }
 
@@ -124,16 +167,14 @@ export class ProductsService {
           this.logger.error(
             `Unique constraint violation on fields: ${JSON.stringify(targetFields)}`,
           );
-          throw new Error(
-            `Product with these details already exists. Conflicting fields: ${JSON.stringify(targetFields)}`,
-          );
+          throw new Error(`Product with these details already exists`);
         } else {
           this.logger.error(`Prisma error ${error.code}: ${error.message}`);
         }
       }
 
       // If it's an error we already created with a message, just pass it on
-      if (error instanceof Error && error.message) {
+      if (error instanceof Error) {
         throw error;
       }
 
@@ -148,41 +189,37 @@ export class ProductsService {
         `Attempting to update product ${id} with data: ${JSON.stringify(productData)}`,
       );
 
-      // Check for name collision if name is being updated
-      if (productData.name) {
-        const nameMatch = await this.prisma.product.findFirst({
-          where: {
-            name: productData.name,
-            id: { not: parseInt(id) },
-          },
+      // Check for name+supplier collision if both fields are being updated or one of them
+      if (productData.name || productData.suppliers) {
+        // Get current product data
+        const currentProduct = await this.prisma.product.findUnique({
+          where: { id: parseInt(id) },
         });
 
-        if (nameMatch) {
-          this.logger.warn(
-            `Cannot update: Another product with name "${productData.name}" already exists`,
-          );
-          throw new Error(`Another product with name "${productData.name}" already exists`);
+        if (!currentProduct) {
+          throw new Error(`Product with ID ${id} not found`);
         }
-      }
 
-      // Check for name+supplier collision if both are being updated
-      if (productData.name && productData.suppliers) {
-        const nameAndSupplierMatch = await this.prisma.product.findFirst({
+        // Check if another product exists with the same name and supplier combination
+        const existingProduct = await this.prisma.product.findFirst({
           where: {
             AND: [
-              { name: productData.name },
-              { supplier: productData.suppliers },
+              { name: productData.name || currentProduct.name },
+              { supplier: productData.suppliers || currentProduct.supplier },
               { id: { not: parseInt(id) } },
             ],
           },
         });
 
-        if (nameAndSupplierMatch) {
+        if (existingProduct) {
+          const updatedName = productData.name || currentProduct.name;
+          const updatedSupplier = productData.suppliers || currentProduct.supplier;
+
           this.logger.warn(
-            `Cannot update: Another product with name "${productData.name}" and supplier "${productData.suppliers}" already exists`,
+            `Cannot update: Another product with name "${updatedName}" and supplier "${updatedSupplier}" already exists`,
           );
           throw new Error(
-            `Another product with name "${productData.name}" and supplier "${productData.suppliers}" already exists`,
+            `Another product with name "${updatedName}" from supplier "${updatedSupplier}" already exists`,
           );
         }
       }
@@ -218,16 +255,14 @@ export class ProductsService {
           this.logger.error(
             `Unique constraint violation on update: ${JSON.stringify(targetFields)}`,
           );
-          throw new Error(
-            `Cannot update: Another product with these details already exists. Conflicting fields: ${JSON.stringify(targetFields)}`,
-          );
+          throw new Error(`Cannot update: Another product with these details already exists`);
         } else {
           this.logger.error(`Prisma error on update ${error.code}: ${error.message}`);
         }
       }
 
       // If it's an error we already created with a message, just pass it on
-      if (error instanceof Error && error.message) {
+      if (error instanceof Error) {
         throw error;
       }
 

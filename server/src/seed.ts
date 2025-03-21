@@ -83,7 +83,7 @@ async function main() {
         data: {
           name: supplier.name,
           address: supplier.address,
-          supplier: supplier.suppliers,
+          company: supplier.suppliers,
           date: new Date(supplier.date),
           amount: supplier.amount,
           status: supplier.status,

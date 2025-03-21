@@ -13,13 +13,11 @@ import Dashboard from "../../pages/Dashboard/Dashboard";
 import CustomerDetails from "../../pages/CustomerDetails/CustomerDetails";
 import Orders from "../../pages/Orders/Orders";
 import ProductList from "../../pages/ProductList";
+import SupplierList from "../../pages/SupplierList/SupplierList";
+import CustomerList from "../../pages/CustomerList";
 import SharedLayout from "../SharedLayout/SharedLayout";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-// Placeholder components for other routes
-const CustomersPage = () => <div>Customers Page</div>;
-const SuppliersPage = () => <div>Suppliers Page</div>;
 
 const App: React.FC = () => {
   return (
@@ -38,8 +36,8 @@ const App: React.FC = () => {
               />
               <Route path="orders" element={<Orders />} />
               <Route path="products" element={<ProductList />} />
-              <Route path="customers" element={<CustomersPage />} />
-              <Route path="suppliers" element={<SuppliersPage />} />
+              <Route path="customers" element={<CustomerList />} />
+              <Route path="suppliers" element={<SupplierList />} />
             </Route>
 
             {/* Redirect to login for any other routes */}

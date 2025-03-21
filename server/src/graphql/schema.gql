@@ -17,6 +17,15 @@ input CreateProductInput {
   suppliers: String!
 }
 
+input CreateSupplierInput {
+  address: String!
+  amount: String!
+  company: String!
+  date: String
+  name: String!
+  status: String!
+}
+
 type Customer {
   address: String!
   country: String!
@@ -40,6 +49,26 @@ type CustomerDetails {
   registerDate: DateTime!
   spent: String!
   transactions: [Transaction!]!
+}
+
+type CustomerEntry {
+  address: String!
+  email: String!
+  id: ID!
+  name: String!
+  phone: String!
+  photo: String
+  register_date: String!
+  spent: String!
+}
+
+input CustomerFiltersInput {
+  address: String
+  email: String
+  name: String
+  phone: String
+  register_date: String
+  spent: String
 }
 
 type DashboardData {
@@ -66,12 +95,15 @@ input LoginInput {
 
 type Mutation {
   createProduct(input: CreateProductInput!): Product!
+  createSupplier(input: CreateSupplierInput!): Supplier!
   deleteProduct(id: String!): Boolean!
+  deleteSupplier(id: String!): Boolean!
   login(loginInput: LoginInput!): AuthResponse!
   logout: Boolean!
   refreshTokens: AuthResponse!
   register(registerInput: RegisterInput!): AuthResponse!
   updateProduct(id: String!, input: UpdateProductInput!): Product
+  updateSupplier(id: String!, input: UpdateSupplierInput!): Supplier
 }
 
 type Order {
@@ -100,6 +132,14 @@ type Product {
   suppliers: String!
 }
 
+input ProductFilterInput {
+  category: String
+  maxPrice: String
+  minPrice: String
+  name: String
+  suppliers: String
+}
+
 type ProductsResponse {
   categories: [String!]!
   products: [Product!]!
@@ -108,8 +148,12 @@ type ProductsResponse {
 type Query {
   customerDetails(customerId: Int!): CustomerDetails
   dashboard: DashboardData!
+  getCustomer(id: String!): CustomerEntry
+  getCustomers(filters: CustomerFiltersInput): [CustomerEntry!]!
   getProduct(id: String!): Product
-  getProducts: ProductsResponse!
+  getProducts(filters: ProductFilterInput): ProductsResponse!
+  getSupplier(id: String!): Supplier
+  getSuppliers(filters: SupplierFilterInput): [Supplier!]!
   me: User!
   orders: OrdersResponse!
 }
@@ -119,6 +163,22 @@ input RegisterInput {
   firstName: String
   lastName: String
   password: String!
+}
+
+type Supplier {
+  address: String!
+  amount: String!
+  company: String!
+  date: String!
+  id: ID!
+  name: String!
+  status: String!
+}
+
+input SupplierFilterInput {
+  company: String
+  name: String
+  status: String
 }
 
 type Transaction {
@@ -138,6 +198,15 @@ input UpdateProductInput {
   price: String
   stock: String
   suppliers: String
+}
+
+input UpdateSupplierInput {
+  address: String
+  amount: String
+  company: String
+  date: String
+  name: String
+  status: String
 }
 
 type User {

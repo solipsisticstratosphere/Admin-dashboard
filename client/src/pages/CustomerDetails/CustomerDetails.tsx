@@ -35,8 +35,8 @@ const CustomerDetails: React.FC = () => {
   return (
     <div className={styles.customerDetails}>
       <div className={styles.header}>
-        <Link to="/dashboard" className={styles.backButton}>
-          ← Back to Dashboard
+        <Link to="/customers" className={styles.backButton}>
+          ← Back to Customers
         </Link>
         <h1 className={styles.title}>Customer Details</h1>
       </div>

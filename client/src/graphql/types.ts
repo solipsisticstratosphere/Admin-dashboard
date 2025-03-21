@@ -5,15 +5,14 @@ export interface DashboardStats {
 }
 
 export interface Customer {
-  id: number;
-  photo: string | null;
+  id: string;
+  photo?: string;
   name: string;
   email: string;
   spent: string;
   phone: string;
   address: string;
-  registerDate: string;
-  country: string;
+  register_date: string;
 }
 
 export interface Transaction {
@@ -62,4 +61,21 @@ export interface CustomerDetailsQueryResult {
 
 export interface OrdersQueryResult {
   orders: OrdersResponse;
+}
+
+export interface CustomerFilters {
+  name?: string;
+  email?: string;
+  address?: string;
+  register_date?: string;
+  phone?: string;
+  spent?: string;
+}
+
+export interface CustomersQueryResult {
+  getCustomers: Customer[];
+}
+
+export interface CustomerQueryResult {
+  getCustomer: Customer;
 }

@@ -1,5 +1,5 @@
 import { Resolver, Query, Mutation, Args, Field, ObjectType, InputType, ID } from '@nestjs/graphql';
-import { ProductsService, Product as ProductType } from './products.service';
+import { ProductsService, Product as ProductType, FilterProductsParams } from './products.service';
 
 @ObjectType()
 class Product {
@@ -76,14 +76,36 @@ class UpdateProductInput {
   category?: string;
 }
 
+@InputType()
+class ProductFilterInput {
+  @Field({ nullable: true })
+  name?: string;
+
+  @Field({ nullable: true })
+  category?: string;
+
+  @Field({ nullable: true })
+  suppliers?: string;
+
+  @Field({ nullable: true })
+  minPrice?: string;
+
+  @Field({ nullable: true })
+  maxPrice?: string;
+}
+
 @Resolver(() => Product)
 export class ProductsResolver {
   constructor(private readonly productsService: ProductsService) {}
 
   @Query(() => ProductsResponse)
-  async getProducts(): Promise<{ products: ProductType[]; categories: string[] }> {
+  async getProducts(
+    @Args('filters', { nullable: true }) filters?: ProductFilterInput,
+  ): Promise<{ products: ProductType[]; categories: string[] }> {
+    const filterParams: FilterProductsParams = filters || {};
+
     const [products, categories] = await Promise.all([
-      this.productsService.getAllProducts(),
+      this.productsService.getAllProducts(filterParams),
       this.productsService.getCategories(),
     ]);
 

@@ -36,25 +36,30 @@ model Customer {
 }
 
 model Product {
-  id       Int     @id @default(autoincrement())
-  photo    String?
-  name     String
-  supplier String
-  stock    String
-  price    String
-  category String
+  id        Int      @id @default(autoincrement())
+  photo     String?
+  name      String
+  supplier  String
+  stock     String
+  price     String
+  category  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 
+  @@unique([name, supplier])
   @@map("products")
 }
 
 model Supplier {
-  id       Int      @id @default(autoincrement())
-  name     String
-  address  String
-  supplier String
-  date     DateTime @default(now())
-  amount   String
-  status   String
+  id        Int      @id @default(autoincrement())
+  name      String
+  address   String
+  company   String
+  date      DateTime @default(now())
+  amount    String
+  status    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 
   @@map("suppliers")
 }

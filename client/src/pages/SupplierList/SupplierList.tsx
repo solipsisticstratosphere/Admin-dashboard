@@ -1,141 +1,127 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useQuery, useMutation } from "@apollo/client";
 import {
-  GET_PRODUCTS,
-  CREATE_PRODUCT,
-  UPDATE_PRODUCT,
-  DELETE_PRODUCT,
-} from "../../graphql/products";
-import ProductModal from "../../components/ProductModal";
-import styles from "./ProductList.module.css";
+  GET_SUPPLIERS,
+  CREATE_SUPPLIER,
+  UPDATE_SUPPLIER,
+  DELETE_SUPPLIER,
+} from "../../graphql/suppliers";
+import SupplierModal from "../../components/SupplierModal";
+import styles from "./SupplierList.module.css";
 
-interface Product {
+interface Supplier {
   id: string;
-  photo: string;
   name: string;
-  suppliers: string;
-  stock: string;
-  price: string;
-  category: string;
+  address: string;
+  company: string;
+  date: string;
+  amount: string;
+  status: string;
 }
 
-interface ProductsData {
-  getProducts: {
-    products: Product[];
-    categories: string[];
-  };
+interface SuppliersData {
+  getSuppliers: Supplier[];
 }
 
-interface ProductFilters {
+interface SupplierFilters {
   name?: string;
-  category?: string;
-  suppliers?: string;
-  minPrice?: string;
-  maxPrice?: string;
+  company?: string;
+  status?: string;
 }
 
 const ITEMS_PER_PAGE = 5;
 
-const ProductList = () => {
-  const [filters, setFilters] = useState<ProductFilters>({});
+const SupplierList = () => {
+  const [filters, setFilters] = useState<SupplierFilters>({});
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [selectedSupplier, setSelectedSupplier] = useState("");
-  const [minPrice, setMinPrice] = useState("");
-  const [maxPrice, setMaxPrice] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("");
+  const [selectedCompany, setSelectedCompany] = useState("");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentProduct, setCurrentProduct] = useState<Product | null>(null);
-  const [availableCategories, setAvailableCategories] = useState<string[]>([]);
+  const [currentSupplier, setCurrentSupplier] = useState<Supplier | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // Query with filters
-  const { loading, error, data, refetch } = useQuery<ProductsData>(
-    GET_PRODUCTS,
+  const { loading, error, data, refetch } = useQuery<SuppliersData>(
+    GET_SUPPLIERS,
     {
       variables: { filters },
     }
   );
 
-  const [createProduct] = useMutation(CREATE_PRODUCT, {
+  const [createSupplier] = useMutation(CREATE_SUPPLIER, {
     onCompleted: () => {
       refetch();
     },
   });
 
-  const [updateProduct] = useMutation(UPDATE_PRODUCT, {
+  const [updateSupplier] = useMutation(UPDATE_SUPPLIER, {
     onCompleted: () => {
       refetch();
     },
   });
 
-  const [deleteProduct] = useMutation(DELETE_PRODUCT, {
+  const [deleteSupplier] = useMutation(DELETE_SUPPLIER, {
     onCompleted: () => {
       refetch();
     },
   });
-
-  useEffect(() => {
-    if (data?.getProducts?.categories) {
-      setAvailableCategories(data.getProducts.categories);
-    }
-  }, [data]);
 
   const handleAddNew = () => {
-    setCurrentProduct(null);
+    setCurrentSupplier(null);
     setIsModalOpen(true);
   };
 
-  const handleEdit = (product: Product) => {
-    setCurrentProduct(product);
+  const handleEdit = (supplier: Supplier) => {
+    setCurrentSupplier(supplier);
     setIsModalOpen(true);
   };
 
-  const handleDelete = async (productId: string) => {
-    if (window.confirm("Are you sure you want to delete this product?")) {
+  const handleDelete = async (supplierId: string) => {
+    if (window.confirm("Are you sure you want to delete this supplier?")) {
       try {
-        await deleteProduct({
-          variables: { id: productId },
+        await deleteSupplier({
+          variables: { id: supplierId },
         });
       } catch (err) {
-        console.error("Error deleting product:", err);
+        console.error("Error deleting supplier:", err);
       }
     }
   };
 
-  const handleModalSubmit = async (productData: Omit<Product, "id">) => {
+  const handleModalSubmit = async (supplierData: Omit<Supplier, "id">) => {
     try {
       setErrorMessage(null);
 
       // Sanitize the input data to prevent whitespace issues
       const sanitizedData = {
-        name: productData.name.trim(),
-        photo: productData.photo || "",
-        suppliers: productData.suppliers.trim(),
-        stock: productData.stock.trim(),
-        price: productData.price.trim(),
-        category: productData.category.trim(),
+        name: supplierData.name.trim(),
+        address: supplierData.address.trim(),
+        company: supplierData.company.trim(),
+        date: supplierData.date,
+        amount: supplierData.amount.trim(),
+        status: supplierData.status.trim(),
       };
 
-      if (currentProduct) {
-        // Update existing product
-        await updateProduct({
+      if (currentSupplier) {
+        // Update existing supplier
+        await updateSupplier({
           variables: {
-            id: currentProduct.id,
+            id: currentSupplier.id,
             input: sanitizedData,
           },
         });
       } else {
-        // Create new product
-        await createProduct({
+        // Create new supplier
+        await createSupplier({
           variables: { input: sanitizedData },
         });
       }
 
       setIsModalOpen(false);
     } catch (err) {
-      console.error("Error saving product:", err);
+      console.error("Error saving supplier:", err);
 
       // Extract the error message from GraphQL error
       const apolloError = err as { graphQLErrors?: { message: string }[] };
@@ -144,27 +130,13 @@ const ProductList = () => {
         const graphQLError = apolloError.graphQLErrors[0];
         const errorMsg = graphQLError.message;
 
-        // Parse specific error messages from the backend
-        if (
-          errorMsg.includes("Product with name") &&
-          errorMsg.includes("from supplier")
-        ) {
-          // This is the case where a product with the same name and supplier already exists
-          setErrorMessage(errorMsg);
-        } else if (errorMsg.includes("details already exists")) {
-          // Generic uniqueness error
-          setErrorMessage(
-            "A product with the same name and supplier already exists. Please use a different name or supplier."
-          );
-        } else {
-          // Other errors
-          setErrorMessage(errorMsg);
-        }
+        // Set the error message
+        setErrorMessage(errorMsg);
       } else {
         // Fallback for non-GraphQL errors
         const errorMsg =
           err instanceof Error ? err.message : "An unknown error occurred";
-        setErrorMessage(`Unable to save product: ${errorMsg}`);
+        setErrorMessage(`Unable to save supplier: ${errorMsg}`);
       }
     }
   };
@@ -173,10 +145,8 @@ const ProductList = () => {
   const applyFilters = () => {
     setFilters({
       name: searchTerm || undefined,
-      category: selectedCategory || undefined,
-      suppliers: selectedSupplier || undefined,
-      minPrice: minPrice || undefined,
-      maxPrice: maxPrice || undefined,
+      company: selectedCompany || undefined,
+      status: selectedStatus || undefined,
     });
     setCurrentPage(1);
     setIsFilterOpen(false);
@@ -185,10 +155,8 @@ const ProductList = () => {
   // Reset all filters
   const resetFilters = () => {
     setSearchTerm("");
-    setSelectedCategory("");
-    setSelectedSupplier("");
-    setMinPrice("");
-    setMaxPrice("");
+    setSelectedCompany("");
+    setSelectedStatus("");
     setFilters({});
     setCurrentPage(1);
     setIsFilterOpen(false);
@@ -199,16 +167,16 @@ const ProductList = () => {
     setIsFilterOpen(!isFilterOpen);
   };
 
-  const filteredProducts = data?.getProducts?.products || [];
+  const suppliers = data?.getSuppliers || [];
 
   // Pagination logic
-  const totalItems = filteredProducts.length;
+  const totalItems = suppliers.length;
   const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
 
   const getCurrentPageItems = () => {
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
     const endIndex = startIndex + ITEMS_PER_PAGE;
-    return filteredProducts.slice(startIndex, endIndex);
+    return suppliers.slice(startIndex, endIndex);
   };
 
   const currentPageItems = getCurrentPageItems();
@@ -240,7 +208,7 @@ const ProductList = () => {
   if (error)
     return (
       <div className={styles.error}>
-        Error loading products: {error.message}
+        Error loading suppliers: {error.message}
       </div>
     );
 
@@ -250,7 +218,7 @@ const ProductList = () => {
         <div className={styles.searchContainer}>
           <input
             type="text"
-            placeholder="Product Name"
+            placeholder="Supplier Name"
             className={styles.searchInput}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -288,7 +256,7 @@ const ProductList = () => {
               d="M12 6v6m0 0v6m0-6h6m-6 0H6"
             />
           </svg>
-          Add a new product
+          Add a new supplier
         </button>
       </div>
 
@@ -296,54 +264,27 @@ const ProductList = () => {
         <div className={styles.filterPanel}>
           <div className={styles.filterRow}>
             <div className={styles.filterItem}>
-              <label>Category</label>
+              <label>Company</label>
+              <input
+                type="text"
+                placeholder="Filter by company"
+                value={selectedCompany}
+                onChange={(e) => setSelectedCompany(e.target.value)}
+                className={styles.filterInput}
+              />
+            </div>
+
+            <div className={styles.filterItem}>
+              <label>Status</label>
               <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
+                value={selectedStatus}
+                onChange={(e) => setSelectedStatus(e.target.value)}
                 className={styles.filterSelect}
               >
-                <option value="">All Categories</option>
-                {availableCategories.map((category) => (
-                  <option key={category} value={category}>
-                    {category}
-                  </option>
-                ))}
+                <option value="">All Statuses</option>
+                <option value="Active">Active</option>
+                <option value="Deactive">Deactive</option>
               </select>
-            </div>
-
-            <div className={styles.filterItem}>
-              <label>Supplier</label>
-              <input
-                type="text"
-                placeholder="Filter by supplier"
-                value={selectedSupplier}
-                onChange={(e) => setSelectedSupplier(e.target.value)}
-                className={styles.filterInput}
-              />
-            </div>
-          </div>
-
-          <div className={styles.filterRow}>
-            <div className={styles.filterItem}>
-              <label>Min Price</label>
-              <input
-                type="text"
-                placeholder="Min price"
-                value={minPrice}
-                onChange={(e) => setMinPrice(e.target.value)}
-                className={styles.filterInput}
-              />
-            </div>
-
-            <div className={styles.filterItem}>
-              <label>Max Price</label>
-              <input
-                type="text"
-                placeholder="Max price"
-                value={maxPrice}
-                onChange={(e) => setMaxPrice(e.target.value)}
-                className={styles.filterInput}
-              />
             </div>
           </div>
 
@@ -359,35 +300,47 @@ const ProductList = () => {
       )}
 
       <div className={styles.tableHeader}>
-        <h2 className="text-lg font-semibold">All products</h2>
+        <h2 className="text-lg font-semibold">All suppliers</h2>
       </div>
 
       <div className={styles.tableContainer}>
         <table className={styles.table}>
           <thead>
             <tr className={styles.tableHeaderRow}>
-              <th className={styles.tableHeaderCell}>Product Info</th>
-              <th className={styles.tableHeaderCell}>Category</th>
-              <th className={styles.tableHeaderCell}>Stock</th>
-              <th className={styles.tableHeaderCell}>Suppliers</th>
-              <th className={styles.tableHeaderCell}>Price</th>
+              <th className={styles.tableHeaderCell}>Suppliers Info</th>
+              <th className={styles.tableHeaderCell}>Address</th>
+              <th className={styles.tableHeaderCell}>Company</th>
+              <th className={styles.tableHeaderCell}>Delivery date</th>
+              <th className={styles.tableHeaderCell}>Amount</th>
+              <th className={styles.tableHeaderCell}>Status</th>
               <th className={styles.tableHeaderCell}>Action</th>
             </tr>
           </thead>
           <tbody>
             {currentPageItems.length > 0 ? (
-              currentPageItems.map((product) => (
-                <tr key={product.id} className={styles.tableRow}>
-                  <td className={styles.tableCell}>{product.name}</td>
-                  <td className={styles.tableCell}>{product.category}</td>
-                  <td className={styles.tableCell}>{product.stock}</td>
-                  <td className={styles.tableCell}>{product.suppliers}</td>
-                  <td className={styles.tableCell}>{product.price}</td>
+              currentPageItems.map((supplier) => (
+                <tr key={supplier.id} className={styles.tableRow}>
+                  <td className={styles.tableCell}>{supplier.name}</td>
+                  <td className={styles.tableCell}>{supplier.address}</td>
+                  <td className={styles.tableCell}>{supplier.company}</td>
+                  <td className={styles.tableCell}>{supplier.date}</td>
+                  <td className={styles.tableCell}>{supplier.amount}</td>
+                  <td className={styles.tableCell}>
+                    <span
+                      className={`${styles.statusBadge} ${
+                        supplier.status === "Active"
+                          ? styles.statusActive
+                          : styles.statusDeactive
+                      }`}
+                    >
+                      {supplier.status}
+                    </span>
+                  </td>
                   <td className={styles.tableCell}>
                     <div className={styles.actionContainer}>
                       <button
                         className={styles.editButton}
-                        onClick={() => handleEdit(product)}
+                        onClick={() => handleEdit(supplier)}
                       >
                         <svg
                           className="w-5 h-5"
@@ -406,7 +359,7 @@ const ProductList = () => {
                       </button>
                       <button
                         className={styles.deleteButton}
-                        onClick={() => handleDelete(product.id)}
+                        onClick={() => handleDelete(supplier.id)}
                       >
                         <svg
                           className="w-5 h-5"
@@ -429,8 +382,8 @@ const ProductList = () => {
               ))
             ) : (
               <tr>
-                <td colSpan={6} className={styles.tableCell}>
-                  No products found.
+                <td colSpan={7} className={styles.tableCell}>
+                  No suppliers found.
                 </td>
               </tr>
             )}
@@ -444,19 +397,18 @@ const ProductList = () => {
         </div>
       )}
 
-      <ProductModal
+      <SupplierModal
         isOpen={isModalOpen}
         onClose={() => {
           setIsModalOpen(false);
           setErrorMessage(null);
         }}
         onSubmit={handleModalSubmit}
-        product={currentProduct}
-        categories={availableCategories}
+        supplier={currentSupplier}
         errorMessage={errorMessage}
       />
     </div>
   );
 };
 
-export default ProductList;
+export default SupplierList;

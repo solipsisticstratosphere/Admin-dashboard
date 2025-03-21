@@ -17,9 +17,35 @@ export class CreateProductInput {
     suppliers: string;
 }
 
+export class CreateSupplierInput {
+    address: string;
+    amount: string;
+    company: string;
+    date?: Nullable<string>;
+    name: string;
+    status: string;
+}
+
+export class CustomerFiltersInput {
+    address?: Nullable<string>;
+    email?: Nullable<string>;
+    name?: Nullable<string>;
+    phone?: Nullable<string>;
+    register_date?: Nullable<string>;
+    spent?: Nullable<string>;
+}
+
 export class LoginInput {
     email: string;
     password: string;
+}
+
+export class ProductFilterInput {
+    category?: Nullable<string>;
+    maxPrice?: Nullable<string>;
+    minPrice?: Nullable<string>;
+    name?: Nullable<string>;
+    suppliers?: Nullable<string>;
 }
 
 export class RegisterInput {
@@ -29,6 +55,12 @@ export class RegisterInput {
     password: string;
 }
 
+export class SupplierFilterInput {
+    company?: Nullable<string>;
+    name?: Nullable<string>;
+    status?: Nullable<string>;
+}
+
 export class UpdateProductInput {
     category?: Nullable<string>;
     name?: Nullable<string>;
@@ -36,6 +68,15 @@ export class UpdateProductInput {
     price?: Nullable<string>;
     stock?: Nullable<string>;
     suppliers?: Nullable<string>;
+}
+
+export class UpdateSupplierInput {
+    address?: Nullable<string>;
+    amount?: Nullable<string>;
+    company?: Nullable<string>;
+    date?: Nullable<string>;
+    name?: Nullable<string>;
+    status?: Nullable<string>;
 }
 
 export class AuthResponse {
@@ -69,6 +110,17 @@ export class CustomerDetails {
     transactions: Transaction[];
 }
 
+export class CustomerEntry {
+    address: string;
+    email: string;
+    id: string;
+    name: string;
+    phone: string;
+    photo?: Nullable<string>;
+    register_date: string;
+    spent: string;
+}
+
 export class DashboardData {
     recentCustomers: Customer[];
     stats: DashboardStats;
@@ -84,7 +136,11 @@ export class DashboardStats {
 export abstract class IMutation {
     abstract createProduct(input: CreateProductInput): Product | Promise<Product>;
 
+    abstract createSupplier(input: CreateSupplierInput): Supplier | Promise<Supplier>;
+
     abstract deleteProduct(id: string): boolean | Promise<boolean>;
+
+    abstract deleteSupplier(id: string): boolean | Promise<boolean>;
 
     abstract login(loginInput: LoginInput): AuthResponse | Promise<AuthResponse>;
 
@@ -95,6 +151,8 @@ export abstract class IMutation {
     abstract register(registerInput: RegisterInput): AuthResponse | Promise<AuthResponse>;
 
     abstract updateProduct(id: string, input: UpdateProductInput): Nullable<Product> | Promise<Nullable<Product>>;
+
+    abstract updateSupplier(id: string, input: UpdateSupplierInput): Nullable<Supplier> | Promise<Nullable<Supplier>>;
 }
 
 export class Order {
@@ -133,13 +191,31 @@ export abstract class IQuery {
 
     abstract dashboard(): DashboardData | Promise<DashboardData>;
 
+    abstract getCustomer(id: string): Nullable<CustomerEntry> | Promise<Nullable<CustomerEntry>>;
+
+    abstract getCustomers(filters?: Nullable<CustomerFiltersInput>): CustomerEntry[] | Promise<CustomerEntry[]>;
+
     abstract getProduct(id: string): Nullable<Product> | Promise<Nullable<Product>>;
 
-    abstract getProducts(): ProductsResponse | Promise<ProductsResponse>;
+    abstract getProducts(filters?: Nullable<ProductFilterInput>): ProductsResponse | Promise<ProductsResponse>;
+
+    abstract getSupplier(id: string): Nullable<Supplier> | Promise<Nullable<Supplier>>;
+
+    abstract getSuppliers(filters?: Nullable<SupplierFilterInput>): Supplier[] | Promise<Supplier[]>;
 
     abstract me(): User | Promise<User>;
 
     abstract orders(): OrdersResponse | Promise<OrdersResponse>;
+}
+
+export class Supplier {
+    address: string;
+    amount: string;
+    company: string;
+    date: string;
+    id: string;
+    name: string;
+    status: string;
 }
 
 export class Transaction {
