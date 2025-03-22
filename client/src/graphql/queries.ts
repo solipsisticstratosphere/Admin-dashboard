@@ -54,8 +54,8 @@ export const GET_CUSTOMER_DETAILS = gql`
 `;
 
 export const GET_ORDERS = gql`
-  query GetOrders {
-    orders {
+  query GetOrders($filters: OrderFilters) {
+    orders(filters: $filters) {
       items {
         id
         photo

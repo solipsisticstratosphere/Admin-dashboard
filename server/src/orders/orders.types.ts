@@ -1,4 +1,4 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Field, InputType, Int, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class Order {
@@ -34,4 +34,22 @@ export class OrdersResponse {
 
   @Field(() => Int)
   totalCount: number;
+}
+
+@InputType()
+export class OrderFilters {
+  @Field(() => String, { nullable: true })
+  name?: string;
+
+  @Field(() => String, { nullable: true })
+  address?: string;
+
+  @Field(() => String, { nullable: true })
+  products?: string;
+
+  @Field(() => String, { nullable: true })
+  status?: string;
+
+  @Field(() => String, { nullable: true })
+  order_date?: string;
 }

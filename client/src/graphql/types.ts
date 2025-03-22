@@ -79,3 +79,11 @@ export interface CustomersQueryResult {
 export interface CustomerQueryResult {
   getCustomer: Customer;
 }
+
+export interface OrderFilters {
+  name?: string;
+  address?: string;
+  products?: string;
+  status?: string;
+  order_date?: string;
+}

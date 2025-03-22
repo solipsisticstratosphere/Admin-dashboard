@@ -117,6 +117,14 @@ type Order {
   status: String!
 }
 
+input OrderFilters {
+  address: String
+  name: String
+  order_date: String
+  products: String
+  status: String
+}
+
 type OrdersResponse {
   items: [Order!]!
   totalCount: Int!
@@ -155,7 +163,7 @@ type Query {
   getSupplier(id: String!): Supplier
   getSuppliers(filters: SupplierFilterInput): [Supplier!]!
   me: User!
-  orders: OrdersResponse!
+  orders(filters: OrderFilters): OrdersResponse!
 }
 
 input RegisterInput {

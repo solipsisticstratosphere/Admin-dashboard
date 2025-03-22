@@ -1,15 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./Orders.module.css";
-import { useQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import { GET_ORDERS } from "../../graphql/queries";
-import { OrdersQueryResult } from "../../graphql/types";
+import { OrderFilters, OrdersQueryResult } from "../../graphql/types";
 
 const ITEMS_PER_PAGE = 5;
 
 const Orders: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const { loading, error, data } = useQuery<OrdersQueryResult>(GET_ORDERS);
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [activeFilters, setActiveFilters] = useState<OrderFilters>({});
+  const [tempFilters, setTempFilters] = useState<OrderFilters>({});
+
+  // Use lazy query for filtering
+  const [getOrders, { loading, error, data }] =
+    useLazyQuery<OrdersQueryResult>(GET_ORDERS);
+
+  // Initial data fetch
+  useEffect(() => {
+    getOrders();
+  }, [getOrders]);
 
   const getStatusClassName = (status: string): string => {
     const statusLower = status.toLowerCase();
@@ -27,7 +38,47 @@ const Orders: React.FC = () => {
     return statusClasses[statusLower] || "";
   };
 
-  // Фильтрация заказов на клиенте по имени клиента или адресу
+  // Apply filters to backend query
+  const applyFilters = () => {
+    const filters: OrderFilters = {};
+
+    // Only add non-empty filters
+    if (tempFilters.name) filters.name = tempFilters.name;
+    if (tempFilters.address) filters.address = tempFilters.address;
+    if (tempFilters.products) filters.products = tempFilters.products;
+    if (tempFilters.status) filters.status = tempFilters.status;
+    if (tempFilters.order_date) filters.order_date = tempFilters.order_date;
+
+    // Update active filters
+    setActiveFilters(filters);
+
+    // Reset to first page
+    setCurrentPage(1);
+
+    // Keep filter panel open (removed the line that closes it)
+
+    // Execute query with filters
+    getOrders({ variables: { filters } });
+  };
+
+  // Reset filters
+  const resetFilters = () => {
+    setTempFilters({});
+    setActiveFilters({});
+    setCurrentPage(1);
+    // Keep filter panel open (removed the line that closes it)
+    getOrders({ variables: { filters: {} } });
+  };
+
+  // Handle filter input change
+  const handleFilterChange = (field: keyof OrderFilters, value: string) => {
+    setTempFilters((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  // Client-side search for immediate feedback (name and address only)
   const filteredOrders =
     data?.orders.items.filter((order) => {
       if (!searchTerm) return true;
@@ -38,11 +89,11 @@ const Orders: React.FC = () => {
       );
     }) || [];
 
-  // Пагинация
+  // Pagination
   const totalItems = filteredOrders.length;
   const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
 
-  // Получаем текущую страницу заказов
+  // Get current page items
   const getCurrentPageItems = () => {
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
     const endIndex = startIndex + ITEMS_PER_PAGE;
@@ -55,7 +106,7 @@ const Orders: React.FC = () => {
     setCurrentPage(page);
   };
 
-  // Функция для генерации кнопок страниц
+  // Generate pagination buttons
   const renderPaginationButtons = () => {
     const buttons = [];
 
@@ -75,7 +126,7 @@ const Orders: React.FC = () => {
     return buttons;
   };
 
-  if (loading) {
+  if (loading && !data) {
     return <div className={styles.loading}>Loading orders...</div>;
   }
 
@@ -101,7 +152,12 @@ const Orders: React.FC = () => {
             setCurrentPage(1);
           }}
         />
-        <button className={styles.filterButton}>
+        <button
+          className={`${styles.filterButton} ${
+            filterOpen ? styles.activeFilter : ""
+          }`}
+          onClick={() => setFilterOpen(!filterOpen)}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"
@@ -115,6 +171,86 @@ const Orders: React.FC = () => {
           Filter
         </button>
       </div>
+
+      {filterOpen && (
+        <div className={styles.filterPanel}>
+          <div className={styles.filterGrid}>
+            <div className={styles.filterItem}>
+              <label htmlFor="name-filter">Customer Name</label>
+              <input
+                id="name-filter"
+                type="text"
+                value={tempFilters.name || ""}
+                onChange={(e) => handleFilterChange("name", e.target.value)}
+                placeholder="Filter by name"
+              />
+            </div>
+            <div className={styles.filterItem}>
+              <label htmlFor="address-filter">Address</label>
+              <input
+                id="address-filter"
+                type="text"
+                value={tempFilters.address || ""}
+                onChange={(e) => handleFilterChange("address", e.target.value)}
+                placeholder="Filter by address"
+              />
+            </div>
+            <div className={styles.filterItem}>
+              <label htmlFor="products-filter">Products</label>
+              <input
+                id="products-filter"
+                type="text"
+                value={tempFilters.products || ""}
+                onChange={(e) => handleFilterChange("products", e.target.value)}
+                placeholder="Filter by products"
+              />
+            </div>
+            <div className={styles.filterItem}>
+              <label htmlFor="status-filter">Status</label>
+              <select
+                id="status-filter"
+                value={tempFilters.status || ""}
+                onChange={(e) => handleFilterChange("status", e.target.value)}
+              >
+                <option value="">All Statuses</option>
+                <option value="pending">Pending</option>
+                <option value="processing">Processing</option>
+                <option value="completed">Completed</option>
+                <option value="cancelled">Cancelled</option>
+                <option value="confirmed">Confirmed</option>
+                <option value="shipped">Shipped</option>
+                <option value="delivered">Delivered</option>
+              </select>
+            </div>
+            <div className={styles.filterItem}>
+              <label htmlFor="date-filter">Order Date</label>
+              <input
+                id="date-filter"
+                type="text"
+                value={tempFilters.order_date || ""}
+                onChange={(e) =>
+                  handleFilterChange("order_date", e.target.value)
+                }
+                placeholder="Filter by date"
+              />
+            </div>
+          </div>
+          <div className={styles.filterActions}>
+            <button
+              className={styles.applyFiltersButton}
+              onClick={applyFilters}
+            >
+              Apply Filters
+            </button>
+            <button
+              className={styles.resetFiltersButton}
+              onClick={resetFilters}
+            >
+              Reset
+            </button>
+          </div>
+        </div>
+      )}
 
       <div className={styles.tableSection}>
         <div className={styles.tableHeader}>

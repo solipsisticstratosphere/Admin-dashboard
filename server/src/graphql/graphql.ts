@@ -40,6 +40,14 @@ export class LoginInput {
     password: string;
 }
 
+export class OrderFilters {
+    address?: Nullable<string>;
+    name?: Nullable<string>;
+    order_date?: Nullable<string>;
+    products?: Nullable<string>;
+    status?: Nullable<string>;
+}
+
 export class ProductFilterInput {
     category?: Nullable<string>;
     maxPrice?: Nullable<string>;
@@ -205,7 +213,7 @@ export abstract class IQuery {
 
     abstract me(): User | Promise<User>;
 
-    abstract orders(): OrdersResponse | Promise<OrdersResponse>;
+    abstract orders(filters?: Nullable<OrderFilters>): OrdersResponse | Promise<OrdersResponse>;
 }
 
 export class Supplier {

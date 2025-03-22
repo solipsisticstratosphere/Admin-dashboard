@@ -1,6 +1,6 @@
 import { Injectable, OnModuleInit, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Order } from './orders.types';
+import { Order, OrderFilters } from './orders.types';
 import * as fs from 'fs';
 import * as path from 'path';
 import { Prisma } from '@prisma/client';
@@ -98,22 +98,48 @@ export class OrdersService implements OnModuleInit {
     }
   }
 
-  async getAllOrders(): Promise<{ items: Order[]; totalCount: number }> {
+  async getAllOrders(filters?: OrderFilters): Promise<{ items: Order[]; totalCount: number }> {
     try {
-      // Получаем все заказы с базовой сортировкой по id
+      // Create where conditions based on filters
+      const where: Prisma.OrderWhereInput = {};
+
+      if (filters) {
+        if (filters.name) {
+          where.name = { contains: filters.name, mode: 'insensitive' };
+        }
+
+        if (filters.address) {
+          where.address = { contains: filters.address, mode: 'insensitive' };
+        }
+
+        if (filters.products) {
+          where.products = { contains: filters.products, mode: 'insensitive' };
+        }
+
+        if (filters.status) {
+          where.status = { contains: filters.status, mode: 'insensitive' };
+        }
+
+        if (filters.order_date) {
+          where.order_date = { contains: filters.order_date, mode: 'insensitive' };
+        }
+      }
+
+      // Basic sorting by id
       const orderBy: Prisma.OrderOrderByWithRelationInput = { id: 'asc' };
 
-      // Выполняем запрос
+      // Execute query with filters
       const [items, totalCount] = await Promise.all([
         this.prisma.order.findMany({
+          where,
           orderBy,
         }),
-        this.prisma.order.count(),
+        this.prisma.order.count({ where }),
       ]);
 
       return { items, totalCount };
     } catch (error) {
-      this.logger.error('Error getting all orders:', error);
+      this.logger.error('Error getting filtered orders:', error);
       return { items: [], totalCount: 0 };
     }
   }

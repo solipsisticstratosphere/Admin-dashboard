@@ -1,6 +1,6 @@
-import { Query, Resolver } from '@nestjs/graphql';
+import { Args, Query, Resolver } from '@nestjs/graphql';
 import { OrdersService } from './orders.service';
-import { Order, OrdersResponse } from './orders.types';
+import { Order, OrderFilters, OrdersResponse } from './orders.types';
 import { Public } from '../common/decorators/public.decorator';
 
 @Resolver(() => Order)
@@ -9,7 +9,7 @@ export class OrdersResolver {
 
   @Public()
   @Query(() => OrdersResponse, { name: 'orders' })
-  async getAllOrders() {
-    return this.ordersService.getAllOrders();
+  async getAllOrders(@Args('filters', { nullable: true }) filters?: OrderFilters) {
+    return this.ordersService.getAllOrders(filters);
   }
 }
