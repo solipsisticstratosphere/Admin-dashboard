@@ -7,16 +7,21 @@
   --font-family: "Inter", sans-serif;
 
   --main-black: #1d1e21;
-  --accent: #59b17a;
+  --accent: #4caf78;
   --accent-2: #e85050;
   --primary-text-color: #dcdddf;
   --primary-background-color: #e7f1ed;
-  --background-2: #f7f8fa;
-  --background-3: #fff;
+  --background-1: #f9fafb;
+  --background-2: #ffffff;
+  --background-3: #f3f4f6;
+  --error: #ef4444;
+  --warning: #f59e0b;
+  --success: #10b981;
 
   --spacing-base: 14px;
   --font-size-base: 16px;
 }
+
 *,
 *::before,
 *::after {
@@ -25,16 +30,19 @@
   box-sizing: border-box;
 }
 body {
-  font-family: var(--font-family, Arial, sans-serif);
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
   font-size: var(--font-size-base);
   line-height: 1;
-  color: var(--primary-text-color, #f9f9f9);
+  color: var(--main-black);
   background-color: var(--background-2, #141414);
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  min-width: 100%;
+  min-width: 320px;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 a,
 button {
@@ -103,6 +111,18 @@ input[type="file"] {
 input {
   background-color: transparent;
 }
+@media (max-width: 480px) {
+  body {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 374px) {
+  body {
+    font-size: 13px;
+  }
+}
+
 @media (max-width: var(--breakpoint-mobile)) {
   :root {
     --font-size-base: 8px;
@@ -139,4 +159,8 @@ input {
     max-width: 1140px;
     padding: 32px;
   }
+}
+
+html {
+  scroll-behavior: smooth;
 }

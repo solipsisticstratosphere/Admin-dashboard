@@ -3,6 +3,7 @@ import styles from "./Orders.module.css";
 import { useLazyQuery } from "@apollo/client";
 import { GET_ORDERS } from "../../graphql/queries";
 import { OrderFilters, OrdersQueryResult } from "../../graphql/types";
+import Icon from "../../components/UI/Icon";
 
 const ITEMS_PER_PAGE = 5;
 
@@ -38,26 +39,19 @@ const Orders: React.FC = () => {
     return statusClasses[statusLower] || "";
   };
 
-  // Apply filters to backend query
   const applyFilters = () => {
     const filters: OrderFilters = {};
 
-    // Only add non-empty filters
     if (tempFilters.name) filters.name = tempFilters.name;
     if (tempFilters.address) filters.address = tempFilters.address;
     if (tempFilters.products) filters.products = tempFilters.products;
     if (tempFilters.status) filters.status = tempFilters.status;
     if (tempFilters.order_date) filters.order_date = tempFilters.order_date;
 
-    // Update active filters
     setActiveFilters(filters);
 
-    // Reset to first page
     setCurrentPage(1);
 
-    // Keep filter panel open (removed the line that closes it)
-
-    // Execute query with filters
     getOrders({ variables: { filters } });
   };
 
@@ -158,16 +152,9 @@ const Orders: React.FC = () => {
           }`}
           onClick={() => setFilterOpen(!filterOpen)}
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="currentColor"
-            viewBox="0 0 16 16"
-            className={styles.filterIcon}
-          >
-            <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z" />
-          </svg>
+          <div className={styles.filterIcon}>
+            <Icon size={16} name="filter" />
+          </div>
           Filter
         </button>
       </div>
@@ -310,13 +297,12 @@ const Orders: React.FC = () => {
             </tbody>
           </table>
         </div>
-
-        {totalItems > 0 && (
-          <div className={styles.paginationContainer}>
-            {renderPaginationButtons()}
-          </div>
-        )}
       </div>
+      {totalItems > 0 && (
+        <div className={styles.paginationContainer}>
+          {renderPaginationButtons()}
+        </div>
+      )}
     </div>
   );
 };

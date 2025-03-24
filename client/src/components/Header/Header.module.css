@@ -1,33 +1,33 @@
 .header {
-  height: 64px;
-  background-color: #ffffff;
-  border-bottom: 1px solid #eaecef;
+  height: 80px;
+  background-color: var(--background-2);
+  border-bottom: 1px solid rgba(29, 30, 33, 0.1);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 20px 0 84px; /* Extra left padding for sidebar */
+  padding: 0 20px; /* Одинаковые отступы слева и справа по умолчанию */
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 5;
+  z-index: 10;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .leftSection {
+  gap: 60px;
   display: flex;
   align-items: center;
 }
 
 .logo {
-  margin-right: 16px;
   display: flex;
   align-items: center;
 }
 
 .logoImage {
-  width: 28px;
-  height: 28px;
+  width: 40px;
+  height: 40px;
 }
 
 .titleContainer {
@@ -36,9 +36,10 @@
 }
 
 .title {
-  font-size: 16px;
+  font-size: 24px;
   font-weight: 600;
-  color: #1f2937;
+  line-height: 117%;
+  color: var(--main-black);
   margin: 0;
 }
 
@@ -50,8 +51,9 @@
 }
 
 .subtitle {
+  font-weight: 400;
   font-size: 12px;
-  color: #6b7280;
+  color: rgba(29, 30, 33, 0.4);
   text-decoration: none;
 }
 
@@ -68,17 +70,18 @@ a.subtitle:hover {
 .rightSection {
   display: flex;
   align-items: center;
+  gap: 12px;
 }
 
 .logoutButton {
-  background: none;
+  background: var(--accent);
   border: none;
-  color: #6b7280;
+  color: #fff;
   cursor: pointer;
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  display: flex;
+  display: none; /* По умолчанию скрыт */
   align-items: center;
   justify-content: center;
   transition: background-color 0.2s;
@@ -90,26 +93,85 @@ a.subtitle:hover {
 }
 
 .logoutIcon {
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
+.menuButton {
+  background: none;
+  border: none;
+  color: #71717a;
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex; /* Показываем кнопку меню по умолчанию */
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.menuButton:hover {
+  background-color: #f3f4f6;
+}
+
+.menuIcon {
+  width: 32px;
+  height: 32px;
+}
+
+/* Для планшетов */
+@media (max-width: 1439px) {
+  .leftSection {
+    gap: 20px;
+  }
+}
+
+/* Для мобильных устройств */
+@media (max-width: 480px) {
   .header {
-    padding-left: 64px;
+    padding: 0 16px;
+  }
+
+  .leftSection {
+    gap: 12px;
+  }
+
+  .logo {
+    margin-right: 12px;
   }
 
   .titleContainer {
-    max-width: 200px;
+    max-width: 150px;
   }
 
   .title {
-    font-size: 14px;
+    font-size: 18px;
   }
 
-  .subtitle,
-  .separator {
-    font-size: 10px;
+  .subtitleContainer {
+  }
+}
+
+/* Для очень маленьких экранов */
+@media (max-width: 374px) {
+  .logoImage {
+    width: 32px;
+    height: 32px;
+  }
+
+  .title {
+    font-size: 18px;
+  }
+}
+
+/* Только для больших экранов, где отображается сайдбар */
+@media (min-width: 1440px) {
+  .menuButton {
+    display: none; /* Скрываем кнопку меню на больших экранах */
+  }
+
+  .logoutButton {
+    display: flex; /* Показываем кнопку логаута на больших экранах */
   }
 }

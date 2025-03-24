@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none">
+  <!-- Coins icon -->
+  <symbol id="coins" viewBox="0 0 20 20">
+    <g stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" clip-path="url(#coins-clip)">
+      <path d="M12.857 10.714c3.55 0 6.429-1.279 6.429-2.857C19.286 6.28 16.408 5 12.857 5 9.307 5 6.43 6.28 6.43 7.857c0 1.578 2.878 2.857 6.428 2.857Z"/>
+      <path d="M6.429 7.857v8.572c0 1.571 2.857 2.857 6.428 2.857 3.572 0 6.429-1.286 6.429-2.857V7.857"/>
+      <path d="M19.286 12.143c0 1.571-2.857 2.857-6.429 2.857-3.571 0-6.428-1.286-6.428-2.857m6.285-10A9.672 9.672 0 0 0 7.143.714C3.586.714.714 2 .714 3.571c0 .843.829 1.6 2.143 2.143"/>
+      <path d="M2.857 14.286c-1.314-.543-2.143-1.3-2.143-2.143V3.57"/>
+      <path d="M2.857 10C1.543 9.457.714 8.7.714 7.857"/>
+    </g>
+    <defs>
+      <clipPath id="coins-clip">
+        <path fill="#fff" d="M0 0h20v20H0z"/>
+      </clipPath>
+    </defs>
+  </symbol>
+
+  <!-- Dashboard icon -->
+  <symbol id="dashboard" viewBox="0 0 24 24">
+    <rect x="3" y="3" width="7" height="7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></rect>
+    <rect x="14" y="3" width="7" height="7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></rect>
+    <rect x="14" y="14" width="7" height="7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></rect>
+    <rect x="3" y="14" width="7" height="7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></rect>
+  </symbol>
+
+  <!-- Orders icon -->
+  <symbol id="orders" viewBox="0 0 24 24">
+    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+    <line x1="3" y1="6" x2="21" y2="6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></line>
+    <path d="M16 10a4 4 0 0 1-8 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+  </symbol>
+
+  <!-- Products icon -->
+  <symbol id="products" viewBox="0 0 24 24">
+    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+    <line x1="7" y1="7" x2="7.01" y2="7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></line>
+  </symbol>
+
+  <!-- Customers icon -->
+  <symbol id="customers" viewBox="0 0 24 24">
+    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+    <circle cx="9" cy="7" r="4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></circle>
+    <path d="M23 21v-2a4 4 0 0 0-3-3.87" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+    <path d="M16 3.13a4 4 0 0 1 0 7.75" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+  </symbol>
+
+  <!-- Suppliers icon -->
+  <symbol id="suppliers" viewBox="0 0 24 24">
+    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+    <circle cx="12" cy="10" r="3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></circle>
+  </symbol>
+
+  <!-- Logout icon -->
+  <symbol id="logout" viewBox="0 0 24 24">
+    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+    <polyline points="16 17 21 12 16 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></polyline>
+    <line x1="21" y1="12" x2="9" y2="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></line>
+  </symbol>
+
+  <!-- Filter icon -->
+  <symbol id="filter" viewBox="0 0 14 14">
+   <path stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12.833 1.75H1.167l4.666 5.518v3.815l2.334 1.167V7.268l4.666-5.518Z"/>
+  </symbol>
+
+  <!-- Add icon -->
+  <symbol id="add" viewBox="0 0 24 24">
+    <path d="M12 6v6m0 0v6m0-6h6m-6 0H6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+  </symbol>
+
+  <!-- Edit icon -->
+  <symbol id="edit" viewBox="0 0 24 24">
+    <path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+  </symbol>
+  
+  <!-- Delete icon -->
+  <symbol id="delete" viewBox="0 0 24 24">
+    <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+  </symbol>
+  
+  <!-- Menu burger icon -->
+  <symbol id="menu" viewBox="0 0 24 24">
+    <path d="M4 6h16M4 12h16M4 18h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+  </symbol>
+</svg>
+

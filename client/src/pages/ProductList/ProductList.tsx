@@ -8,6 +8,7 @@ import {
 } from "../../graphql/products";
 import ProductModal from "../../components/ProductModal";
 import styles from "./ProductList.module.css";
+import Icon from "../../components/UI/Icon";
 
 interface Product {
   id: string;
@@ -256,38 +257,12 @@ const ProductList = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
           <button className={styles.filterButton} onClick={toggleFilter}>
-            <svg
-              className={styles.buttonIcon}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
-              />
-            </svg>
+            <Icon name="filter" className={styles.buttonIcon} />
             Filter
           </button>
         </div>
         <button className={styles.addButton} onClick={handleAddNew}>
-          <svg
-            className={styles.buttonIcon}
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-            />
-          </svg>
+          <Icon name="add" className={styles.buttonIcon} />
           Add a new product
         </button>
       </div>
@@ -359,7 +334,7 @@ const ProductList = () => {
       )}
 
       <div className={styles.tableHeader}>
-        <h2 className="text-lg font-semibold">All products</h2>
+        <h2 className={styles.tableTitle}>All products</h2>
       </div>
 
       <div className={styles.tableContainer}>
@@ -389,39 +364,13 @@ const ProductList = () => {
                         className={styles.editButton}
                         onClick={() => handleEdit(product)}
                       >
-                        <svg
-                          className="w-5 h-5"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                          />
-                        </svg>
+                        <Icon name="edit" className="w-5 h-5" />
                       </button>
                       <button
                         className={styles.deleteButton}
                         onClick={() => handleDelete(product.id)}
                       >
-                        <svg
-                          className="w-5 h-5"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                          />
-                        </svg>
+                        <Icon name="delete" className="w-5 h-5" />
                       </button>
                     </div>
                   </td>

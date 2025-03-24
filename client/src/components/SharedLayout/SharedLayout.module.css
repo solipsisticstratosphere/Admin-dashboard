@@ -4,17 +4,39 @@
 }
 
 .content {
+  overflow-x: auto;
   flex: 1;
-  margin-left: 64px; /* Same as sidebar width */
-  margin-top: 64px; /* Same as header height */
+  margin-left: 0; /* По умолчанию без отступа (для мобильных) */
+  margin-top: 60px; /* Same as header height */
   padding: 24px;
   background-color: #f9fafb;
 }
 
-/* Responsive adjustments */
+/* Для устройств с шириной до 768px (планшеты) */
 @media (max-width: 768px) {
   .content {
-    margin-left: 48px;
     padding: 16px;
+  }
+}
+
+/* Для мобильных устройств */
+@media (max-width: 480px) {
+  .content {
+    padding: 12px;
+    margin-top: 70px;
+  }
+}
+
+/* Для очень маленьких экранов */
+@media (max-width: 374px) {
+  .content {
+    padding: 10px;
+  }
+}
+
+/* Только для больших экранов, где отображается сайдбар */
+@media (min-width: 1440px) {
+  .content {
+    margin-left: 80px; /* Отступ равен ширине сайдбара */
   }
 }

@@ -1,0 +1,149 @@
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 90;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.mobileMenu {
+  position: fixed;
+  top: 0;
+  left: -280px;
+  width: 280px;
+  height: 100vh;
+  background-color: #fff;
+  z-index: 100;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+  transition: left 0.3s ease-out;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.open {
+  left: 0;
+}
+
+.closeButtonContainer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 16px;
+  border-bottom: 1px solid #eaecef;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #71717a;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.closeButton:hover {
+  background-color: #f3f4f6;
+}
+
+.menu {
+  padding: 16px 0;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.menuItems {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  padding: 12px 24px;
+  color: #71717a;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  gap: 16px;
+}
+
+.menuItem:hover {
+  background-color: #f9fafb;
+  color: #4caf78;
+}
+
+.active {
+  color: #4caf78;
+  background-color: rgba(76, 175, 120, 0.05);
+  border-left: 3px solid #4caf78;
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menuText {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.logoutContainer {
+  margin-top: auto;
+  padding: 16px 0;
+  border-top: 1px solid #eaecef;
+}
+
+.logoutButton {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 12px 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #ef4444;
+  gap: 16px;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.logoutButton:hover {
+  background-color: #fee2e2;
+}
+
+.logoutButton .icon {
+  color: #ef4444;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Скрываем мобильное меню только на больших экранах */
+@media (min-width: 1440px) {
+  .backdrop,
+  .mobileMenu {
+    display: none;
+  }
+}

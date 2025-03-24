@@ -1,7 +1,7 @@
 .sidebar {
-  width: 64px;
+  width: 80px;
   height: 100vh;
-  background-color: #f9fafb;
+
   border-right: 1px solid #eaecef;
   position: fixed;
   left: 0;
@@ -9,14 +9,14 @@
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  z-index: 10;
+  z-index: 9;
 }
 
 .menu {
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding-top: 64px; /* Space for header */
+  margin-top: 120px; /* Space for header */
 }
 
 .menuItems {
@@ -54,14 +54,36 @@
   height: 24px;
 }
 
+/* По умолчанию скрываем боковую панель на мобильных и планшетах */
+@media (max-width: 1439px) {
+  .sidebar {
+    display: none; /* Скрываем боковую панель на разрешениях меньше 1440px */
+  }
+}
+
+/* Отображаем боковую панель только на больших экранах */
+@media (min-width: 1440px) {
+  .sidebar {
+    display: flex;
+  }
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .sidebar {
     width: 48px;
+    padding: 0 8px;
   }
 
   .icon {
     width: 20px;
     height: 20px;
+  }
+}
+
+/* Для мобильных устройств */
+@media (max-width: 480px) {
+  .sidebar {
+    display: none; /* Скрываем боковую панель на мобильных устройствах */
   }
 }
