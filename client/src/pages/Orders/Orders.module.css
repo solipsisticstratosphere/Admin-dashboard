@@ -337,7 +337,9 @@
   gap: 12px;
   margin-top: 8px;
 }
-
+.icon:focus {
+  outline: none;
+}
 .applyFiltersButton,
 .resetFiltersButton {
   padding: 8px 16px;

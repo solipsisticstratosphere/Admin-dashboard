@@ -257,14 +257,16 @@ const ProductList = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
           <button className={styles.filterButton} onClick={toggleFilter}>
-            <Icon name="filter" className={styles.buttonIcon} />
+            <Icon name="filter" size={16} className={styles.buttonIcon} />
             Filter
           </button>
         </div>
-        <button className={styles.addButton} onClick={handleAddNew}>
-          <Icon name="add" className={styles.buttonIcon} />
-          Add a new product
-        </button>
+        <div className={styles.addButtonContainer}>
+          <button className={styles.addButton} onClick={handleAddNew}>
+            <Icon name="add" size={26} className={styles.buttonIcon} />
+          </button>
+          <p>Add a new product</p>
+        </div>
       </div>
 
       {isFilterOpen && (

@@ -153,7 +153,7 @@ const Orders: React.FC = () => {
           onClick={() => setFilterOpen(!filterOpen)}
         >
           <div className={styles.filterIcon}>
-            <Icon size={16} name="filter" />
+            <Icon className={styles.icon} size={16} name="filter" />
           </div>
           Filter
         </button>

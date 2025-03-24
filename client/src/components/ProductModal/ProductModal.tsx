@@ -159,126 +159,115 @@ const ProductModal = ({
           <div className={styles.errorMessage}>{errorMessage}</div>
         )}
 
-        <form onSubmit={handleSubmit}>
-          <div className={styles.formGroup}>
-            <label htmlFor="name" className={styles.label}>
-              Product Info
-            </label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              className={`${styles.input} ${
-                !validation.name ? styles.inputError : ""
-              }`}
-              required
-            />
-            {!validation.name && (
-              <div className={styles.fieldError}>Product name is required</div>
-            )}
-          </div>
+        <form className={styles.form} onSubmit={handleSubmit}>
+          <div className={styles.formRows}>
+            <div className={styles.formGroup}>
+              <input
+                placeholder="Product Name"
+                type="text"
+                id="name"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                className={`${styles.input} ${
+                  !validation.name ? styles.inputError : ""
+                }`}
+                required
+              />
+              {!validation.name && (
+                <div className={styles.fieldError}>
+                  Product name is required
+                </div>
+              )}
+            </div>
 
-          <div className={styles.formGroup}>
-            <label htmlFor="category" className={styles.label}>
-              Category
-            </label>
-            <select
-              id="category"
-              name="category"
-              value={formData.category}
-              onChange={handleChange}
-              className={styles.select}
-              required
-            >
-              {categories.map((category) => (
-                <option key={category} value={category}>
-                  {category}
-                </option>
-              ))}
-            </select>
-          </div>
+            <div className={styles.formGroup}>
+              <select
+                id="category"
+                name="category"
+                value={formData.category}
+                onChange={handleChange}
+                className={styles.select}
+                required
+              >
+                {categories.map((category) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-          <div className={styles.formGroup}>
-            <label htmlFor="stock" className={styles.label}>
-              Stock
-            </label>
-            <input
-              type="text"
-              id="stock"
-              name="stock"
-              value={formData.stock}
-              onChange={handleChange}
-              className={`${styles.input} ${
-                !validation.stock ? styles.inputError : ""
-              }`}
-              required
-            />
-            {!validation.stock && (
-              <div className={styles.fieldError}>
-                Stock must be a valid number
-              </div>
-            )}
-          </div>
+            <div className={styles.formGroup}>
+              <input
+                placeholder="Stock"
+                type="text"
+                id="stock"
+                name="stock"
+                value={formData.stock}
+                onChange={handleChange}
+                className={`${styles.input} ${
+                  !validation.stock ? styles.inputError : ""
+                }`}
+                required
+              />
+              {!validation.stock && (
+                <div className={styles.fieldError}>
+                  Stock must be a valid number
+                </div>
+              )}
+            </div>
 
-          <div className={styles.formGroup}>
-            <label htmlFor="suppliers" className={styles.label}>
-              Suppliers
-            </label>
-            <input
-              type="text"
-              id="suppliers"
-              name="suppliers"
-              value={formData.suppliers}
-              onChange={handleChange}
-              className={`${styles.input} ${
-                !validation.suppliers ? styles.inputError : ""
-              }`}
-              required
-            />
-            {!validation.suppliers && (
-              <div className={styles.fieldError}>Supplier is required</div>
-            )}
-          </div>
+            <div className={styles.formGroup}>
+              <input
+                placeholder="Suppliers"
+                type="text"
+                id="suppliers"
+                name="suppliers"
+                value={formData.suppliers}
+                onChange={handleChange}
+                className={`${styles.input} ${
+                  !validation.suppliers ? styles.inputError : ""
+                }`}
+                required
+              />
+              {!validation.suppliers && (
+                <div className={styles.fieldError}>Supplier is required</div>
+              )}
+            </div>
 
-          <div className={styles.formGroup}>
-            <label htmlFor="price" className={styles.label}>
-              Price
-            </label>
-            <input
-              type="text"
-              id="price"
-              name="price"
-              value={formData.price}
-              onChange={handleChange}
-              className={`${styles.input} ${
-                !validation.price ? styles.inputError : ""
-              }`}
-              required
-            />
-            {!validation.price && (
-              <div className={styles.fieldError}>
-                Price must be a valid number
-              </div>
-            )}
-          </div>
+            <div className={styles.formGroup}>
+              <input
+                placeholder="Price"
+                type="text"
+                id="price"
+                name="price"
+                value={formData.price}
+                onChange={handleChange}
+                className={`${styles.input} ${
+                  !validation.price ? styles.inputError : ""
+                }`}
+                required
+              />
+              {!validation.price && (
+                <div className={styles.fieldError}>
+                  Price must be a valid number
+                </div>
+              )}
+            </div>
 
-          <div className={styles.formGroup}>
-            <label htmlFor="photo" className={styles.label}>
-              Photo URL
-            </label>
-            <input
-              type="url"
-              id="photo"
-              name="photo"
-              value={formData.photo}
-              onChange={handleChange}
-              className={styles.input}
-              placeholder="https://example.com/image.jpg"
-            />
+            <div className={styles.formGroup}>
+              <input
+                type="url"
+                id="photo"
+                name="photo"
+                value={formData.photo}
+                onChange={handleChange}
+                className={styles.input}
+                placeholder="https://example.com/image.jpg"
+              />
+            </div>
           </div>
-
           <div className={styles.buttonContainer}>
             <button type="submit" className={styles.submitButton}>
               {product ? "Update" : "Add"}

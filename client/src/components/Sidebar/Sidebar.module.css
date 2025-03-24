@@ -53,7 +53,9 @@
   width: 24px;
   height: 24px;
 }
-
+.icon:focus {
+  outline: none;
+}
 /* По умолчанию скрываем боковую панель на мобильных и планшетах */
 @media (max-width: 1439px) {
   .sidebar {

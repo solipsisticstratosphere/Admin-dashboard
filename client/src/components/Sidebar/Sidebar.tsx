@@ -17,7 +17,7 @@ const Sidebar = () => {
               }
             >
               <div className={styles.icon}>
-                <Icon name="dashboard" />
+                <Icon className={styles.icon} name="dashboard" />
               </div>
             </NavLink>
           </li>
@@ -31,7 +31,7 @@ const Sidebar = () => {
               }
             >
               <div className={styles.icon}>
-                <Icon name="orders" />
+                <Icon className={styles.icon} name="orders" />
               </div>
             </NavLink>
           </li>
@@ -45,7 +45,7 @@ const Sidebar = () => {
               }
             >
               <div className={styles.icon}>
-                <Icon name="products" />
+                <Icon className={styles.icon} name="products" />
               </div>
             </NavLink>
           </li>
@@ -59,7 +59,7 @@ const Sidebar = () => {
               }
             >
               <div className={styles.icon}>
-                <Icon name="customers" />
+                <Icon className={styles.icon} name="customers" />
               </div>
             </NavLink>
           </li>
@@ -73,7 +73,7 @@ const Sidebar = () => {
               }
             >
               <div className={styles.icon}>
-                <Icon name="suppliers" />
+                <Icon className={styles.icon} name="suppliers" />
               </div>
             </NavLink>
           </li>
