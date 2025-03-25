@@ -12,7 +12,8 @@ export interface Customer {
   spent: string;
   phone: string;
   address: string;
-  register_date: string;
+  registerDate: string;
+  country: string;
 }
 
 export interface Transaction {

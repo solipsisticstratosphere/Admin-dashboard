@@ -11,6 +11,7 @@ const Orders: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [filterOpen, setFilterOpen] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [activeFilters, setActiveFilters] = useState<OrderFilters>({});
   const [tempFilters, setTempFilters] = useState<OrderFilters>({});
 
