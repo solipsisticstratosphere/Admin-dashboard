@@ -2,7 +2,7 @@ services:
   - type: web
     name: epharmacy-server
     env: node
-    buildCommand: npm install && npx prisma generate && npx nest build
+    buildCommand: npm install --no-shrinkwrap && npx prisma generate && npx nest build
     startCommand: npm run start:prod
     envVars:
       - key: DATABASE_URL
@@ -19,4 +19,6 @@ services:
         value: https://epharmacy-dashboard.onrender.com
       - key: PROD_CLIENT_URL
         value: https://epharmacy-dashboard.onrender.com
+      - key: RENDER_SKIP_LOCKFILE_CHECK
+        value: true
     healthCheckPath: /healthz
