@@ -21,6 +21,9 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
     try {
       this.logger.log('Connecting to database...');
       await this.$connect();
+
+      await this.$executeRaw`SET idle_in_transaction_session_timeout = 0`;
+
       this.logger.log('Successfully connected to database');
     } catch (error) {
       this.logger.error('Failed to connect to database:', error);

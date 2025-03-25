@@ -30,7 +30,9 @@
     "prisma:seed:supabase": "dotenv -e .env.supabase -- ts-node src/seed.ts",
     "seed": "ts-node src/seed.ts",
     "seed:orders": "ts-node src/seed-orders.ts",
-    "seed:products": "ts-node src/seed-products.ts"
+    "seed:products": "ts-node src/seed-products.ts",
+    "export:data": "ts-node src/export-data.ts",
+    "import:supabase": "dotenv -e .env.supabase -- ts-node src/import-to-supabase.ts"
   },
   "dependencies": {
     "@apollo/server": "^4.11.3",

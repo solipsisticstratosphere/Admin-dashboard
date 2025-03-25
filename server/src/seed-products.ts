@@ -20,10 +20,42 @@ async function main() {
     await prisma.product.deleteMany({});
     console.log('Cleared existing products');
 
-    // Read products from JSON file
-    const productsFilePath = path.join(process.cwd(), 'server/json/products.json');
-    const data = await fs.readFile(productsFilePath, 'utf8');
-    const jsonProducts = JSON.parse(data) as JsonProduct[];
+    // Try different potential file paths
+    const possiblePaths = [
+      path.join(process.cwd(), 'json', 'products.json'),
+      path.resolve(__dirname, '..', 'json', 'products.json'),
+      path.join(process.cwd(), 'server', 'json', 'products.json'),
+    ];
+
+    let jsonProducts: JsonProduct[] = [];
+    let filePath = '';
+
+    for (const potentialPath of possiblePaths) {
+      try {
+        if (
+          await fs
+            .stat(potentialPath)
+            .then(() => true)
+            .catch(() => false)
+        ) {
+          filePath = potentialPath;
+          console.log(`Found products.json at: ${filePath}`);
+          const data = await fs.readFile(filePath, 'utf8');
+          jsonProducts = JSON.parse(data);
+          break;
+        }
+      } catch (e) {
+        console.error(`Error checking path ${potentialPath}:`, e);
+      }
+    }
+
+    if (!filePath || jsonProducts.length === 0) {
+      console.error(
+        'Could not find products.json file or file is empty. Checked paths:',
+        possiblePaths,
+      );
+      return;
+    }
 
     // Track unique product names to avoid duplicates
     const uniqueNames = new Set<string>();
