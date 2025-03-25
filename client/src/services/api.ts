@@ -1,4 +1,5 @@
 import axios from "axios";
+import { API_CONFIG } from "../config/api.config";
 
 // Dashboard API interfaces
 export interface DashboardStats {
@@ -72,7 +73,7 @@ export const getDashboardDataGQL = async (): Promise<DashboardData> => {
   `;
 
   const response = await axios.post<{ data: { dashboard: DashboardData } }>(
-    "http://localhost:3001/graphql",
+    API_CONFIG.url,
     { query },
     {
       headers: {
@@ -118,7 +119,7 @@ export const getCustomerDetailsGQL = async (
   const response = await axios.post<{
     data: { customerDetails: CustomerDetails };
   }>(
-    "http://localhost:3001/graphql",
+    API_CONFIG.url,
     { query, variables },
     {
       headers: {

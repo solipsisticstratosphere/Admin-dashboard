@@ -1,12 +1,10 @@
 // src/apollo.ts
 import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
-
-// Определение API URL в зависимости от окружения
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3001/graphql";
+import { API_CONFIG } from "./config/api.config";
 
 const httpLink = createHttpLink({
-  uri: API_URL,
+  uri: API_CONFIG.url,
   credentials: "include",
   headers: {
     "Content-Type": "application/json",

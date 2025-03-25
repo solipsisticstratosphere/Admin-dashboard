@@ -15,7 +15,7 @@ async function bootstrap() {
   // Настройка CORS в зависимости от окружения
   const origins = [
     'http://localhost:5173',
-    'http://localhost:3000',
+    'http://localhost:3001',
     'http://localhost:5174',
     'https://admin-dashboard-iota-seven-29.vercel.app',
     'https://epharmacy-dashboard.onrender.com',
