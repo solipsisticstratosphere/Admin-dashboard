@@ -14,4 +14,9 @@ export class AppController {
   healthCheck() {
     return { status: 'ok' };
   }
+
+  @Get('healthz')
+  healthCheckZ() {
+    return { status: 'ok' };
+  }
 }
