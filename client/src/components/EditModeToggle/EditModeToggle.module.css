@@ -1,0 +1,46 @@
+.container {
+  display: flex;
+  align-items: center;
+}
+
+.toggleButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: transparent;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.toggleButton:hover {
+  background-color: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.toggleButton.active {
+  background-color: var(--accent);
+
+  color: white;
+}
+
+.icon {
+  transition: transform 0.2s ease;
+}
+
+.active .icon {
+  transform: rotate(-10deg);
+}
+@media (max-width: 1439px) {
+  .toggleButton span {
+    display: none;
+  }
+  .toggleButton {
+    font-size: 12px;
+  }
+}

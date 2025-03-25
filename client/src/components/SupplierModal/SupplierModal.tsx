@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import styles from "./SupplierModal.module.css";
 
 interface Supplier {
@@ -26,162 +27,246 @@ const SupplierModal = ({
   supplier,
   errorMessage,
 }: SupplierModalProps) => {
-  const [name, setName] = useState("");
-  const [address, setAddress] = useState("");
-  const [company, setCompany] = useState("");
-  const [date, setDate] = useState("");
-  const [amount, setAmount] = useState("");
-  const [status, setStatus] = useState("Active");
+  const [formData, setFormData] = useState<Omit<Supplier, "id">>({
+    name: "",
+    address: "",
+    company: "",
+    date: "",
+    amount: "",
+    status: "Active",
+  });
 
-  // Reset form or populate with supplier data when modal opens/changes
+  // Form validation state
+  const [validation, setValidation] = useState({
+    name: true,
+    address: true,
+    company: true,
+    amount: true,
+  });
+
   useEffect(() => {
-    if (isOpen) {
-      if (supplier) {
-        // Edit mode - populate form with supplier data
-        setName(supplier.name);
-        setAddress(supplier.address);
-        setCompany(supplier.company);
-        setDate(supplier.date);
-        setAmount(supplier.amount);
-        setStatus(supplier.status);
-      } else {
-        // Create mode - reset form
-        setName("");
-        setAddress("");
-        setCompany("");
-        setDate(new Date().toISOString().split("T")[0]); // Today's date
-        setAmount("");
-        setStatus("Active");
-      }
+    if (supplier) {
+      setFormData({
+        name: supplier.name,
+        address: supplier.address,
+        company: supplier.company,
+        date: supplier.date,
+        amount: supplier.amount,
+        status: supplier.status,
+      });
+    } else {
+      setFormData({
+        name: "",
+        address: "",
+        company: "",
+        date: new Date().toISOString().split("T")[0], // Today's date
+        amount: "",
+        status: "Active",
+      });
     }
-  }, [isOpen, supplier]);
+
+    // Reset validation state when modal opens
+    setValidation({
+      name: true,
+      address: true,
+      company: true,
+      amount: true,
+    });
+  }, [supplier, isOpen]);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    // Clear validation errors on change
+    if (!validation[name as keyof typeof validation]) {
+      setValidation((prev) => ({
+        ...prev,
+        [name]: true,
+      }));
+    }
+  };
+
+  const validateForm = (): boolean => {
+    const newValidation = {
+      name: formData.name.trim() !== "",
+      address: formData.address.trim() !== "",
+      company: formData.company.trim() !== "",
+      amount: /^\d+(\.\d+)?$/.test(formData.amount.trim()),
+    };
+
+    setValidation(newValidation);
+
+    return Object.values(newValidation).every((isValid) => isValid);
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Submit the form data
-    onSubmit({
-      name,
-      address,
-      company,
-      date,
-      amount,
-      status,
-    });
+    if (!validateForm()) {
+      return;
+    }
+
+    // Sanitize the data before submitting
+    const sanitizedData = {
+      name: formData.name.trim(),
+      address: formData.address.trim(),
+      company: formData.company.trim(),
+      date: formData.date,
+      amount: formData.amount.trim(),
+      status: formData.status,
+    };
+
+    onSubmit(sanitizedData);
   };
 
   if (!isOpen) return null;
 
-  return (
+  // Use React's createPortal to render the modal to the document body
+  return createPortal(
     <div className={styles.modalOverlay}>
       <div className={styles.modalContainer}>
         <div className={styles.modalHeader}>
           <h2 className={styles.modalTitle}>
-            {supplier ? "Edit Supplier" : "Add New Supplier"}
+            {supplier ? "Edit Supplier" : "Add a new supplier"}
           </h2>
-          <button className={styles.closeButton} onClick={onClose}>
-            &times;
+          <button onClick={onClose} className={styles.closeButton}>
+            <svg
+              className={styles.closeIcon}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className={styles.form}>
-          <div className={styles.formGroup}>
-            <label htmlFor="name" className={styles.label}>
-              Name
-            </label>
-            <input
-              type="text"
-              id="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className={styles.input}
-              placeholder="Supplier name"
-              required
-            />
-          </div>
+        {errorMessage && (
+          <div className={styles.errorMessage}>{errorMessage}</div>
+        )}
 
-          <div className={styles.formGroup}>
-            <label htmlFor="address" className={styles.label}>
-              Address
-            </label>
-            <input
-              type="text"
-              id="address"
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-              className={styles.input}
-              placeholder="Supplier address"
-              required
-            />
-          </div>
-
-          <div className={styles.formGroup}>
-            <label htmlFor="company" className={styles.label}>
-              Company
-            </label>
-            <input
-              type="text"
-              id="company"
-              value={company}
-              onChange={(e) => setCompany(e.target.value)}
-              className={styles.input}
-              placeholder="Company name"
-              required
-            />
-          </div>
-
-          <div className={styles.formRow}>
+        <form className={styles.form} onSubmit={handleSubmit}>
+          <div className={styles.formRows}>
             <div className={styles.formGroup}>
-              <label htmlFor="date" className={styles.label}>
-                Delivery Date
-              </label>
               <input
+                placeholder="Supplier Name"
+                type="text"
+                id="name"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                className={`${styles.input} ${
+                  !validation.name ? styles.inputError : ""
+                }`}
+                required
+              />
+              {!validation.name && (
+                <div className={styles.fieldError}>
+                  Supplier name is required
+                </div>
+              )}
+            </div>
+
+            <div className={styles.formGroup}>
+              <input
+                placeholder="Address"
+                type="text"
+                id="address"
+                name="address"
+                value={formData.address}
+                onChange={handleChange}
+                className={`${styles.input} ${
+                  !validation.address ? styles.inputError : ""
+                }`}
+                required
+              />
+              {!validation.address && (
+                <div className={styles.fieldError}>Address is required</div>
+              )}
+            </div>
+
+            <div className={styles.formGroup}>
+              <input
+                placeholder="Company"
+                type="text"
+                id="company"
+                name="company"
+                value={formData.company}
+                onChange={handleChange}
+                className={`${styles.input} ${
+                  !validation.company ? styles.inputError : ""
+                }`}
+                required
+              />
+              {!validation.company && (
+                <div className={styles.fieldError}>Company is required</div>
+              )}
+            </div>
+
+            <div className={styles.formGroup}>
+              <input
+                placeholder="Delivery Date"
                 type="date"
                 id="date"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
+                name="date"
+                value={formData.date}
+                onChange={handleChange}
                 className={styles.input}
                 required
               />
             </div>
 
             <div className={styles.formGroup}>
-              <label htmlFor="amount" className={styles.label}>
-                Amount
-              </label>
               <input
+                placeholder="Amount"
                 type="text"
                 id="amount"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                className={styles.input}
-                placeholder="Amount"
+                name="amount"
+                value={formData.amount}
+                onChange={handleChange}
+                className={`${styles.input} ${
+                  !validation.amount ? styles.inputError : ""
+                }`}
                 required
               />
+              {!validation.amount && (
+                <div className={styles.fieldError}>
+                  Amount must be a valid number
+                </div>
+              )}
+            </div>
+
+            <div className={styles.formGroup}>
+              <select
+                id="status"
+                name="status"
+                value={formData.status}
+                onChange={handleChange}
+                className={styles.select}
+                required
+              >
+                <option value="Active">Active</option>
+                <option value="Deactive">Deactive</option>
+              </select>
             </div>
           </div>
 
-          <div className={styles.formGroup}>
-            <label htmlFor="status" className={styles.label}>
-              Status
-            </label>
-            <select
-              id="status"
-              value={status}
-              onChange={(e) => setStatus(e.target.value)}
-              className={styles.select}
-              required
-            >
-              <option value="Active">Active</option>
-              <option value="Deactive">Deactive</option>
-            </select>
-          </div>
-
-          {errorMessage && (
-            <div className={styles.errorMessage}>{errorMessage}</div>
-          )}
-
           <div className={styles.buttonContainer}>
+            <button type="submit" className={styles.submitButton}>
+              {supplier ? "Update" : "Add"}
+            </button>
             <button
               type="button"
               onClick={onClose}
@@ -189,13 +274,11 @@ const SupplierModal = ({
             >
               Cancel
             </button>
-            <button type="submit" className={styles.submitButton}>
-              {supplier ? "Update Supplier" : "Add Supplier"}
-            </button>
           </div>
         </form>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

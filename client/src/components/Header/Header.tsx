@@ -5,6 +5,8 @@ import logo from "../../assets/images/logo1.png";
 import { useAuth } from "../../context/AuthContext";
 import Icon from "../UI/Icon";
 import MobileMenu from "../MobileMenu/MobileMenu";
+import EditModeToggle from "../EditModeToggle/EditModeToggle";
+import AdminPasswordDialog from "../AdminPasswordDialog/AdminPasswordDialog";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -54,6 +56,7 @@ const Header = () => {
           </div>
         </div>
         <div className={styles.rightSection}>
+          <EditModeToggle />
           <button
             onClick={handleLogout}
             className={styles.logoutButton}
@@ -64,6 +67,7 @@ const Header = () => {
         </div>
       </header>
       <MobileMenu isOpen={isMobileMenuOpen} onClose={closeMobileMenu} />
+      <AdminPasswordDialog />
     </>
   );
 };

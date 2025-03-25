@@ -1,48 +1,88 @@
 .customersPage {
-  padding: 1.5rem;
-  background-color: #f9fafb;
-  min-height: calc(100vh - 64px);
+  padding: 1rem;
+}
+.container {
+  padding: 1rem;
 }
 
-.filterSection {
+.header {
   display: flex;
-  gap: 0.75rem;
-  margin-bottom: 1.5rem;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.searchContainer {
+  gap: 10px;
+  display: flex;
+  align-items: center;
 }
 
 .searchInput {
-  flex: 1;
-  max-width: 400px;
-  padding: 0.625rem 1rem;
-  border: 1px solid #e5e7eb;
-  border-radius: 0.375rem;
-  background-color: white;
-  font-size: 0.875rem;
+  border: 1px solid rgba(29, 30, 33, 0.1);
+  border-radius: 60px;
+  width: 224px;
+  padding: 10px 12px;
+  height: 44px;
+  font-size: 14px;
+  outline: none;
+  background: #fff;
+}
+.searchInput::placeholder {
+  color: rgba(29, 30, 33, 0.4);
+}
+.searchInput:focus {
+  border-color: #6c757d;
+}
+
+.searchInput:focus {
+  outline: none;
+  ring: 2px;
+  ring-color: #10b981;
 }
 
 .filterButton {
+  border-radius: 60px;
+  padding: 13px 30px;
+  width: 116px;
+  display: flex;
+  align-items: stretch;
+  gap: 5px;
+  background-color: #59b17a;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.addButton {
+  width: 42px;
+  height: 42px;
+  background-color: #59b17a;
+  color: white;
+  border-radius: 50%;
+  border: none;
   display: flex;
   align-items: center;
-  gap: 0.375rem;
-  padding: 0.625rem 1rem;
-  background-color: #f3f4f6;
-  border: 1px solid #e5e7eb;
-  border-radius: 0.375rem;
-  color: #4b5563;
-  font-size: 0.875rem;
-  font-weight: 500;
+  justify-content: center;
+}
+.addButton:hover {
+  background-color: #40805d;
+}
+.buttonIcon:focus {
+  outline: none;
+}
+.addButtonContainer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.filterIcon {
-  width: 1rem;
-  height: 1rem;
-  color: #6b7280;
-}
-
+/* Filter Panel Styles */
 .filterPanel {
-  background-color: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 0.5rem;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.375rem;
   padding: 1rem;
   margin-bottom: 1.5rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -50,105 +90,136 @@
 
 .filterRow {
   display: flex;
-  gap: 1.5rem;
+  gap: 1rem;
   margin-bottom: 1rem;
 }
 
 .filterItem {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
 }
 
 .filterItem label {
+  display: block;
   font-size: 0.875rem;
   font-weight: 500;
-  color: #4b5563;
+  margin-bottom: 0.375rem;
+  color: #475569;
 }
 
+.filterSelect,
 .filterInput {
+  width: 100%;
   padding: 0.5rem;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #e2e8f0;
   border-radius: 0.375rem;
   background-color: white;
-  width: 100%;
+}
+
+.filterSelect:focus,
+.filterInput:focus {
+  outline: none;
+  border-color: #10b981;
+  ring: 2px;
+  ring-color: #10b981;
 }
 
 .filterActions {
   display: flex;
-  gap: 0.5rem;
   justify-content: flex-end;
+  gap: 0.75rem;
 }
 
 .applyButton {
-  padding: 0.5rem 1rem;
   background-color: #10b981;
   color: white;
+  padding: 0.5rem 1rem;
   border-radius: 0.375rem;
   font-weight: 500;
-  font-size: 0.875rem;
+  border: none;
+  cursor: pointer;
 }
 
 .resetButton {
+  background-color: #f1f5f9;
+  color: #475569;
   padding: 0.5rem 1rem;
-  background-color: #e5e7eb;
-  color: #4b5563;
   border-radius: 0.375rem;
   font-weight: 500;
-  font-size: 0.875rem;
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
 }
 
 .tableSection {
   background-color: white;
-  border-radius: 0.5rem;
+  border-radius: 12px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
 
 .tableHeader {
-  padding: 1rem 1.5rem;
-  border-bottom: 1px solid #e5e7eb;
-}
-
-.tableTitle {
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: #111827;
-  margin: 0;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  padding: 20px;
+  border-bottom: 1px solid #e9ecef;
+  background-color: #e7f1ed;
 }
 
 .tableContainer {
   overflow-x: auto;
+  width: 100%;
 }
 
 .customersTable {
+  background-color: #fff;
   width: 100%;
+  min-width: 800px;
   border-collapse: collapse;
 }
 
+.customersTable thead tr {
+  background-color: white;
+}
+
 .customersTable th {
-  background-color: #f9fafb;
-  padding: 0.75rem 1.5rem;
+  padding: 20px;
   text-align: left;
-  font-size: 0.75rem;
+  border-bottom: 1px solid #e9ecef;
+  position: relative;
   font-weight: 600;
-  color: #6b7280;
-  border-bottom: 1px solid #e5e7eb;
+  color: rgba(29, 30, 33, 0.4);
+  font-size: 14px;
 }
 
-.customerRow {
-  border-bottom: 1px solid #e5e7eb;
-}
-
-.customerRow:last-child {
-  border-bottom: none;
+.customersTable th::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background-color: #e9ecef;
 }
 
 .customersTable td {
-  padding: 1rem 1.5rem;
-  font-size: 0.875rem;
-  color: #1f2937;
+  padding: 20px;
+  text-align: left;
+  border-bottom: 1px solid #e9ecef;
+  color: #212529;
+  position: relative;
+}
+
+.customersTable td:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background-color: #e9ecef;
+}
+
+.customerRow:hover {
+  background-color: #f8f9fa;
 }
 
 .customerInfo {
@@ -169,63 +240,65 @@
   font-weight: 500;
 }
 
+.customerName a {
+  color: #212529;
+  text-decoration: none;
+}
+
+.customerName a:hover {
+  color: #10b981;
+  text-decoration: underline;
+}
+
 .noCustomersCell {
   text-align: center;
   color: #6b7280;
   padding: 2rem 1.5rem;
 }
 
+.tableTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: #212529;
+  margin: 0;
+}
+
+/* Pagination Styles */
 .paginationContainer {
   display: flex;
   justify-content: center;
-  padding: 1rem 0;
-  gap: 0.5rem;
+  align-items: center;
+  padding: 25px 0;
+  gap: 8px;
 }
 
 .pageButton {
-  width: 0.75rem;
-  height: 0.75rem;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
-  background-color: #e5e7eb;
-  padding: 0;
+  background-color: #e0e0e0;
   border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  padding: 0;
+  margin: 0 4px;
+}
+
+.pageButton:hover {
+  background-color: #b8e4c9;
 }
 
 .activePageDot {
-  background-color: #10b981;
+  background-color: #4caf50;
 }
 
 .loading {
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: 300px;
-  font-size: 1rem;
-  color: #6b7280;
+  padding: 2rem;
 }
 
 .error {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 300px;
-  font-size: 1rem;
   color: #ef4444;
-  text-align: center;
-}
-
-.searchButton {
-  padding: 0.625rem 1rem;
-  background-color: #10b981;
-  color: white;
-  border: none;
-  border-radius: 0.375rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  cursor: pointer;
-}
-
-.searchButton:hover {
-  background-color: #059669;
+  padding: 2rem;
 }

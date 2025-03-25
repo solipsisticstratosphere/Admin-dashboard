@@ -9,6 +9,7 @@ import {
 import ProductModal from "../../components/ProductModal";
 import styles from "./ProductList.module.css";
 import Icon from "../../components/UI/Icon";
+import { useEditMode } from "../../context/EditModeContext";
 
 interface Product {
   id: string;
@@ -38,6 +39,7 @@ interface ProductFilters {
 const ITEMS_PER_PAGE = 5;
 
 const ProductList = () => {
+  const { isEditMode } = useEditMode();
   const [filters, setFilters] = useState<ProductFilters>({});
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -84,16 +86,28 @@ const ProductList = () => {
   }, [data]);
 
   const handleAddNew = () => {
+    if (!isEditMode) {
+      alert("You must enable Edit Mode to add a new product");
+      return;
+    }
     setCurrentProduct(null);
     setIsModalOpen(true);
   };
 
   const handleEdit = (product: Product) => {
+    if (!isEditMode) {
+      alert("You must enable Edit Mode to edit products");
+      return;
+    }
     setCurrentProduct(product);
     setIsModalOpen(true);
   };
 
   const handleDelete = async (productId: string) => {
+    if (!isEditMode) {
+      alert("You must enable Edit Mode to delete products");
+      return;
+    }
     if (window.confirm("Are you sure you want to delete this product?")) {
       try {
         await deleteProduct({
@@ -200,7 +214,16 @@ const ProductList = () => {
     setIsFilterOpen(!isFilterOpen);
   };
 
-  const filteredProducts = data?.getProducts?.products || [];
+  const filteredProducts = data?.getProducts.products.filter((product) => {
+    if (!searchTerm) return true;
+    const searchLower = searchTerm.toLowerCase();
+    return (
+      product.name.toLowerCase().includes(searchLower) ||
+      product.suppliers.toLowerCase().includes(searchLower)
+    );
+  });
+
+  if (!filteredProducts) return null;
 
   // Pagination logic
   const totalItems = filteredProducts.length;
@@ -251,7 +274,7 @@ const ProductList = () => {
         <div className={styles.searchContainer}>
           <input
             type="text"
-            placeholder="Product Name"
+            placeholder="Product Name or Suppliers"
             className={styles.searchInput}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -262,10 +285,18 @@ const ProductList = () => {
           </button>
         </div>
         <div className={styles.addButtonContainer}>
-          <button className={styles.addButton} onClick={handleAddNew}>
+          <button
+            className={`${styles.addButton} ${
+              !isEditMode ? styles.disabled : ""
+            }`}
+            onClick={handleAddNew}
+            disabled={!isEditMode}
+          >
             <Icon name="add" size={26} className={styles.buttonIcon} />
           </button>
-          <p>Add a new product</p>
+          <p>
+            {isEditMode ? "Add a new product" : "Edit mode required to add"}
+          </p>
         </div>
       </div>
 
@@ -363,14 +394,20 @@ const ProductList = () => {
                   <td className={styles.tableCell}>
                     <div className={styles.actionContainer}>
                       <button
-                        className={styles.editButton}
+                        className={`${styles.editButton} ${
+                          !isEditMode ? styles.disabled : ""
+                        }`}
                         onClick={() => handleEdit(product)}
+                        disabled={!isEditMode}
                       >
                         <Icon name="edit" className="w-5 h-5" />
                       </button>
                       <button
-                        className={styles.deleteButton}
+                        className={`${styles.deleteButton} ${
+                          !isEditMode ? styles.disabled : ""
+                        }`}
                         onClick={() => handleDelete(product.id)}
+                        disabled={!isEditMode}
                       >
                         <Icon name="delete" className="w-5 h-5" />
                       </button>

@@ -8,6 +8,8 @@ import * as bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
 import { JwtPayload } from './types/jwt-payload.type';
 import { User } from '../users/entities/user.entity';
+import { VerifyAdminPasswordInput } from './dto/verify-admin-password.input';
+import { VerifyAdminPasswordResponse } from './dto/verify-admin-password.response';
 
 @Injectable()
 export class AuthService {
@@ -169,6 +171,32 @@ export class AuthService {
     return {
       accessToken,
       refreshToken,
+    };
+  }
+
+  async verifyAdminPassword(
+    verifyInput: VerifyAdminPasswordInput,
+  ): Promise<VerifyAdminPasswordResponse> {
+    const { password } = verifyInput;
+    const adminPassword = this.configService.get<string>('ADMIN_EDIT_PASSWORD');
+
+    if (!adminPassword) {
+      return {
+        success: false,
+        message: 'Admin password not configured on server',
+      };
+    }
+
+    if (password === adminPassword) {
+      return {
+        success: true,
+        message: 'Admin password verified successfully',
+      };
+    }
+
+    return {
+      success: false,
+      message: 'Invalid admin password',
     };
   }
 }

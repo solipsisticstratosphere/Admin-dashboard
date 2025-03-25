@@ -87,6 +87,10 @@ export class UpdateSupplierInput {
     status?: Nullable<string>;
 }
 
+export class VerifyAdminPasswordInput {
+    password: string;
+}
+
 export class AuthResponse {
     accessToken: string;
     refreshToken: string;
@@ -161,6 +165,8 @@ export abstract class IMutation {
     abstract updateProduct(id: string, input: UpdateProductInput): Nullable<Product> | Promise<Nullable<Product>>;
 
     abstract updateSupplier(id: string, input: UpdateSupplierInput): Nullable<Supplier> | Promise<Nullable<Supplier>>;
+
+    abstract verifyAdminPassword(input: VerifyAdminPasswordInput): VerifyAdminPasswordResponse | Promise<VerifyAdminPasswordResponse>;
 }
 
 export class Order {
@@ -243,6 +249,11 @@ export class User {
     id: string;
     lastName?: Nullable<string>;
     updatedAt: DateTime;
+}
+
+export class VerifyAdminPasswordResponse {
+    message?: Nullable<string>;
+    success: boolean;
 }
 
 export type DateTime = any;

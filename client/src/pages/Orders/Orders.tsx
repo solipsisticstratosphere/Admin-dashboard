@@ -139,7 +139,7 @@ const Orders: React.FC = () => {
         <input
           type="text"
           className={styles.searchInput}
-          placeholder="Search by name or address"
+          placeholder="Name or Address"
           value={searchTerm}
           onChange={(e) => {
             setSearchTerm(e.target.value);

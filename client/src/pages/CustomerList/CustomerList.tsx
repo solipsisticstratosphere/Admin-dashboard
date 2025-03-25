@@ -4,6 +4,7 @@ import { useQuery } from "@apollo/client";
 import { GET_CUSTOMERS } from "../../graphql/customers";
 import { CustomersQueryResult, CustomerFilters } from "../../graphql/types";
 import { Link } from "react-router-dom";
+import Icon from "../../components/UI/Icon";
 
 const ITEMS_PER_PAGE = 5;
 
@@ -26,8 +27,15 @@ const CustomerList: React.FC = () => {
     }
   );
 
-  const filteredCustomers = data?.getCustomers || [];
-
+  const filteredCustomers =
+    data?.getCustomers.filter((customer) => {
+      if (!searchTerm) return true;
+      const searchLower = searchTerm.toLowerCase();
+      return (
+        customer.name.toLowerCase().includes(searchLower) ||
+        customer.email.toLowerCase().includes(searchLower)
+      );
+    }) || [];
   // Pagination
   const totalItems = filteredCustomers.length;
   const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
@@ -110,39 +118,26 @@ const CustomerList: React.FC = () => {
   }
 
   return (
-    <div className={styles.customersPage}>
-      <div className={styles.filterSection}>
-        <input
-          type="text"
-          className={styles.searchInput}
-          placeholder="Search by name, email, or address"
-          value={searchTerm}
-          onChange={(e) => {
-            setSearchTerm(e.target.value);
-            // No longer applying filter immediately on change
-          }}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              applySearch();
-            }
-          }}
-        />
-        <button className={styles.searchButton} onClick={applySearch}>
-          Search
-        </button>
-        <button className={styles.filterButton} onClick={toggleFilter}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="currentColor"
-            viewBox="0 0 16 16"
-            className={styles.filterIcon}
-          >
-            <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z" />
-          </svg>
-          Filter
-        </button>
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <div className={styles.searchContainer}>
+          <input
+            type="text"
+            placeholder="Customer Name or Email"
+            className={styles.searchInput}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                applySearch();
+              }
+            }}
+          />
+          <button className={styles.filterButton} onClick={toggleFilter}>
+            <Icon name="filter" size={16} className={styles.buttonIcon} />
+            Filter
+          </button>
+        </div>
       </div>
 
       {isFilterOpen && (
@@ -256,67 +251,63 @@ const CustomerList: React.FC = () => {
         </div>
       )}
 
-      <div className={styles.tableSection}>
-        <div className={styles.tableHeader}>
-          <h2 className={styles.tableTitle}>All customers</h2>
-        </div>
-
-        <div className={styles.tableContainer}>
-          <table className={styles.customersTable}>
-            <thead>
-              <tr>
-                <th>Customer Info</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Address</th>
-                <th>Registration Date</th>
-                <th>Spent</th>
-              </tr>
-            </thead>
-            <tbody>
-              {currentPageItems.length > 0 ? (
-                currentPageItems.map((customer) => (
-                  <tr key={customer.id} className={styles.customerRow}>
-                    <td>
-                      <div className={styles.customerInfo}>
-                        <img
-                          src={
-                            customer.photo || "https://via.placeholder.com/40"
-                          }
-                          alt={customer.name}
-                          className={styles.avatar}
-                        />
-                        <span className={styles.customerName}>
-                          <Link to={`/customers/${customer.id}`}>
-                            {customer.name}
-                          </Link>
-                        </span>
-                      </div>
-                    </td>
-                    <td>{customer.email}</td>
-                    <td>{customer.phone}</td>
-                    <td>{customer.address}</td>
-                    <td>{customer.register_date}</td>
-                    <td>{customer.spent}</td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={6} className={styles.noCustomersCell}>
-                    No customers found.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-
-        {totalItems > 0 && (
-          <div className={styles.paginationContainer}>
-            {renderPaginationButtons()}
-          </div>
-        )}
+      <div className={styles.tableHeader}>
+        <h2 className={styles.tableTitle}>All customers</h2>
       </div>
+
+      <div className={styles.tableContainer}>
+        <table className={styles.customersTable}>
+          <thead>
+            <tr className={styles.tableHeaderRow}>
+              <th className={styles.tableHeaderCell}>Customer Info</th>
+              <th className={styles.tableHeaderCell}>Email</th>
+              <th className={styles.tableHeaderCell}>Phone</th>
+              <th className={styles.tableHeaderCell}>Address</th>
+              <th className={styles.tableHeaderCell}>Registration Date</th>
+              <th className={styles.tableHeaderCell}>Spent</th>
+            </tr>
+          </thead>
+          <tbody>
+            {currentPageItems.length > 0 ? (
+              currentPageItems.map((customer) => (
+                <tr key={customer.id} className={styles.tableRow}>
+                  <td className={styles.tableCell}>
+                    <div className={styles.customerInfo}>
+                      <img
+                        src={customer.photo || "https://via.placeholder.com/40"}
+                        alt={customer.name}
+                        className={styles.avatar}
+                      />
+                      <span className={styles.customerName}>
+                        <Link to={`/customers/${customer.id}`}>
+                          {customer.name}
+                        </Link>
+                      </span>
+                    </div>
+                  </td>
+                  <td className={styles.tableCell}>{customer.email}</td>
+                  <td className={styles.tableCell}>{customer.phone}</td>
+                  <td className={styles.tableCell}>{customer.address}</td>
+                  <td className={styles.tableCell}>{customer.register_date}</td>
+                  <td className={styles.tableCell}>{customer.spent}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={6} className={styles.tableCell}>
+                  No customers found.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      {totalItems > 0 && (
+        <div className={styles.paginationContainer}>
+          {renderPaginationButtons()}
+        </div>
+      )}
     </div>
   );
 };

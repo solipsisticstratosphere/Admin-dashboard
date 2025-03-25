@@ -49,20 +49,7 @@ const Sidebar = () => {
               </div>
             </NavLink>
           </li>
-          <li>
-            <NavLink
-              to="/customers"
-              className={({ isActive }) =>
-                isActive
-                  ? `${styles.menuItem} ${styles.active}`
-                  : styles.menuItem
-              }
-            >
-              <div className={styles.icon}>
-                <Icon className={styles.icon} name="customers" />
-              </div>
-            </NavLink>
-          </li>
+
           <li>
             <NavLink
               to="/suppliers"
@@ -74,6 +61,20 @@ const Sidebar = () => {
             >
               <div className={styles.icon}>
                 <Icon className={styles.icon} name="suppliers" />
+              </div>
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/customers"
+              className={({ isActive }) =>
+                isActive
+                  ? `${styles.menuItem} ${styles.active}`
+                  : styles.menuItem
+              }
+            >
+              <div className={styles.icon}>
+                <Icon className={styles.icon} name="customers" />
               </div>
             </NavLink>
           </li>

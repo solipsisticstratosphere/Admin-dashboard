@@ -8,6 +8,8 @@ import { GqlAuthGuard } from '../common/guards/gql-auth.guard';
 import { GqlRefreshGuard } from '../common/guards/gql-refresh.guard';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { User } from '../users/entities/user.entity';
+import { VerifyAdminPasswordInput } from './dto/verify-admin-password.input';
+import { VerifyAdminPasswordResponse } from './dto/verify-admin-password.response';
 
 interface GqlContext {
   req: {
@@ -48,5 +50,12 @@ export class AuthResolver {
     }
 
     return this.authService.refreshTokens(user.id, refreshToken);
+  }
+
+  @Mutation(() => VerifyAdminPasswordResponse, { name: 'verifyAdminPassword' })
+  async verifyAdminPassword(
+    @Args('input') verifyAdminPasswordInput: VerifyAdminPasswordInput,
+  ): Promise<VerifyAdminPasswordResponse> {
+    return this.authService.verifyAdminPassword(verifyAdminPasswordInput);
   }
 }

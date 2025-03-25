@@ -104,6 +104,7 @@ type Mutation {
   register(registerInput: RegisterInput!): AuthResponse!
   updateProduct(id: String!, input: UpdateProductInput!): Product
   updateSupplier(id: String!, input: UpdateSupplierInput!): Supplier
+  verifyAdminPassword(input: VerifyAdminPasswordInput!): VerifyAdminPasswordResponse!
 }
 
 type Order {
@@ -224,4 +225,13 @@ type User {
   id: ID!
   lastName: String
   updatedAt: DateTime!
+}
+
+input VerifyAdminPasswordInput {
+  password: String!
+}
+
+type VerifyAdminPasswordResponse {
+  message: String
+  success: Boolean!
 }

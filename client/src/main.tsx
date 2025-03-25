@@ -5,12 +5,15 @@ import App from "./components/App/App.tsx";
 import { ApolloProvider } from "@apollo/client";
 import client from "./apollo.ts";
 import { AuthProvider } from "./context/AuthContext";
+import { EditModeProvider } from "./context/EditModeContext";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ApolloProvider client={client}>
       <AuthProvider>
-        <App />
+        <EditModeProvider>
+          <App />
+        </EditModeProvider>
       </AuthProvider>
     </ApolloProvider>
   </StrictMode>

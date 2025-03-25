@@ -9,6 +9,7 @@ import {
 import SupplierModal from "../../components/SupplierModal";
 import styles from "./SupplierList.module.css";
 import Icon from "../../components/UI/Icon";
+import { useEditMode } from "../../context/EditModeContext";
 
 interface Supplier {
   id: string;
@@ -33,6 +34,7 @@ interface SupplierFilters {
 const ITEMS_PER_PAGE = 5;
 
 const SupplierList = () => {
+  const { isEditMode } = useEditMode();
   const [filters, setFilters] = useState<SupplierFilters>({});
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
@@ -70,16 +72,28 @@ const SupplierList = () => {
   });
 
   const handleAddNew = () => {
+    if (!isEditMode) {
+      alert("You must enable Edit Mode to add a new supplier");
+      return;
+    }
     setCurrentSupplier(null);
     setIsModalOpen(true);
   };
 
   const handleEdit = (supplier: Supplier) => {
+    if (!isEditMode) {
+      alert("You must enable Edit Mode to edit suppliers");
+      return;
+    }
     setCurrentSupplier(supplier);
     setIsModalOpen(true);
   };
 
   const handleDelete = async (supplierId: string) => {
+    if (!isEditMode) {
+      alert("You must enable Edit Mode to delete suppliers");
+      return;
+    }
     if (window.confirm("Are you sure you want to delete this supplier?")) {
       try {
         await deleteSupplier({
@@ -168,7 +182,15 @@ const SupplierList = () => {
     setIsFilterOpen(!isFilterOpen);
   };
 
-  const suppliers = data?.getSuppliers || [];
+  const suppliers =
+    data?.getSuppliers.filter((supplier) => {
+      if (!searchTerm) return true;
+      const searchLower = searchTerm.toLowerCase();
+      return (
+        supplier.name.toLowerCase().includes(searchLower) ||
+        supplier.company.toLowerCase().includes(searchLower)
+      );
+    }) || [];
 
   // Pagination logic
   const totalItems = suppliers.length;
@@ -219,20 +241,30 @@ const SupplierList = () => {
         <div className={styles.searchContainer}>
           <input
             type="text"
-            placeholder="Supplier Name"
+            placeholder="Supplier Name or Company"
             className={styles.searchInput}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
           <button className={styles.filterButton} onClick={toggleFilter}>
-            <Icon name="filter" className={styles.buttonIcon} />
+            <Icon name="filter" size={16} className={styles.buttonIcon} />
             Filter
           </button>
         </div>
-        <button className={styles.addButton} onClick={handleAddNew}>
-          <Icon name="add" className={styles.buttonIcon} />
-          Add a new supplier
-        </button>
+        <div className={styles.addButtonContainer}>
+          <button
+            className={`${styles.addButton} ${
+              !isEditMode ? styles.disabled : ""
+            }`}
+            onClick={handleAddNew}
+            disabled={!isEditMode}
+          >
+            <Icon name="add" size={26} className={styles.buttonIcon} />
+          </button>
+          <p>
+            {isEditMode ? "Add a new supplier" : "Edit mode required to add"}
+          </p>
+        </div>
       </div>
 
       {isFilterOpen && (
@@ -275,7 +307,7 @@ const SupplierList = () => {
       )}
 
       <div className={styles.tableHeader}>
-        <h2 className="text-lg font-semibold">All suppliers</h2>
+        <h2 className={styles.tableTitle}>All suppliers</h2>
       </div>
 
       <div className={styles.tableContainer}>
@@ -314,14 +346,20 @@ const SupplierList = () => {
                   <td className={styles.tableCell}>
                     <div className={styles.actionContainer}>
                       <button
-                        className={styles.editButton}
+                        className={`${styles.editButton} ${
+                          !isEditMode ? styles.disabled : ""
+                        }`}
                         onClick={() => handleEdit(supplier)}
+                        disabled={!isEditMode}
                       >
                         <Icon name="edit" className="w-5 h-5" />
                       </button>
                       <button
-                        className={styles.deleteButton}
+                        className={`${styles.deleteButton} ${
+                          !isEditMode ? styles.disabled : ""
+                        }`}
                         onClick={() => handleDelete(supplier.id)}
+                        disabled={!isEditMode}
                       >
                         <Icon name="delete" className="w-5 h-5" />
                       </button>
