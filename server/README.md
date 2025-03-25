@@ -1,3 +1,131 @@
+# Epharmacy Dashboard Server
+
+Серверная часть панели администратора для приложения Epharmacy.
+
+## Требования
+
+- Node.js >= 16
+- npm >= 8
+- PostgreSQL >= 13
+
+## Настройка проекта
+
+### Локальная разработка
+
+1. Установите зависимости:
+
+```bash
+npm install
+```
+
+2. Скопируйте файл `.env.example` в `.env`:
+
+```bash
+cp .env.example .env
+```
+
+3. Настройте переменные окружения в `.env` файле.
+
+4. Создайте и примените миграции базы данных:
+
+```bash
+npm run prisma:migrate:dev
+```
+
+5. Заполните базу данных начальными данными:
+
+```bash
+npm run prisma:seed
+```
+
+6. Запустите сервер в режиме разработки:
+
+```bash
+npm run start:dev
+```
+
+### Deployment на Supabase и Render
+
+#### 1. Создание проекта в Supabase
+
+1. Зарегистрируйтесь или войдите в [Supabase](https://supabase.com/)
+2. Создайте новый проект
+3. Скопируйте строку подключения (Connection string) из раздела "Settings" > "Database"
+
+#### 2. Настройка переменных окружения для Supabase
+
+1. Скопируйте файл `.env.example` в `.env.supabase`:
+
+```bash
+cp .env.example .env.supabase
+```
+
+2. Обновите `DATABASE_URL` в `.env.supabase` используя строку подключения из Supabase.
+
+   - Для предотвращения проблем с IPv6, используйте строку подключения через pooler:
+
+   ```
+   DATABASE_URL=postgresql://postgres.[PROJECT_ID]:[PASSWORD]@aws-0-[REGION].pooler.supabase.com:6543/postgres
+   ```
+
+3. Установите безопасные значения для JWT ключей и других секретов.
+
+4. Настройте разрешенные IP-адреса в Supabase:
+   - Перейдите в раздел "Project Settings" > "Database" > "Network Restrictions"
+   - Добавьте свой IP-адрес для локальной разработки
+   - Добавьте IP-адрес Render для продакшн-деплоя (можно найти в настройках инстанса)
+
+#### 3. Миграция схемы базы данных в Supabase
+
+```bash
+npm run prisma:migrate:supabase
+```
+
+#### 4. Заполнение базы данных в Supabase
+
+```bash
+npm run prisma:seed:supabase
+```
+
+#### 5. Деплой на Render
+
+1. Зарегистрируйтесь или войдите в [Render](https://render.com/)
+2. Подключите ваш GitHub репозиторий
+3. Создайте новый Web Service, указав директорию `server`
+4. Установите следующие настройки:
+   - Build Command: `npm ci && npx prisma generate && npm run build`
+   - Start Command: `npm run start:prod`
+5. Добавьте все необходимые переменные окружения:
+
+   - `DATABASE_URL` (строка подключения из Supabase)
+   - `NODE_ENV=production`
+   - `PORT=8080`
+   - `JWT_SECRET` и `JWT_REFRESH_SECRET`
+   - `ADMIN_EDIT_PASSWORD`
+   - `PROD_CLIENT_URL` (URL вашего фронтенда)
+
+6. Дождитесь завершения деплоя
+
+#### 6. Обновление клиентской части
+
+В файле `.env` клиентского приложения укажите:
+
+```
+VITE_API_URL=https://your-render-service-url.onrender.com/graphql
+```
+
+## Доступные скрипты
+
+- `npm run build` - сборка проекта
+- `npm run start:dev` - запуск в режиме разработки
+- `npm run start:prod` - запуск в production-режиме
+- `npm run prisma:studio` - запуск Prisma Studio
+- `npm run prisma:generate` - генерация Prisma клиента
+- `npm run prisma:migrate:dev` - создание и применение миграций
+- `npm run prisma:migrate:supabase` - применение миграций к Supabase
+- `npm run prisma:seed` - заполнение локальной базы данных
+- `npm run prisma:seed:supabase` - заполнение базы данных в Supabase
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>

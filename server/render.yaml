@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: epharmacy-server
+    env: node
+    plan: free
+    buildCommand: npm ci && npx prisma generate && npx nest build
+    startCommand: npm run start:prod
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 8080
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: JWT_REFRESH_SECRET
+        sync: false
+      - key: ADMIN_EDIT_PASSWORD
+        sync: false
+      - key: PROD_CLIENT_URL
+        value: https://admin-dashboard-iota-seven-29.vercel.app
+    healthCheckPath: /health

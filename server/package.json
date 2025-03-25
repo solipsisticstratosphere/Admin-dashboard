@@ -10,6 +10,7 @@
     "seed:orders": "ts-node src/seed-orders.ts",
     "seed:products": "ts-node src/seed-products.ts",
     "build": "nest build",
+    "build:render": "npx nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "fix:line-endings": "node fix-line-endings.js",
     "start": "nest start",
@@ -26,7 +27,9 @@
     "prisma:generate": "prisma generate",
     "prisma:migrate:dev": "prisma migrate dev",
     "prisma:migrate:reset": "prisma migrate reset",
-    "prisma:seed": "ts-node src/seed.ts"
+    "prisma:migrate:supabase": "dotenv -e .env.supabase -- prisma migrate deploy",
+    "prisma:seed": "ts-node src/seed.ts",
+    "prisma:seed:supabase": "dotenv -e .env.supabase -- ts-node src/seed.ts"
   },
   "dependencies": {
     "@nestjs/apollo": "^13.0.3",
@@ -70,6 +73,7 @@
     "@types/node": "^22.10.7",
     "@types/passport-jwt": "^4.0.1",
     "@types/supertest": "^6.0.2",
+    "dotenv-cli": "^8.0.0",
     "eslint": "^9.22.0",
     "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-prettier": "^5.2.3",
