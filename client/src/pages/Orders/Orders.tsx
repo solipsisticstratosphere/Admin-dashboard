@@ -11,8 +11,7 @@ const Orders: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [filterOpen, setFilterOpen] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [activeFilters, setActiveFilters] = useState<OrderFilters>({});
+
   const [tempFilters, setTempFilters] = useState<OrderFilters>({});
 
   // Use lazy query for filtering
@@ -49,8 +48,6 @@ const Orders: React.FC = () => {
     if (tempFilters.status) filters.status = tempFilters.status;
     if (tempFilters.order_date) filters.order_date = tempFilters.order_date;
 
-    setActiveFilters(filters);
-
     setCurrentPage(1);
 
     getOrders({ variables: { filters } });
@@ -59,7 +56,7 @@ const Orders: React.FC = () => {
   // Reset filters
   const resetFilters = () => {
     setTempFilters({});
-    setActiveFilters({});
+
     setCurrentPage(1);
     // Keep filter panel open (removed the line that closes it)
     getOrders({ variables: { filters: {} } });

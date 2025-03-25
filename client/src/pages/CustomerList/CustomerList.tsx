@@ -288,7 +288,7 @@ const CustomerList: React.FC = () => {
                   <td className={styles.tableCell}>{customer.email}</td>
                   <td className={styles.tableCell}>{customer.phone}</td>
                   <td className={styles.tableCell}>{customer.address}</td>
-                  <td className={styles.tableCell}>{customer.register_date}</td>
+                  <td className={styles.tableCell}>{customer.registerDate}</td>
                   <td className={styles.tableCell}>{customer.spent}</td>
                 </tr>
               ))
