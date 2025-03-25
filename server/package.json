@@ -9,9 +9,9 @@
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "node ./node_modules/.bin/nest start",
-    "start:dev": "node ./node_modules/.bin/nest start --watch",
-    "start:debug": "node ./node_modules/.bin/nest start --debug --watch",
+    "start": "npx nest start",
+    "start:dev": "npx nest start --watch",
+    "start:debug": "npx nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "echo 'Skipping lint for build'",
     "test": "jest",
@@ -31,6 +31,7 @@
     "seed:products": "ts-node src/seed-products.ts"
   },
   "dependencies": {
+    "@apollo/server": "^4.11.3",
     "@nestjs/apollo": "^12.1.0",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.2.2",
@@ -53,6 +54,7 @@
     "pg": "^8.11.3",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
+    "ts-morph": "^25.0.1",
     "typeorm": "^0.3.20"
   },
   "devDependencies": {
