@@ -25,6 +25,7 @@
     "prisma:migrate:deploy": "prisma migrate deploy",
     "prisma:migrate:reset": "prisma migrate reset",
     "prisma:migrate:supabase": "dotenv -e .env.supabase -- prisma migrate deploy",
+    "prisma:migrate:direct": "dotenv -e .env.migration -- prisma migrate deploy",
     "prisma:seed": "ts-node src/seed.ts",
     "prisma:seed:supabase": "dotenv -e .env.supabase -- ts-node src/seed.ts",
     "seed": "ts-node src/seed.ts",

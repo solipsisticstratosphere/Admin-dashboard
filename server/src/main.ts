@@ -16,7 +16,9 @@ async function bootstrap() {
   const origins = [
     'http://localhost:5173',
     'http://localhost:3000',
+    'http://localhost:5174',
     'https://admin-dashboard-iota-seven-29.vercel.app',
+    'https://epharmacy-dashboard.onrender.com',
   ];
 
   // Добавляем дополнительные URL для production, если они определены
@@ -28,8 +30,17 @@ async function bootstrap() {
   app.enableCors({
     origin: origins,
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Apollo-Require-Preflight'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+    allowedHeaders: [
+      'Content-Type',
+      'Authorization',
+      'Apollo-Require-Preflight',
+      'Accept',
+      'Origin',
+      'X-Requested-With',
+    ],
+    exposedHeaders: ['Content-Range', 'X-Content-Range'],
+    maxAge: 600,
   });
 
   app.use(cookieParser());
@@ -40,6 +51,7 @@ async function bootstrap() {
   console.log(`Server running on port ${port}`);
   console.log(`Environment: ${nodeEnv}`);
   console.log(`GraphQL playground available at http://localhost:${port}/graphql`);
+  console.log('Allowed CORS origins:', origins);
 }
 bootstrap().catch((error) => {
   console.error('Server failed to start:', error);
