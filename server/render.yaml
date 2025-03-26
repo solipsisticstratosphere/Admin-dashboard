@@ -1,8 +1,8 @@
 services:
   - type: web
-    name: epharmacy-server
+    name: admin-dashboard
     env: node
-    buildCommand: npm install --include=dev && npx prisma generate && npm run build
+    buildCommand: npm install --include=dev && npx prisma generate && npm run clean && npm run build && cp -r prisma dist/prisma
     startCommand: npm run start:prod
     envVars:
       - key: DATABASE_URL
@@ -16,11 +16,11 @@ services:
       - key: PORT
         value: 10000
       - key: CORS_ORIGIN
-        value: https://epharmacy-dashboard.onrender.com
+        value: https://admin-dashboard-iota-seven-29.vercel.app
       - key: PROD_CLIENT_URL
-        value: https://epharmacy-dashboard.onrender.com
+        value: https://admin-dashboard-iota-seven-29.vercel.app
       - key: RENDER_SKIP_LOCKFILE_CHECK
         value: true
       - key: ALLOWED_ORIGINS
-        value: http://localhost:5173,http://localhost:3000,http://localhost:5174,https://admin-dashboard-iota-seven-29.vercel.app,https://epharmacy-dashboard.onrender.com
-    healthCheckPath: /healthz
+        value: http://localhost:5173,http://localhost:3000,http://localhost:5174,https://admin-dashboard-iota-seven-29.vercel.app
+    healthCheckPath: /graphql

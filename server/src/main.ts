@@ -16,7 +16,6 @@ async function bootstrap() {
     'http://localhost:3001',
     'http://localhost:5174',
     'https://admin-dashboard-iota-seven-29.vercel.app',
-    'https://epharmacy-dashboard.onrender.com',
   ];
 
   const prodClientUrl = configService.get<string>('PROD_CLIENT_URL');

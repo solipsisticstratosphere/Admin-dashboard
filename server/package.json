@@ -8,7 +8,7 @@
   "scripts": {
     "clean": "rimraf dist",
     "prebuild": "npm run clean",
-    "build": "nest build",
+    "build": "nest build && node build.js",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "postinstall": "prisma generate",
     "start": "npx nest start",

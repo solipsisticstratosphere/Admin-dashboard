@@ -1,15 +1,26 @@
 {
-  "routes": [
+  "rewrites": [
     {
-      "src": "/graphql/(.*)",
-      "dest": "https://epharmacy-server.onrender.com/graphql/$1",
-      "methods": ["GET", "POST", "OPTIONS"]
+      "source": "/graphql",
+      "destination": "https://admin-dashboard-o49z.onrender.com/graphql",
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET,OPTIONS,PATCH,DELETE,POST,PUT",
+        "Access-Control-Allow-Headers": "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization"
+      }
     },
     {
-      "src": "/graphql",
-      "dest": "https://epharmacy-server.onrender.com/graphql",
-      "methods": ["GET", "POST", "OPTIONS"]
+      "source": "/graphql/(.*)",
+      "destination": "https://admin-dashboard-o49z.onrender.com/graphql/$1",
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET,OPTIONS,PATCH,DELETE,POST,PUT",
+        "Access-Control-Allow-Headers": "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization"
+      }
     },
-    { "src": "/[^.]+", "dest": "/", "status": 200 }
+    {
+      "source": "/(.*)",
+      "destination": "/"
+    }
   ]
 }
