@@ -19,8 +19,6 @@ const apiUrl = API_CONFIG.isProduction
   ? "https://admin-dashboard-o49z.onrender.com/graphql"
   : API_CONFIG.url || "http://localhost:3001/graphql";
 
-console.log("GraphQL URI:", apiUrl);
-
 const httpLink = new HttpLink({
   uri: apiUrl,
   credentials: "include",
