@@ -30,7 +30,10 @@ type FormData = {
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const { login: authLogin } = useAuth();
-  const [login, { loading }] = useMutation(LOGIN_MUTATION);
+  const [login, { loading }] = useMutation(LOGIN_MUTATION, {
+    errorPolicy: "all",
+    fetchPolicy: "no-cache",
+  });
 
   const {
     register,
@@ -71,7 +74,27 @@ const LoginPage: React.FC = () => {
       let errorMessage = "Login failed. Please try again.";
 
       if (apolloError.networkError) {
-        errorMessage = `Network error: ${apolloError.networkError.message}. Please check your connection.`;
+        // Use proper type for network error
+        type NetworkErrorWithStatus = {
+          statusCode?: number;
+          response?: { status?: number };
+          message: string;
+        };
+
+        const networkError = apolloError.networkError as NetworkErrorWithStatus;
+        const status =
+          networkError?.statusCode || networkError?.response?.status;
+
+        if (status === 405) {
+          errorMessage =
+            "Method not allowed. API endpoint configuration issue.";
+          console.error(
+            "The server is responding with a 405 error. This is likely a backend API configuration issue."
+          );
+        } else {
+          errorMessage = `Network error: ${networkError.message}. Please check your connection.`;
+        }
+
         console.error("Network error details:", apolloError.networkError);
       } else if (
         apolloError.graphQLErrors &&

@@ -1,3 +1,15 @@
 {
-  "routes": [{ "src": "/[^.]+", "dest": "/", "status": 200 }]
+  "routes": [
+    {
+      "src": "/graphql/(.*)",
+      "dest": "https://epharmacy-server.onrender.com/graphql/$1",
+      "methods": ["GET", "POST", "OPTIONS"]
+    },
+    {
+      "src": "/graphql",
+      "dest": "https://epharmacy-server.onrender.com/graphql",
+      "methods": ["GET", "POST", "OPTIONS"]
+    },
+    { "src": "/[^.]+", "dest": "/", "status": 200 }
+  ]
 }
