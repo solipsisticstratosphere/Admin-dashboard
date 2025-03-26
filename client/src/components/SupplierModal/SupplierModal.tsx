@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { createPortal } from "react-dom";
+import { useForm, SubmitHandler } from "react-hook-form";
 import styles from "./SupplierModal.module.css";
 
 interface Supplier {
@@ -27,107 +28,49 @@ const SupplierModal = ({
   supplier,
   errorMessage,
 }: SupplierModalProps) => {
-  const [formData, setFormData] = useState<Omit<Supplier, "id">>({
-    name: "",
-    address: "",
-    company: "",
-    date: "",
-    amount: "",
-    status: "Active",
-  });
-
-  // Form validation state
-  const [validation, setValidation] = useState({
-    name: true,
-    address: true,
-    company: true,
-    amount: true,
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setValue,
+    formState: { errors },
+  } = useForm<Omit<Supplier, "id">>({
+    defaultValues: {
+      name: "",
+      address: "",
+      company: "",
+      date: new Date().toISOString().split("T")[0],
+      amount: "",
+      status: "Active",
+    },
   });
 
   useEffect(() => {
     if (supplier) {
-      setFormData({
-        name: supplier.name,
-        address: supplier.address,
-        company: supplier.company,
-        date: supplier.date,
-        amount: supplier.amount,
-        status: supplier.status,
-      });
+      setValue("name", supplier.name);
+      setValue("address", supplier.address);
+      setValue("company", supplier.company);
+      setValue("date", supplier.date);
+      setValue("amount", supplier.amount);
+      setValue("status", supplier.status);
     } else {
-      setFormData({
+      reset({
         name: "",
         address: "",
         company: "",
-        date: new Date().toISOString().split("T")[0], // Today's date
+        date: new Date().toISOString().split("T")[0],
         amount: "",
         status: "Active",
       });
     }
+  }, [supplier, isOpen, setValue, reset]);
 
-    // Reset validation state when modal opens
-    setValidation({
-      name: true,
-      address: true,
-      company: true,
-      amount: true,
-    });
-  }, [supplier, isOpen]);
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-
-    // Clear validation errors on change
-    if (!validation[name as keyof typeof validation]) {
-      setValidation((prev) => ({
-        ...prev,
-        [name]: true,
-      }));
-    }
-  };
-
-  const validateForm = (): boolean => {
-    const newValidation = {
-      name: formData.name.trim() !== "",
-      address: formData.address.trim() !== "",
-      company: formData.company.trim() !== "",
-      amount: /^\d+(\.\d+)?$/.test(formData.amount.trim()),
-    };
-
-    setValidation(newValidation);
-
-    return Object.values(newValidation).every((isValid) => isValid);
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!validateForm()) {
-      return;
-    }
-
-    // Sanitize the data before submitting
-    const sanitizedData = {
-      name: formData.name.trim(),
-      address: formData.address.trim(),
-      company: formData.company.trim(),
-      date: formData.date,
-      amount: formData.amount.trim(),
-      status: formData.status,
-    };
-
-    onSubmit(sanitizedData);
+  const onSubmitHandler: SubmitHandler<Omit<Supplier, "id">> = (data) => {
+    onSubmit(data);
   };
 
   if (!isOpen) return null;
 
-  // Use React's createPortal to render the modal to the document body
   return createPortal(
     <div className={styles.modalOverlay}>
       <div className={styles.modalContainer}>
@@ -157,25 +100,20 @@ const SupplierModal = ({
           <div className={styles.errorMessage}>{errorMessage}</div>
         )}
 
-        <form className={styles.form} onSubmit={handleSubmit}>
+        <form className={styles.form} onSubmit={handleSubmit(onSubmitHandler)}>
           <div className={styles.formRows}>
             <div className={styles.formGroup}>
               <input
                 placeholder="Supplier Name"
                 type="text"
                 id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
+                {...register("name", { required: "Supplier name is required" })}
                 className={`${styles.input} ${
-                  !validation.name ? styles.inputError : ""
+                  errors.name ? styles.inputError : ""
                 }`}
-                required
               />
-              {!validation.name && (
-                <div className={styles.fieldError}>
-                  Supplier name is required
-                </div>
+              {errors.name && (
+                <div className={styles.fieldError}>{errors.name.message}</div>
               )}
             </div>
 
@@ -184,16 +122,15 @@ const SupplierModal = ({
                 placeholder="Address"
                 type="text"
                 id="address"
-                name="address"
-                value={formData.address}
-                onChange={handleChange}
+                {...register("address", { required: "Address is required" })}
                 className={`${styles.input} ${
-                  !validation.address ? styles.inputError : ""
+                  errors.address ? styles.inputError : ""
                 }`}
-                required
               />
-              {!validation.address && (
-                <div className={styles.fieldError}>Address is required</div>
+              {errors.address && (
+                <div className={styles.fieldError}>
+                  {errors.address.message}
+                </div>
               )}
             </div>
 
@@ -202,16 +139,15 @@ const SupplierModal = ({
                 placeholder="Company"
                 type="text"
                 id="company"
-                name="company"
-                value={formData.company}
-                onChange={handleChange}
+                {...register("company", { required: "Company is required" })}
                 className={`${styles.input} ${
-                  !validation.company ? styles.inputError : ""
+                  errors.company ? styles.inputError : ""
                 }`}
-                required
               />
-              {!validation.company && (
-                <div className={styles.fieldError}>Company is required</div>
+              {errors.company && (
+                <div className={styles.fieldError}>
+                  {errors.company.message}
+                </div>
               )}
             </div>
 
@@ -220,11 +156,8 @@ const SupplierModal = ({
                 placeholder="Delivery Date"
                 type="date"
                 id="date"
-                name="date"
-                value={formData.date}
-                onChange={handleChange}
+                {...register("date", { required: "Delivery date is required" })}
                 className={styles.input}
-                required
               />
             </div>
 
@@ -233,29 +166,27 @@ const SupplierModal = ({
                 placeholder="Amount"
                 type="text"
                 id="amount"
-                name="amount"
-                value={formData.amount}
-                onChange={handleChange}
+                {...register("amount", {
+                  required: "Amount is required",
+                  pattern: {
+                    value: /^\d+(\.\d+)?$/,
+                    message: "Amount must be a valid number",
+                  },
+                })}
                 className={`${styles.input} ${
-                  !validation.amount ? styles.inputError : ""
+                  errors.amount ? styles.inputError : ""
                 }`}
-                required
               />
-              {!validation.amount && (
-                <div className={styles.fieldError}>
-                  Amount must be a valid number
-                </div>
+              {errors.amount && (
+                <div className={styles.fieldError}>{errors.amount.message}</div>
               )}
             </div>
 
             <div className={styles.formGroup}>
               <select
                 id="status"
-                name="status"
-                value={formData.status}
-                onChange={handleChange}
+                {...register("status", { required: "Status is required" })}
                 className={styles.select}
-                required
               >
                 <option value="Active">Active</option>
                 <option value="Deactive">Deactive</option>

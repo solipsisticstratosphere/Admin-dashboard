@@ -86,22 +86,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
                 <span className={styles.menuText}>Products</span>
               </NavLink>
             </li>
-            <li>
-              <NavLink
-                to="/customers"
-                className={({ isActive }) =>
-                  isActive
-                    ? `${styles.menuItem} ${styles.active}`
-                    : styles.menuItem
-                }
-                onClick={handleLinkClick}
-              >
-                <div className={styles.icon}>
-                  <Icon name="customers" />
-                </div>
-                <span className={styles.menuText}>Customers</span>
-              </NavLink>
-            </li>
+
             <li>
               <NavLink
                 to="/suppliers"
@@ -116,6 +101,22 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
                   <Icon name="suppliers" />
                 </div>
                 <span className={styles.menuText}>Suppliers</span>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to="/customers"
+                className={({ isActive }) =>
+                  isActive
+                    ? `${styles.menuItem} ${styles.active}`
+                    : styles.menuItem
+                }
+                onClick={handleLinkClick}
+              >
+                <div className={styles.icon}>
+                  <Icon name="customers" />
+                </div>
+                <span className={styles.menuText}>Customers</span>
               </NavLink>
             </li>
           </ul>

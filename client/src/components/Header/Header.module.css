@@ -5,7 +5,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 20px; /* Одинаковые отступы слева и справа по умолчанию */
+  padding: 0 20px;
   position: fixed;
   top: 0;
   left: 0;
@@ -81,7 +81,7 @@ a.subtitle:hover {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  display: none; /* По умолчанию скрыт */
+  display: none;
   align-items: center;
   justify-content: center;
   transition: background-color 0.2s;
@@ -105,7 +105,7 @@ a.subtitle:hover {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  display: flex; /* Показываем кнопку меню по умолчанию */
+  display: flex;
   align-items: center;
   justify-content: center;
   transition: background-color 0.2s;
@@ -120,14 +120,12 @@ a.subtitle:hover {
   height: 32px;
 }
 
-/* Для планшетов */
 @media (max-width: 1439px) {
   .leftSection {
     gap: 20px;
   }
 }
 
-/* Для мобильных устройств */
 @media (max-width: 480px) {
   .header {
     padding: 0 16px;
@@ -148,12 +146,8 @@ a.subtitle:hover {
   .title {
     font-size: 18px;
   }
-
-  .subtitleContainer {
-  }
 }
 
-/* Для очень маленьких экранов */
 @media (max-width: 374px) {
   .logoImage {
     width: 32px;
@@ -165,13 +159,12 @@ a.subtitle:hover {
   }
 }
 
-/* Только для больших экранов, где отображается сайдбар */
 @media (min-width: 1440px) {
   .menuButton {
-    display: none; /* Скрываем кнопку меню на больших экранах */
+    display: none;
   }
 
   .logoutButton {
-    display: flex; /* Показываем кнопку логаута на больших экранах */
+    display: flex;
   }
 }

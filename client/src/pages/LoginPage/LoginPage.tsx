@@ -43,6 +43,11 @@ const LoginPage: React.FC = () => {
 
   const onSubmit = async (data: FormData) => {
     try {
+      console.log("Attempting login with:", {
+        email: data.email,
+        passwordLength: data.password.length,
+      });
+
       const response = await login({
         variables: {
           loginInput: {
@@ -53,16 +58,29 @@ const LoginPage: React.FC = () => {
       });
 
       if (response.data?.login) {
+        console.log("Login successful, navigating to dashboard");
         authLogin(response.data.login.accessToken, response.data.login.user);
         navigate("/dashboard");
       }
     } catch (err: unknown) {
-      // Type guard for Apollo errors
       const apolloError = err as ApolloError;
-      const errorMessage =
-        apolloError.graphQLErrors?.[0]?.message ||
-        apolloError.networkError?.message ||
-        "Something went wrong during login";
+
+      console.error("Login error:", err);
+
+      // More detailed error handling
+      let errorMessage = "Login failed. Please try again.";
+
+      if (apolloError.networkError) {
+        errorMessage = `Network error: ${apolloError.networkError.message}. Please check your connection.`;
+        console.error("Network error details:", apolloError.networkError);
+      } else if (
+        apolloError.graphQLErrors &&
+        apolloError.graphQLErrors.length > 0
+      ) {
+        errorMessage = apolloError.graphQLErrors[0].message;
+        console.error("GraphQL error details:", apolloError.graphQLErrors);
+      }
+
       toast.error(errorMessage);
     }
   };

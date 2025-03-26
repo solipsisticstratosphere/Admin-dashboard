@@ -28,7 +28,6 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       throw new UnauthorizedException();
     }
 
-    // Create a user instance that matches our entity
     const userEntity: User = {
       id: user.id,
       email: user.email,

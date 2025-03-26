@@ -167,7 +167,7 @@
 .table {
   background-color: #fff;
   width: 100%;
-  min-width: 800px; /* Добавлена минимальная ширина для горизонтальной прокрутки */
+  min-width: 800px;
   border-collapse: collapse;
 }
 
@@ -271,7 +271,6 @@
   padding: 2rem;
 }
 
-/* Pagination Styles */
 .paginationContainer {
   display: flex;
   justify-content: center;

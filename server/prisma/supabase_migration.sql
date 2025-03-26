@@ -1,4 +1,4 @@
--- Create tables
+
 CREATE TABLE IF NOT EXISTS "public"."users" (
     "id" SERIAL NOT NULL,
     "email" TEXT NOT NULL,
@@ -73,10 +73,10 @@ CREATE TABLE IF NOT EXISTS "public"."orders" (
     CONSTRAINT "orders_pkey" PRIMARY KEY ("id")
 );
 
--- Create unique constraints
+
 ALTER TABLE "public"."users" ADD CONSTRAINT "users_email_key" UNIQUE ("email");
 ALTER TABLE "public"."customers" ADD CONSTRAINT "customers_email_key" UNIQUE ("email");
 ALTER TABLE "public"."products" ADD CONSTRAINT "products_name_supplier_key" UNIQUE ("name", "supplier");
 
--- Create foreign key constraints
+
 ALTER TABLE "public"."transactions" ADD CONSTRAINT "transactions_customerId_fkey" FOREIGN KEY ("customerId") REFERENCES "public"."customers"("id") ON DELETE SET NULL ON UPDATE CASCADE; 

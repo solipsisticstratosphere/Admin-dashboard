@@ -28,11 +28,9 @@ export const EditModeProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const toggleEditMode = () => {
     if (isEditMode) {
-      // If turning off edit mode, just do it
       setIsEditMode(false);
       setAdminPassword(null);
     } else {
-      // If turning on edit mode, first show password dialog
       setPasswordDialogOpen(true);
     }
   };

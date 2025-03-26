@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { createPortal } from "react-dom";
+import { useForm, SubmitHandler } from "react-hook-form";
 import styles from "./ProductModal.module.css";
 
 interface Product {
@@ -29,35 +30,24 @@ const ProductModal = ({
   categories,
   errorMessage,
 }: ProductModalProps) => {
-  const [formData, setFormData] = useState<Omit<Product, "id">>({
-    photo: "",
-    name: "",
-    suppliers: "",
-    stock: "",
-    price: "",
-    category: "",
-  });
-
-  // Form validation state
-  const [validation, setValidation] = useState({
-    name: true,
-    suppliers: true,
-    stock: true,
-    price: true,
-  });
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    reset,
+    formState: { errors },
+  } = useForm<Omit<Product, "id">>();
 
   useEffect(() => {
     if (product) {
-      setFormData({
-        photo: product.photo,
-        name: product.name,
-        suppliers: product.suppliers,
-        stock: product.stock,
-        price: product.price,
-        category: product.category,
-      });
+      setValue("photo", product.photo);
+      setValue("name", product.name);
+      setValue("suppliers", product.suppliers);
+      setValue("stock", product.stock);
+      setValue("price", product.price);
+      setValue("category", product.category);
     } else {
-      setFormData({
+      reset({
         photo: "",
         name: "",
         suppliers: "",
@@ -66,70 +56,14 @@ const ProductModal = ({
         category: categories.length > 0 ? categories[0] : "",
       });
     }
+  }, [product, categories, setValue, reset]);
 
-    // Reset validation state when modal opens
-    setValidation({
-      name: true,
-      suppliers: true,
-      stock: true,
-      price: true,
-    });
-  }, [product, categories]);
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-
-    // Clear validation errors on change
-    if (!validation[name as keyof typeof validation]) {
-      setValidation((prev) => ({
-        ...prev,
-        [name]: true,
-      }));
-    }
-  };
-
-  const validateForm = (): boolean => {
-    const newValidation = {
-      name: formData.name.trim() !== "",
-      suppliers: formData.suppliers.trim() !== "",
-      stock: /^\d+$/.test(formData.stock.trim()),
-      price: /^\d+(\.\d+)?$/.test(formData.price.trim()),
-    };
-
-    setValidation(newValidation);
-
-    return Object.values(newValidation).every((isValid) => isValid);
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!validateForm()) {
-      return;
-    }
-
-    // Sanitize the data before submitting
-    const sanitizedData = {
-      photo: formData.photo.trim(),
-      name: formData.name.trim(),
-      suppliers: formData.suppliers.trim(),
-      stock: formData.stock.trim(),
-      price: formData.price.trim(),
-      category: formData.category.trim(),
-    };
-
-    onSubmit(sanitizedData);
+  const onSubmitHandler: SubmitHandler<Omit<Product, "id">> = (data) => {
+    onSubmit(data);
   };
 
   if (!isOpen) return null;
 
-  // Use React's createPortal to render the modal to the document body
   return createPortal(
     <div className={styles.modalOverlay}>
       <div className={styles.modalContainer}>
@@ -159,36 +93,28 @@ const ProductModal = ({
           <div className={styles.errorMessage}>{errorMessage}</div>
         )}
 
-        <form className={styles.form} onSubmit={handleSubmit}>
+        <form className={styles.form} onSubmit={handleSubmit(onSubmitHandler)}>
           <div className={styles.formRows}>
             <div className={styles.formGroup}>
               <input
                 placeholder="Product Name"
                 type="text"
                 id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
+                {...register("name", { required: "Product name is required" })}
                 className={`${styles.input} ${
-                  !validation.name ? styles.inputError : ""
+                  errors.name ? styles.inputError : ""
                 }`}
-                required
               />
-              {!validation.name && (
-                <div className={styles.fieldError}>
-                  Product name is required
-                </div>
+              {errors.name && (
+                <div className={styles.fieldError}>{errors.name.message}</div>
               )}
             </div>
 
             <div className={styles.formGroup}>
               <select
                 id="category"
-                name="category"
-                value={formData.category}
-                onChange={handleChange}
+                {...register("category", { required: "Category is required" })}
                 className={styles.select}
-                required
               >
                 {categories.map((category) => (
                   <option key={category} value={category}>
@@ -203,18 +129,19 @@ const ProductModal = ({
                 placeholder="Stock"
                 type="text"
                 id="stock"
-                name="stock"
-                value={formData.stock}
-                onChange={handleChange}
+                {...register("stock", {
+                  required: "Stock is required",
+                  pattern: {
+                    value: /^\d+$/,
+                    message: "Stock must be a valid number",
+                  },
+                })}
                 className={`${styles.input} ${
-                  !validation.stock ? styles.inputError : ""
+                  errors.stock ? styles.inputError : ""
                 }`}
-                required
               />
-              {!validation.stock && (
-                <div className={styles.fieldError}>
-                  Stock must be a valid number
-                </div>
+              {errors.stock && (
+                <div className={styles.fieldError}>{errors.stock.message}</div>
               )}
             </div>
 
@@ -223,16 +150,15 @@ const ProductModal = ({
                 placeholder="Suppliers"
                 type="text"
                 id="suppliers"
-                name="suppliers"
-                value={formData.suppliers}
-                onChange={handleChange}
+                {...register("suppliers", { required: "Supplier is required" })}
                 className={`${styles.input} ${
-                  !validation.suppliers ? styles.inputError : ""
+                  errors.suppliers ? styles.inputError : ""
                 }`}
-                required
               />
-              {!validation.suppliers && (
-                <div className={styles.fieldError}>Supplier is required</div>
+              {errors.suppliers && (
+                <div className={styles.fieldError}>
+                  {errors.suppliers.message}
+                </div>
               )}
             </div>
 
@@ -241,18 +167,19 @@ const ProductModal = ({
                 placeholder="Price"
                 type="text"
                 id="price"
-                name="price"
-                value={formData.price}
-                onChange={handleChange}
+                {...register("price", {
+                  required: "Price is required",
+                  pattern: {
+                    value: /^\d+(\.\d+)?$/,
+                    message: "Price must be a valid number",
+                  },
+                })}
                 className={`${styles.input} ${
-                  !validation.price ? styles.inputError : ""
+                  errors.price ? styles.inputError : ""
                 }`}
-                required
               />
-              {!validation.price && (
-                <div className={styles.fieldError}>
-                  Price must be a valid number
-                </div>
+              {errors.price && (
+                <div className={styles.fieldError}>{errors.price.message}</div>
               )}
             </div>
 
@@ -260,9 +187,7 @@ const ProductModal = ({
               <input
                 type="url"
                 id="photo"
-                name="photo"
-                value={formData.photo}
-                onChange={handleChange}
+                {...register("photo")}
                 className={styles.input}
                 placeholder="https://example.com/image.jpg"
               />

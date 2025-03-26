@@ -9,15 +9,12 @@ import Icon from "../../components/UI/Icon";
 const ITEMS_PER_PAGE = 5;
 
 const CustomerList: React.FC = () => {
-  // UI state
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
-  // Form state (what user is typing)
   const [formFilters, setFormFilters] = useState<CustomerFilters>({});
 
-  // Applied filters (what's actually sent to the query)
   const [appliedFilters, setAppliedFilters] = useState<CustomerFilters>({});
 
   const { loading, error, data } = useQuery<CustomersQueryResult>(
@@ -36,11 +33,10 @@ const CustomerList: React.FC = () => {
         customer.email.toLowerCase().includes(searchLower)
       );
     }) || [];
-  // Pagination
+
   const totalItems = filteredCustomers.length;
   const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
 
-  // Get current page items
   const getCurrentPageItems = () => {
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
     const endIndex = startIndex + ITEMS_PER_PAGE;
@@ -53,20 +49,17 @@ const CustomerList: React.FC = () => {
     setCurrentPage(page);
   };
 
-  // Apply search term to filters
   const applySearch = () => {
     setAppliedFilters({ ...appliedFilters, name: searchTerm || undefined });
     setCurrentPage(1);
   };
 
-  // Apply all filters from the filter panel
   const applyFilters = () => {
     setAppliedFilters(formFilters);
     setCurrentPage(1);
     setIsFilterOpen(false);
   };
 
-  // Reset filters
   const resetFilters = () => {
     setSearchTerm("");
     setFormFilters({});
@@ -75,16 +68,13 @@ const CustomerList: React.FC = () => {
     setCurrentPage(1);
   };
 
-  // Toggle filter panel
   const toggleFilter = () => {
-    // When opening filter panel, initialize form filters with currently applied filters
     if (!isFilterOpen) {
       setFormFilters(appliedFilters);
     }
     setIsFilterOpen(!isFilterOpen);
   };
 
-  // Function to generate pagination buttons
   const renderPaginationButtons = () => {
     const buttons = [];
 

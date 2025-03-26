@@ -24,7 +24,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Initialize state from localStorage on mount
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     const storedUser = localStorage.getItem("user");
@@ -35,7 +34,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         setUser(JSON.parse(storedUser));
       } catch (error) {
         console.error("Error parsing user data:", error);
-        // Clear corrupted data
+
         localStorage.removeItem("token");
         localStorage.removeItem("user");
       }
@@ -48,7 +47,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setToken(newToken);
     setUser(newUser);
 
-    // Save to localStorage
     localStorage.setItem("token", newToken);
     localStorage.setItem("user", JSON.stringify(newUser));
   };
@@ -57,7 +55,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setToken(null);
     setUser(null);
 
-    // Clear localStorage
     localStorage.removeItem("token");
     localStorage.removeItem("user");
   };
@@ -71,7 +68,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   if (isLoading) {
-    return <div>Loading...</div>; // You can use a proper loading component
+    return <div>Loading...</div>;
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

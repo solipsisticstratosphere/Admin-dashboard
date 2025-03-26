@@ -8,12 +8,10 @@ const SharedLayout = () => {
   const { isAuthenticated } = useAuth();
   const location = useLocation();
 
-  // If not authenticated, redirect to login page
   if (!isAuthenticated) {
     return <Navigate to="/" replace />;
   }
 
-  // If user navigates to root path of protected routes, redirect to dashboard
   if (location.pathname === "/") {
     return <Navigate to="/dashboard" replace />;
   }

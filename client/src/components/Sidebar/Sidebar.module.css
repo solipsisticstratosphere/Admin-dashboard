@@ -16,7 +16,7 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  margin-top: 120px; /* Space for header */
+  margin-top: 120px;
 }
 
 .menuItems {
@@ -56,21 +56,19 @@
 .icon:focus {
   outline: none;
 }
-/* По умолчанию скрываем боковую панель на мобильных и планшетах */
+
 @media (max-width: 1439px) {
   .sidebar {
-    display: none; /* Скрываем боковую панель на разрешениях меньше 1440px */
+    display: none;
   }
 }
 
-/* Отображаем боковую панель только на больших экранах */
 @media (min-width: 1440px) {
   .sidebar {
     display: flex;
   }
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
   .sidebar {
     width: 48px;
@@ -83,9 +81,8 @@
   }
 }
 
-/* Для мобильных устройств */
 @media (max-width: 480px) {
   .sidebar {
-    display: none; /* Скрываем боковую панель на мобильных устройствах */
+    display: none;
   }
 }

@@ -1,4 +1,4 @@
--- Сначала очищаем все таблицы (с учетом внешних ключей)
+
 TRUNCATE TABLE "public"."transactions" CASCADE;
 TRUNCATE TABLE "public"."orders" CASCADE;
 TRUNCATE TABLE "public"."customers" CASCADE;
@@ -6,12 +6,12 @@ TRUNCATE TABLE "public"."products" CASCADE;
 TRUNCATE TABLE "public"."suppliers" CASCADE;
 TRUNCATE TABLE "public"."users" CASCADE;
 
--- Создание администратора (если не существует)
+
 INSERT INTO "public"."users" ("email", "password", "firstName", "lastName", "refreshToken", "createdAt", "updatedAt")
 VALUES ('admin@email.com', '$2b$10$3DAmrzZqoZqI5r/d0LCKe.z.JHRoFdmHyCfYyDt75SMI2xG5Td8r6', 'Admin', 'User', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
 ON CONFLICT (email) DO NOTHING;
 
--- Импорт тестовых клиентов
+
 INSERT INTO "public"."customers" ("photo", "name", "email", "spent", "phone", "address", "registerDate", "country")
 VALUES 
   ('/static/customers/1.jpg', 'John Doe', 'john.doe@example.com', '$2,500', '+1 (234) 567-8901', '123 Main St, New York, NY', CURRENT_TIMESTAMP, 'USA'),
@@ -26,7 +26,7 @@ VALUES
   ('/static/customers/10.jpg', 'Anna Smirnova', 'anna.s@example.com', '$1,750', '+7 (911) 234-5678', 'Nevsky Prospekt, 20, St Petersburg', CURRENT_TIMESTAMP, 'Russia')
 ON CONFLICT (email) DO NOTHING;
 
--- Импорт тестовых продуктов
+
 INSERT INTO "public"."products" ("photo", "name", "supplier", "stock", "price", "category", "createdAt", "updatedAt")
 VALUES 
   ('/static/products/product1.jpg', 'Paracetamol 500mg', 'Pfizer', '150', '$5.99', 'Analgesics', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
@@ -41,7 +41,7 @@ VALUES
   ('/static/products/product10.jpg', 'Ranitidine 150mg', 'Abbott', '95', '$9.75', 'Antacids', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
 ON CONFLICT ("name", "supplier") DO NOTHING;
 
--- Импорт тестовых поставщиков
+
 INSERT INTO "public"."suppliers" ("name", "address", "company", "date", "amount", "status", "createdAt", "updatedAt")
 VALUES 
   ('Pfizer', '235 E 42nd St, New York, NY 10017', 'Pfizer Inc.', CURRENT_TIMESTAMP, '$25,000', 'Approved', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
@@ -51,7 +51,7 @@ VALUES
   ('Bayer', 'Kaiser-Wilhelm-Allee, 51368 Leverkusen, Germany', 'Bayer AG', CURRENT_TIMESTAMP, '$19,800', 'Pending', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
 ON CONFLICT (id) DO NOTHING;
 
--- Импорт тестовых заказов
+
 INSERT INTO "public"."orders" ("photo", "name", "address", "products", "price", "status", "order_date")
 VALUES 
   ('/static/products/product1.jpg', 'John Doe', '123 Main St, New York, NY', 'Paracetamol 500mg x2', '$11.98', 'Delivered', '2025-03-10'),
@@ -60,7 +60,7 @@ VALUES
   ('/static/products/product7.jpg', 'Natalia Koval', 'Pushkinska St, 5, Kharkiv', 'Loratadine 10mg x2', '$16.50', 'Processing', '2025-03-18'),
   ('/static/products/product9.jpg', 'Ivan Melnyk', 'Deribasivska St, 15, Odesa', 'Omeprazole 20mg x1', '$11.25', 'Delivered', '2025-03-20');
 
--- Импорт тестовых транзакций
+
 INSERT INTO "public"."transactions" ("name", "amount", "type", "email", "customerId", "createdAt")
 VALUES 
   ('Purchase - Paracetamol', '$11.98', 'income', 'john.doe@example.com', (SELECT id FROM customers WHERE email = 'john.doe@example.com'), CURRENT_TIMESTAMP),

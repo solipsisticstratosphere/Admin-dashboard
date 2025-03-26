@@ -1,226 +1,203 @@
-# Epharmacy Dashboard Server
+# E-Pharmacy Admin Dashboard - Server
 
-Серверная часть панели администратора для приложения Epharmacy.
+[English](#english) | [Українська](#ukrainian)
 
-## Требования
+<a name="english"></a>
 
-- Node.js >= 16
-- npm >= 8
-- PostgreSQL >= 13
+## E-Pharmacy Admin Dashboard - Backend
 
-## Настройка проекта
+### Overview
 
-### Локальная разработка
+This is the backend server for the E-Pharmacy Admin Dashboard, a comprehensive system designed for managing pharmacy operations. The server provides GraphQL APIs for managing products, orders, customers, and suppliers while also handling authentication and authorization.
 
-1. Установите зависимости:
+### Features
+
+- **GraphQL API** - Flexible and efficient API for data operations
+- **Authentication** - JWT-based authentication and authorization
+- **Database ORM** - Prisma for type-safe database access
+- **Data Validation** - Request validation using NestJS pipes and DTOs
+- **Data Seeding** - Scripts for initializing the database with test data
+
+### Tech Stack
+
+- **NestJS** - Progressive Node.js framework for building server-side applications
+- **GraphQL** - Query language for APIs
+- **Prisma** - Next-generation ORM for Node.js and TypeScript
+- **PostgreSQL** - Advanced open-source relational database
+- **JWT** - JSON Web Token for secure authentication
+
+### Project Structure
+
+```
+server/
+├── prisma/                 # Prisma schema and migrations
+├── src/
+│   ├── auth/               # Authentication logic
+│   ├── common/             # Shared utilities and decorators
+│   ├── config/             # Application configuration
+│   ├── customers/          # Customer management module
+│   ├── dashboard/          # Dashboard data and analytics
+│   ├── graphql/            # GraphQL schema and resolvers
+│   ├── orders/             # Order processing module
+│   ├── prisma/             # Prisma service
+│   ├── products/           # Product management module
+│   ├── suppliers/          # Supplier management module
+│   ├── users/              # User management module
+│   ├── app.module.ts       # Main application module
+│   └── main.ts             # Application entry point
+└── temp/                   # Temporary utility scripts
+```
+
+### Getting Started
+
+#### Prerequisites
+
+- Node.js (v16 or higher)
+- npm or yarn
+- PostgreSQL database
+
+#### Installation
+
+1. Install dependencies:
 
 ```bash
 npm install
 ```
 
-2. Скопируйте файл `.env.example` в `.env`:
+2. Configure environment variables:
 
-```bash
-cp .env.example .env
-```
+- Copy `.env.example` to `.env` and update the database connection string
 
-3. Настройте переменные окружения в `.env` файле.
-
-4. Создайте и примените миграции базы данных:
+3. Initialize the database:
 
 ```bash
 npm run prisma:migrate:dev
-```
-
-5. Заполните базу данных начальными данными:
-
-```bash
 npm run prisma:seed
 ```
 
-6. Запустите сервер в режиме разработки:
+4. Start the server:
 
 ```bash
+# Development mode
 npm run start:dev
+
+# Production mode
+npm run start:prod
 ```
 
-### Deployment на Supabase и Render
+### Available Scripts
 
-#### 1. Создание проекта в Supabase
+- `npm run build` - Build the application
+- `npm run format` - Format code with Prettier
+- `npm run start` - Start the server
+- `npm run start:dev` - Start in development mode (with watch)
+- `npm run start:prod` - Start in production mode
+- `npm run prisma:generate` - Generate Prisma client
+- `npm run prisma:migrate:dev` - Run development migrations
+- `npm run prisma:migrate:prod` - Run production migrations
+- `npm run prisma:seed` - Seed the database
 
-1. Зарегистрируйтесь или войдите в [Supabase](https://supabase.com/)
-2. Создайте новый проект
-3. Скопируйте строку подключения (Connection string) из раздела "Settings" > "Database"
+### API Documentation
 
-#### 2. Настройка переменных окружения для Supabase
+The GraphQL API is available at `/graphql` when the server is running. The GraphQL Playground provides interactive documentation of all available queries and mutations.
 
-1. Скопируйте файл `.env.example` в `.env.supabase`:
+---
+
+<a name="ukrainian"></a>
+
+## Адміністративна панель E-Pharmacy - Серверна частина
+
+### Огляд
+
+Це серверна частина Адміністративної панелі E-Pharmacy, комплексної системи, розробленої для управління аптечними операціями. Сервер надає GraphQL API для управління продуктами, замовленнями, клієнтами та постачальниками, а також забезпечує аутентифікацію та авторизацію.
+
+### Функції
+
+- **GraphQL API** - Гнучкий та ефективний API для операцій з даними
+- **Аутентифікація** - Аутентифікація та авторизація на основі JWT
+- **ORM для бази даних** - Prisma для типобезпечного доступу до бази даних
+- **Валідація даних** - Валідація запитів за допомогою NestJS pipes та DTO
+- **Заповнення даних** - Скрипти для ініціалізації бази даних тестовими даними
+
+### Технічний стек
+
+- **NestJS** - Прогресивний Node.js фреймворк для побудови серверних додатків
+- **GraphQL** - Мова запитів для API
+- **Prisma** - ORM нового покоління для Node.js та TypeScript
+- **PostgreSQL** - Розширена реляційна база даних з відкритим кодом
+- **JWT** - JSON Web Token для безпечної аутентифікації
+
+### Структура проєкту
+
+```
+server/
+├── prisma/                 # Prisma схема та міграції
+├── src/
+│   ├── auth/               # Логіка аутентифікації
+│   ├── common/             # Спільні утиліти та декоратори
+│   ├── config/             # Конфігурація додатку
+│   ├── customers/          # Модуль управління клієнтами
+│   ├── dashboard/          # Дані панелі приладів та аналітика
+│   ├── graphql/            # GraphQL схема та резолвери
+│   ├── orders/             # Модуль обробки замовлень
+│   ├── prisma/             # Prisma сервіс
+│   ├── products/           # Модуль управління продуктами
+│   ├── suppliers/          # Модуль управління постачальниками
+│   ├── users/              # Модуль управління користувачами
+│   ├── app.module.ts       # Головний модуль додатку
+│   └── main.ts             # Точка входу до додатку
+└── temp/                   # Тимчасові утилітарні скрипти
+```
+
+### Початок роботи
+
+#### Передумови
+
+- Node.js (v16 або вище)
+- npm або yarn
+- База даних PostgreSQL
+
+#### Встановлення
+
+1. Встановіть залежності:
 
 ```bash
-cp .env.example .env.supabase
+npm install
 ```
 
-2. Обновите `DATABASE_URL` в `.env.supabase` используя строку подключения из Supabase.
+2. Налаштуйте змінні середовища:
 
-   - Для предотвращения проблем с IPv6, используйте строку подключения через pooler:
+- Скопіюйте `.env.example` до `.env` і оновіть рядок підключення до бази даних
 
-   ```
-   DATABASE_URL=postgresql://postgres.[PROJECT_ID]:[PASSWORD]@aws-0-[REGION].pooler.supabase.com:6543/postgres
-   ```
-
-3. Установите безопасные значения для JWT ключей и других секретов.
-
-4. Настройте разрешенные IP-адреса в Supabase:
-   - Перейдите в раздел "Project Settings" > "Database" > "Network Restrictions"
-   - Добавьте свой IP-адрес для локальной разработки
-   - Добавьте IP-адрес Render для продакшн-деплоя (можно найти в настройках инстанса)
-
-#### 3. Миграция схемы базы данных в Supabase
+3. Ініціалізуйте базу даних:
 
 ```bash
-npm run prisma:migrate:supabase
+npm run prisma:migrate:dev
+npm run prisma:seed
 ```
 
-#### 4. Заполнение базы данных в Supabase
+4. Запустіть сервер:
 
 ```bash
-npm run prisma:seed:supabase
+# Режим розробки
+npm run start:dev
+
+# Режим роботи
+npm run start:prod
 ```
 
-#### 5. Деплой на Render
+### Доступні скрипти
 
-1. Зарегистрируйтесь или войдите в [Render](https://render.com/)
-2. Подключите ваш GitHub репозиторий
-3. Создайте новый Web Service, указав директорию `server`
-4. Установите следующие настройки:
-   - Build Command: `npm ci && npx prisma generate && npm run build`
-   - Start Command: `npm run start:prod`
-5. Добавьте все необходимые переменные окружения:
+- `npm run build` - Збірка додатку
+- `npm run format` - Форматування коду за допомогою Prettier
+- `npm run start` - Запуск сервера
+- `npm run start:dev` - Запуск у режимі розробки (з перезавантаженням)
+- `npm run start:prod` - Запуск у виробничому режимі
+- `npm run prisma:generate` - Створення Prisma клієнта
+- `npm run prisma:migrate:dev` - Запуск міграцій для розробки
+- `npm run prisma:migrate:prod` - Запуск міграцій для виробництва
+- `npm run prisma:seed` - Заповнення бази даних
 
-   - `DATABASE_URL` (строка подключения из Supabase)
-   - `NODE_ENV=production`
-   - `PORT=8080`
-   - `JWT_SECRET` и `JWT_REFRESH_SECRET`
-   - `ADMIN_EDIT_PASSWORD`
-   - `PROD_CLIENT_URL` (URL вашего фронтенда)
+### Документація API
 
-6. Дождитесь завершения деплоя
-
-#### 6. Обновление клиентской части
-
-В файле `.env` клиентского приложения укажите:
-
-```
-VITE_API_URL=https://your-render-service-url.onrender.com/graphql
-```
-
-## Доступные скрипты
-
-- `npm run build` - сборка проекта
-- `npm run start:dev` - запуск в режиме разработки
-- `npm run start:prod` - запуск в production-режиме
-- `npm run prisma:studio` - запуск Prisma Studio
-- `npm run prisma:generate` - генерация Prisma клиента
-- `npm run prisma:migrate:dev` - создание и применение миграций
-- `npm run prisma:migrate:supabase` - применение миграций к Supabase
-- `npm run prisma:seed` - заполнение локальной базы данных
-- `npm run prisma:seed:supabase` - заполнение базы данных в Supabase
-
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
-
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Project setup
-
-```bash
-$ npm install
-```
-
-## Compile and run the project
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Run tests
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+GraphQL API доступне за адресою `/graphql` при запущеному сервері. GraphQL Playground надає інтерактивну документацію всіх доступних запитів та мутацій.

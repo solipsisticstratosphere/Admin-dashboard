@@ -42,7 +42,6 @@ export class RefreshTokenStrategy extends PassportStrategy(Strategy, 'jwt-refres
       throw new UnauthorizedException('Invalid refresh token');
     }
 
-    // Create a user instance that matches our entity
     const userEntity: User = {
       id: user.id,
       email: user.email,

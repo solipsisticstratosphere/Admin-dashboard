@@ -14,11 +14,9 @@ const Orders: React.FC = () => {
 
   const [tempFilters, setTempFilters] = useState<OrderFilters>({});
 
-  // Use lazy query for filtering
   const [getOrders, { loading, error, data }] =
     useLazyQuery<OrdersQueryResult>(GET_ORDERS);
 
-  // Initial data fetch
   useEffect(() => {
     getOrders();
   }, [getOrders]);
@@ -53,16 +51,14 @@ const Orders: React.FC = () => {
     getOrders({ variables: { filters } });
   };
 
-  // Reset filters
   const resetFilters = () => {
     setTempFilters({});
 
     setCurrentPage(1);
-    // Keep filter panel open (removed the line that closes it)
+
     getOrders({ variables: { filters: {} } });
   };
 
-  // Handle filter input change
   const handleFilterChange = (field: keyof OrderFilters, value: string) => {
     setTempFilters((prev) => ({
       ...prev,
@@ -70,7 +66,6 @@ const Orders: React.FC = () => {
     }));
   };
 
-  // Client-side search for immediate feedback (name and address only)
   const filteredOrders =
     data?.orders.items.filter((order) => {
       if (!searchTerm) return true;
@@ -81,11 +76,9 @@ const Orders: React.FC = () => {
       );
     }) || [];
 
-  // Pagination
   const totalItems = filteredOrders.length;
   const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
 
-  // Get current page items
   const getCurrentPageItems = () => {
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
     const endIndex = startIndex + ITEMS_PER_PAGE;
@@ -98,7 +91,6 @@ const Orders: React.FC = () => {
     setCurrentPage(page);
   };
 
-  // Generate pagination buttons
   const renderPaginationButtons = () => {
     const buttons = [];
 

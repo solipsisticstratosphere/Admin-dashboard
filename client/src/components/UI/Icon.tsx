@@ -29,7 +29,6 @@ const Icon: React.FC<IconProps> = ({
   color,
   title,
 }) => {
-  // Используем публичный путь для Vite
   const basePath = import.meta.env.BASE_URL || "/";
 
   return (
