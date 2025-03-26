@@ -59,11 +59,6 @@ const LoginPage: React.FC = () => {
 
   const onSubmit = async (data: FormData) => {
     try {
-      console.log("Attempting login with:", {
-        email: data.email,
-        passwordLength: data.password.length,
-      });
-
       const response = await login({
         variables: {
           loginInput: {
@@ -74,7 +69,6 @@ const LoginPage: React.FC = () => {
       });
 
       if (response.data?.login) {
-        console.log("Login successful, navigating to dashboard");
         authLogin(response.data.login.accessToken, response.data.login.user);
         navigate("/dashboard");
       }
@@ -106,18 +100,6 @@ const LoginPage: React.FC = () => {
       ) {
         const gqlError = apolloError.graphQLErrors[0];
         errorMessage = gqlError.message;
-
-        if (gqlError.extensions && gqlError.extensions.code) {
-          console.log(`Error code: ${gqlError.extensions.code}`);
-        }
-
-        if (gqlError.path) {
-          console.log(`Error path: ${gqlError.path.join(".")}`);
-        }
-
-        if (gqlError.locations) {
-          console.log("Error locations:", gqlError.locations);
-        }
       }
 
       toast.error(errorMessage);
