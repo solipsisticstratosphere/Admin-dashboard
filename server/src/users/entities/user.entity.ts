@@ -8,10 +8,8 @@ export class User {
   @Field()
   email: string;
 
-  // Not exposed in GraphQL but used in code
   password?: string;
 
-  // Not exposed in GraphQL but used in code
   refreshToken?: string;
 
   @Field({ nullable: true })

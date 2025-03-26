@@ -39,7 +39,6 @@ export class OrdersService implements OnModuleInit {
 
   private async seedOrders() {
     try {
-      // Try different potential file paths
       const possiblePaths = [
         path.join(process.cwd(), 'server', 'json', 'orders.json'),
         path.join(process.cwd(), 'json', 'orders.json'),
@@ -59,9 +58,7 @@ export class OrdersService implements OnModuleInit {
             ordersData = JSON.parse(fileContent) as OrderData[];
             break;
           }
-        } catch {
-          // Continue to next path
-        }
+        } catch {}
       }
 
       if (!filePath) {
@@ -71,7 +68,6 @@ export class OrdersService implements OnModuleInit {
 
       this.logger.log(`Parsed ${ordersData.length} orders from JSON file`);
 
-      // Insert orders one by one to avoid transaction issues
       for (let i = 0; i < ordersData.length; i++) {
         const order = ordersData[i];
         await this.prisma.order.create({
@@ -91,7 +87,7 @@ export class OrdersService implements OnModuleInit {
       this.logger.log(`Successfully seeded ${ordersData.length} orders`);
     } catch (error) {
       this.logger.error('Error seeding orders:', error);
-      // Print more detailed error for debugging
+
       if (error instanceof Error) {
         this.logger.error('Error details:', error.message, error.stack);
       }
@@ -100,7 +96,6 @@ export class OrdersService implements OnModuleInit {
 
   async getAllOrders(filters?: OrderFilters): Promise<{ items: Order[]; totalCount: number }> {
     try {
-      // Create where conditions based on filters
       const where: Prisma.OrderWhereInput = {};
 
       if (filters) {
@@ -125,10 +120,8 @@ export class OrdersService implements OnModuleInit {
         }
       }
 
-      // Basic sorting by id
       const orderBy: Prisma.OrderOrderByWithRelationInput = { id: 'asc' };
 
-      // Execute query with filters
       const [items, totalCount] = await Promise.all([
         this.prisma.order.findMany({
           where,

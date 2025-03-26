@@ -33,7 +33,6 @@ export class ProductsService {
   async getAllProducts(filters?: FilterProductsParams): Promise<Product[]> {
     const { name, category, suppliers, minPrice, maxPrice } = filters || {};
 
-    // Build where conditions based on provided filters
     const where: Prisma.ProductWhereInput = {};
 
     if (name) {
@@ -58,21 +57,18 @@ export class ProductsService {
       where.price = {};
 
       if (minPrice) {
-        // Using gte (greater than or equal)
         where.price.gte = minPrice;
       }
 
       if (maxPrice) {
-        // Using lte (less than or equal)
         where.price.lte = maxPrice;
       }
     }
 
-    // Get products sorted by createdAt (newest first)
     const products = await this.prisma.product.findMany({
       where,
       orderBy: {
-        id: 'desc', // Sort by ID descending as a proxy for creation time
+        id: 'desc',
       },
     });
 
@@ -120,7 +116,6 @@ export class ProductsService {
     try {
       this.logger.log(`Attempting to create product with data: ${JSON.stringify(productData)}`);
 
-      // Check for duplicate product (exact same name and supplier combination)
       const existingProduct = await this.prisma.product.findFirst({
         where: {
           AND: [{ name: productData.name }, { supplier: productData.suppliers }],
@@ -136,7 +131,6 @@ export class ProductsService {
         );
       }
 
-      // Now try to create the product
       const newProduct = await this.prisma.product.create({
         data: {
           name: productData.name,
@@ -160,7 +154,6 @@ export class ProductsService {
         category: newProduct.category,
       };
     } catch (error) {
-      // Log detailed information about the error
       if (error instanceof PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {
           const targetFields = error.meta?.target || 'unknown';
@@ -173,7 +166,6 @@ export class ProductsService {
         }
       }
 
-      // If it's an error we already created with a message, just pass it on
       if (error instanceof Error) {
         throw error;
       }
@@ -189,9 +181,7 @@ export class ProductsService {
         `Attempting to update product ${id} with data: ${JSON.stringify(productData)}`,
       );
 
-      // Check for name+supplier collision if both fields are being updated or one of them
       if (productData.name || productData.suppliers) {
-        // Get current product data
         const currentProduct = await this.prisma.product.findUnique({
           where: { id: parseInt(id) },
         });
@@ -200,7 +190,6 @@ export class ProductsService {
           throw new Error(`Product with ID ${id} not found`);
         }
 
-        // Check if another product exists with the same name and supplier combination
         const existingProduct = await this.prisma.product.findFirst({
           where: {
             AND: [
@@ -248,7 +237,6 @@ export class ProductsService {
         category: updatedProduct.category,
       };
     } catch (error) {
-      // Log detailed information about the error
       if (error instanceof PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {
           const targetFields = error.meta?.target || 'unknown';
@@ -261,7 +249,6 @@ export class ProductsService {
         }
       }
 
-      // If it's an error we already created with a message, just pass it on
       if (error instanceof Error) {
         throw error;
       }

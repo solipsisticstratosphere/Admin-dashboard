@@ -1,22 +1,17 @@
-/* LoginPage.module.css */
 .container {
   margin: 0 auto;
-  padding-top: 28px;
-  padding-left: 100px;
-  padding-right: 100px;
+  padding-top: 15px;
+  padding-left: 70px;
+  padding-right: 70px;
   display: flex;
   min-height: 100vh;
-  position: relative; /* Добавляем это свойство */
+  position: relative;
 }
 
 .leftSection {
   display: flex;
   flex-direction: column;
   flex: 1;
-}
-
-.logoContainer {
-  padding: 1rem 0;
 }
 
 .logo {
@@ -61,11 +56,11 @@
   background-image: url("../../assets/images/pill.png");
   background-repeat: no-repeat;
   background-position: center;
-  background-size: contain; /* Добавлено для правильного масштабирования */
-  position: absolute; /* Позиционирование абсолютное относительно заголовка */
-  right: 0; /* Расположение справа */
-  top: -100px; /* Смещение вверх для правильного выравнивания */
-  z-index: -1; /* Размещение позади текста, чтобы текст мог обтекать */
+  background-size: contain;
+  position: absolute;
+  right: 0;
+  top: -100px;
+  z-index: -1;
 }
 
 .highlight {
@@ -151,16 +146,16 @@
   position: absolute;
   bottom: -20px;
   right: -40px;
-  width: 279px; /* Подстройте размеры под ваше изображение */
+  width: 279px;
   height: 257px;
-  background-image: url("../../assets/images/elements.png"); /* Путь к вашему изображению с волнами */
+  background-image: url("../../assets/images/elements.png");
   background-repeat: no-repeat;
   background-position: bottom right;
   background-size: contain;
   z-index: -1;
   pointer-events: none;
 }
-/* Responsive adjustments */
+
 @media (max-width: 1024px) {
   .container {
     flex-direction: column;
@@ -169,8 +164,31 @@
   .leftSection {
     padding-bottom: 1rem;
   }
-
+  .contentContainer {
+    align-items: center;
+  }
+  .pillImage {
+    top: -130px;
+  }
+  .tagline {
+    height: 100%;
+    width: 500px;
+    max-width: 100%;
+  }
   .tagline h1 {
-    font-size: 2rem;
+    font-size: 45px;
+  }
+  .container {
+    padding-left: 60px;
+    padding-right: 60px;
+  }
+}
+@media (max-width: 500px) {
+  .container {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .pillImage {
+    display: none;
   }
 }

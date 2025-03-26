@@ -48,7 +48,6 @@ export class CustomersService {
     }
 
     if (spent) {
-      // For numeric comparison, remove currency symbols and convert to number
       const spentValue = parseFloat(spent.replace(/[^0-9.-]+/g, ''));
       if (!isNaN(spentValue)) {
         whereClause.spent = {
@@ -70,7 +69,6 @@ export class CustomersService {
       orderBy: { registerDate: 'desc' },
     });
 
-    // Map database model to our Customer type
     return customers.map((customer) => ({
       id: customer.id.toString(),
       photo: customer.photo,

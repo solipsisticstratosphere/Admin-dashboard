@@ -29,7 +29,6 @@ export class UsersService {
     const passwordValid = await bcrypt.compare(password, user.password);
     if (!passwordValid) return null;
 
-    // Map to entity model without sensitive data
     const userEntity: UserEntity = {
       id: user.id,
       email: user.email,

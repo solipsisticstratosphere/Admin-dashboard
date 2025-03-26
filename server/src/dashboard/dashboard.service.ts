@@ -6,7 +6,6 @@ export class DashboardService {
   constructor(private prisma: PrismaService) {}
 
   async getDashboardData() {
-    // Get counts
     const [productsCount, suppliersCount, customersCount, recentCustomers, transactions] =
       await Promise.all([
         this.prisma.product.count(),
@@ -25,7 +24,6 @@ export class DashboardService {
         }),
       ]);
 
-    // Format data for frontend
     const formattedTransactions = transactions.map((transaction) => ({
       id: transaction.id,
       name: transaction.name,

@@ -6,28 +6,22 @@ async function linkTransactionsToCustomers() {
   try {
     console.log('Starting to link transactions to customers...');
 
-    // Get all customers
     const customers = await prisma.customer.findMany();
 
-    // Get all transactions
     const transactions = await prisma.transaction.findMany({
       where: {
-        customerId: null, // Only get transactions that aren't linked yet
+        customerId: null,
       },
     });
 
-    // For each transaction, randomly assign it to a customer
     for (const transaction of transactions) {
-      // Skip transactions with type "Expense" as they are not customer-related
       if (transaction.type === 'Expense') {
         continue;
       }
 
-      // Randomly select a customer
       const randomIndex = Math.floor(Math.random() * customers.length);
       const customer = customers[randomIndex];
 
-      // Update transaction with customer info
       await prisma.transaction.update({
         where: { id: transaction.id },
         data: {

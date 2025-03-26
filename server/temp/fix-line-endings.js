@@ -37,7 +37,6 @@ async function fixLineEndings() {
     for (const file of files) {
       const content = await readFile(file, 'utf8');
 
-      // Replace CRLF with LF
       const fixedContent = content.replace(/\r\n/g, '\n');
 
       if (content !== fixedContent) {

@@ -151,7 +151,6 @@ const LoginPage: React.FC = () => {
           </form>
         </div>
       </div>
-      <div className={styles.decorativeElements}></div>
     </div>
   );
 };

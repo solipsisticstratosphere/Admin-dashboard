@@ -22,7 +22,6 @@ export class AuthService {
   async register(registerInput: RegisterInput): Promise<AuthResponse> {
     const { email, password, firstName, lastName } = registerInput;
 
-    // Check if user exists
     const userExists = await this.prisma.user.findUnique({
       where: { email },
     });
@@ -31,10 +30,8 @@ export class AuthService {
       throw new ForbiddenException('Email already exists');
     }
 
-    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create user
     const user = await this.prisma.user.create({
       data: {
         email,
@@ -66,7 +63,6 @@ export class AuthService {
   async login(loginInput: LoginInput): Promise<AuthResponse> {
     const { email, password } = loginInput;
 
-    // Find user
     const user = await this.prisma.user.findUnique({
       where: { email },
     });
@@ -75,7 +71,6 @@ export class AuthService {
       throw new UnauthorizedException('Invalid email or password');
     }
 
-    // Validate password
     const passwordValid = await bcrypt.compare(password, user.password);
 
     if (!passwordValid) {

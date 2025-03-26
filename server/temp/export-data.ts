@@ -8,7 +8,6 @@ async function main() {
   try {
     console.log('Starting data export...');
 
-    // Export users
     const users = await prisma.user.findMany();
     fs.writeFileSync(
       path.join(process.cwd(), 'export', 'users.json'),
@@ -16,7 +15,6 @@ async function main() {
     );
     console.log(`Exported ${users.length} users`);
 
-    // Export customers
     const customers = await prisma.customer.findMany();
     fs.writeFileSync(
       path.join(process.cwd(), 'export', 'customers.json'),
@@ -24,7 +22,6 @@ async function main() {
     );
     console.log(`Exported ${customers.length} customers`);
 
-    // Export products
     const products = await prisma.product.findMany();
     fs.writeFileSync(
       path.join(process.cwd(), 'export', 'products.json'),
@@ -32,7 +29,6 @@ async function main() {
     );
     console.log(`Exported ${products.length} products`);
 
-    // Export suppliers
     const suppliers = await prisma.supplier.findMany();
     fs.writeFileSync(
       path.join(process.cwd(), 'export', 'suppliers.json'),
@@ -40,7 +36,6 @@ async function main() {
     );
     console.log(`Exported ${suppliers.length} suppliers`);
 
-    // Export transactions
     const transactions = await prisma.transaction.findMany();
     fs.writeFileSync(
       path.join(process.cwd(), 'export', 'transactions.json'),
@@ -48,7 +43,6 @@ async function main() {
     );
     console.log(`Exported ${transactions.length} transactions`);
 
-    // Export orders
     const orders = await prisma.order.findMany();
     fs.writeFileSync(
       path.join(process.cwd(), 'export', 'orders.json'),

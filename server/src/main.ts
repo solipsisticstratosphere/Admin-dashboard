@@ -8,11 +8,9 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
 
-  // Получение переменных окружения
   const port = configService.get<number>('PORT') || 3001;
   const nodeEnv = configService.get<string>('NODE_ENV') || 'development';
 
-  // Настройка CORS в зависимости от окружения
   const origins = [
     'http://localhost:5173',
     'http://localhost:3001',
@@ -21,7 +19,6 @@ async function bootstrap() {
     'https://epharmacy-dashboard.onrender.com',
   ];
 
-  // Добавляем дополнительные URL для production, если они определены
   const prodClientUrl = configService.get<string>('PROD_CLIENT_URL');
   if (prodClientUrl) {
     origins.push(prodClientUrl);

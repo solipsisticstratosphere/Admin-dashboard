@@ -65,7 +65,6 @@ export class ProductsService {
 
   async createProduct(productData: CreateProductInput): Promise<Product> {
     try {
-      // Check if a product with the same name already exists
       const existingProduct = await this.prisma.product.findFirst({
         where: {
           name: productData.name,
@@ -97,7 +96,6 @@ export class ProductsService {
         category: newProduct.category,
       };
     } catch (error) {
-      // Check specifically for Prisma's unique constraint violation error
       if (error instanceof PrismaClientKnownRequestError && error.code === 'P2002') {
         this.logger.error(
           `Unique constraint violation on product creation: ${JSON.stringify(error.meta)}`,
@@ -112,7 +110,6 @@ export class ProductsService {
 
   async updateProduct(id: string, productData: UpdateProductInput): Promise<Product | null> {
     try {
-      // Check if a product with the same name already exists but a different ID
       if (productData.name) {
         const existingProduct = await this.prisma.product.findFirst({
           where: {

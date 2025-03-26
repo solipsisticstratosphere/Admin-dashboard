@@ -35,7 +35,6 @@ interface TransactionData {
   createdAt: string;
 }
 
-// Сначала очистим все существующие данные в Supabase
 async function clearAllData() {
   console.log('Clearing existing data from Supabase...');
 
@@ -46,7 +45,6 @@ async function clearAllData() {
   });
 
   try {
-    // Очищаем таблицы в правильном порядке (с учетом foreign key constraints)
     await prisma.transaction.deleteMany({});
     await prisma.order.deleteMany({});
     await prisma.customer.deleteMany({});
@@ -74,7 +72,6 @@ async function importUsers() {
     const fileContent = fs.readFileSync(path.join(process.cwd(), 'export', 'users.json'), 'utf-8');
     const usersData: UserData[] = JSON.parse(fileContent);
 
-    // Используем rawQuery для импорта
     for (const user of usersData) {
       const query = `
         INSERT INTO "public"."users" 
@@ -117,7 +114,6 @@ async function importCustomers() {
     );
     const customersData: CustomerData[] = JSON.parse(fileContent);
 
-    // Используем rawQuery для импорта
     for (const customer of customersData) {
       const query = `
         INSERT INTO "public"."customers" 
@@ -162,7 +158,6 @@ async function importTransactions() {
     );
     const transactionsData: TransactionData[] = JSON.parse(fileContent);
 
-    // Загрузим всех клиентов, чтобы правильно связать транзакции
     const customers = await prisma.customer.findMany({
       select: { id: true, email: true },
     });
@@ -172,11 +167,9 @@ async function importTransactions() {
       if (c.email) customerByEmail.set(c.email, c.id);
     });
 
-    // Используем rawQuery для импорта
     for (const transaction of transactionsData) {
       let customerId = transaction.customerId;
 
-      // Если у транзакции есть email, пытаемся найти клиента по email
       if (transaction.email && !customerId) {
         customerId = customerByEmail.get(transaction.email) || null;
       }
@@ -318,19 +311,15 @@ async function main() {
   try {
     console.log('Starting data import to Supabase...');
 
-    // Сначала очистим все существующие данные
     await clearAllData();
 
-    // Импортируем данные в правильном порядке
     await importUsers();
     await importCustomers();
 
-    // Для остальных используем существующие функции
     const prisma = new PrismaClient({
       datasources: { db: { url: process.env.DATABASE_URL } },
     });
 
-    // Импорт продуктов
     console.log('Importing products...');
     const productsData = JSON.parse(
       fs.readFileSync(path.join(process.cwd(), 'export', 'products.json'), 'utf-8'),
@@ -353,7 +342,6 @@ async function main() {
     }
     console.log(`Imported ${productsData.length} products`);
 
-    // Импорт поставщиков
     console.log('Importing suppliers...');
     const suppliersData = JSON.parse(
       fs.readFileSync(path.join(process.cwd(), 'export', 'suppliers.json'), 'utf-8'),
@@ -376,7 +364,6 @@ async function main() {
     }
     console.log(`Imported ${suppliersData.length} suppliers`);
 
-    // Импорт заказов
     console.log('Importing orders...');
     const ordersData = JSON.parse(
       fs.readFileSync(path.join(process.cwd(), 'export', 'orders.json'), 'utf-8'),
@@ -400,7 +387,6 @@ async function main() {
 
     await prisma.$disconnect();
 
-    // Импортируем транзакции, сохраняя связи с клиентами
     await importTransactions();
 
     console.log('Import to Supabase completed successfully!');

@@ -18,7 +18,6 @@ async function main() {
   try {
     console.log('Starting order seeding script...');
 
-    // Check if orders already exist
     const ordersCount = await prisma.order.count();
     console.log(`Found ${ordersCount} existing orders`);
 
@@ -28,7 +27,6 @@ async function main() {
       console.log('All existing orders deleted');
     }
 
-    // Try different potential file paths
     const possiblePaths = [
       path.join(process.cwd(), 'server', 'json', 'orders.json'),
       path.join(process.cwd(), 'json', 'orders.json'),
@@ -62,7 +60,6 @@ async function main() {
 
     console.log(`Parsed ${ordersData.length} orders from JSON file`);
 
-    // Insert orders one by one
     console.log('Inserting orders...');
     for (let i = 0; i < ordersData.length; i++) {
       const order = ordersData[i];

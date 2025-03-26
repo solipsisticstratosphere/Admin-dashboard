@@ -1,4 +1,9 @@
-# E-Pharmacy Admin Dashboard
+# E-Pharmacy Admin Dashboard 🏥
+
+## Email & Password for Login:
+
+Email: admin@email.com
+Password: admin123
 
 [English](#english) | [Українська](#ukrainian)
 
@@ -207,3 +212,13 @@ npm run dev
 - **Бекенд**: Render, Heroku, AWS або будь-який сервіс хостингу Node.js
 - **Фронтенд**: Vercel, Netlify або подібні сервіси статичного хостингу
 - **База даних**: Будь-який провайдер PostgreSQL, як-от Supabase, AWS RDS або ElephantSQL
+
+## Author
+
+- Ярослав Кліменко (Yaroslav Klimenko)
+
+### Connect with me | Зв'язатися зі мною:
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/klimenko-yaroslav/)
+[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/solipsisticstratosphere)
+[![Telegram](https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/nosebl33d)

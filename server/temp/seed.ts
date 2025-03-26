@@ -7,16 +7,13 @@ const prisma = new PrismaClient();
 
 async function main() {
   try {
-    // Check if admin user exists
     const existingUser = await prisma.user.findUnique({
       where: { email: 'admin@email.com' },
     });
 
     if (!existingUser) {
-      // Hash password
       const hashedPassword = await bcrypt.hash('admin123', 10);
 
-      // Create admin user
       const newUser = await prisma.user.create({
         data: {
           email: 'admin@email.com',
@@ -31,7 +28,6 @@ async function main() {
       console.log('Admin user already exists');
     }
 
-    // Import customers
     const customersData = JSON.parse(
       fs.readFileSync(path.join(__dirname, '../json/customers.json'), 'utf-8'),
     );
@@ -52,7 +48,6 @@ async function main() {
       });
     }
 
-    // Import products
     const productsData = JSON.parse(
       fs.readFileSync(path.join(__dirname, '../json/products.json'), 'utf-8'),
     );
@@ -73,7 +68,6 @@ async function main() {
       });
     }
 
-    // Import suppliers
     const suppliersData = JSON.parse(
       fs.readFileSync(path.join(__dirname, '../json/suppliers.json'), 'utf-8'),
     );
@@ -91,7 +85,6 @@ async function main() {
       });
     }
 
-    // Import income-expenses data
     const transactionsData = JSON.parse(
       fs.readFileSync(path.join(__dirname, '../json/Income-Expenses.json'), 'utf-8'),
     );

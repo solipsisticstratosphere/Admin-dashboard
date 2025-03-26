@@ -3,12 +3,11 @@ import { PrismaService } from '../prisma/prisma.service';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { Prisma } from '@prisma/client';
 
-// Define interface to match the actual database structure
 interface PrismaSupplier {
   id: number;
   name: string;
   address: string;
-  company: string; // The renamed field
+  company: string;
   date: Date;
   amount: string;
   status: string;
@@ -44,8 +43,7 @@ export class SuppliersService {
   async getAllSuppliers(filters?: FilterSuppliersParams): Promise<Supplier[]> {
     const { name, company, status } = filters || {};
 
-    // Build where conditions based on provided filters
-    const where: any = {}; // Use any until Prisma types are updated
+    const where: any = {};
 
     if (name) {
       where.name = {
@@ -65,11 +63,10 @@ export class SuppliersService {
       where.status = status;
     }
 
-    // Get suppliers sorted by creation date (newest first)
     const suppliers = await this.prisma.supplier.findMany({
       where,
       orderBy: {
-        id: 'desc', // Sort by ID descending as a proxy for creation time
+        id: 'desc',
       },
     });
 
@@ -78,7 +75,7 @@ export class SuppliersService {
       name: supplier.name,
       address: supplier.address,
       company: supplier.company,
-      date: supplier.date.toISOString().split('T')[0], // Format to YYYY-MM-DD
+      date: supplier.date.toISOString().split('T')[0],
       amount: supplier.amount,
       status: supplier.status,
     }));
@@ -108,15 +105,13 @@ export class SuppliersService {
     try {
       this.logger.log(`Attempting to create supplier with data: ${JSON.stringify(supplierData)}`);
 
-      // Convert string date to Date object if provided
       let dateValue: Date;
       if (supplierData.date) {
         dateValue = new Date(supplierData.date);
       } else {
-        dateValue = new Date(); // Use current date if not provided
+        dateValue = new Date();
       }
 
-      // Create the supplier - cast to any until Prisma types are updated
       const data: any = {
         name: supplierData.name,
         address: supplierData.address,
@@ -140,12 +135,10 @@ export class SuppliersService {
         status: (newSupplier as unknown as PrismaSupplier).status,
       };
     } catch (error) {
-      // Log detailed information about the error
       if (error instanceof PrismaClientKnownRequestError) {
         this.logger.error(`Prisma error ${error.code}: ${error.message}`);
       }
 
-      // If it's an error we already created with a message, just pass it on
       if (error instanceof Error) {
         throw error;
       }
@@ -161,7 +154,6 @@ export class SuppliersService {
         `Attempting to update supplier ${id} with data: ${JSON.stringify(supplierData)}`,
       );
 
-      // Check if the supplier exists
       const existingSupplier = await this.prisma.supplier.findUnique({
         where: { id: parseInt(id) },
       });
@@ -170,13 +162,11 @@ export class SuppliersService {
         throw new Error(`Supplier with ID ${id} not found`);
       }
 
-      // Convert string date to Date object if provided
       let dateValue: Date | undefined;
       if (supplierData.date) {
         dateValue = new Date(supplierData.date);
       }
 
-      // Update the supplier - cast to any until Prisma types are updated
       const data: any = {};
       if (supplierData.name !== undefined) data.name = supplierData.name;
       if (supplierData.address !== undefined) data.address = supplierData.address;
@@ -202,12 +192,10 @@ export class SuppliersService {
         status: (updatedSupplier as unknown as PrismaSupplier).status,
       };
     } catch (error) {
-      // Log detailed information about the error
       if (error instanceof PrismaClientKnownRequestError) {
         this.logger.error(`Prisma error on update ${error.code}: ${error.message}`);
       }
 
-      // If it's an error we already created with a message, just pass it on
       if (error instanceof Error) {
         throw error;
       }

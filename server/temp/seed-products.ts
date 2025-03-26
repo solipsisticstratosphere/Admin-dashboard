@@ -16,11 +16,9 @@ async function main() {
   const prisma = new PrismaClient();
 
   try {
-    // Clear existing products to avoid duplicates
     await prisma.product.deleteMany({});
     console.log('Cleared existing products');
 
-    // Try different potential file paths
     const possiblePaths = [
       path.join(process.cwd(), 'json', 'products.json'),
       path.resolve(__dirname, '..', 'json', 'products.json'),
@@ -57,11 +55,9 @@ async function main() {
       return;
     }
 
-    // Track unique product names to avoid duplicates
     const uniqueNames = new Set<string>();
     const uniqueProducts: JsonProduct[] = [];
 
-    // Filter out duplicate products (based on name)
     jsonProducts.forEach((product) => {
       if (!uniqueNames.has(product.name)) {
         uniqueNames.add(product.name);
@@ -69,7 +65,6 @@ async function main() {
       }
     });
 
-    // Create products in database
     for (const product of uniqueProducts) {
       await prisma.product.create({
         data: {
