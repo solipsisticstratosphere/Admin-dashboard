@@ -4,18 +4,11 @@ import { onError } from "@apollo/client/link/error";
 import { setContext } from "@apollo/client/link/context";
 import { API_CONFIG } from "./config/api.config";
 
-// Error handling link
-const errorLink = onError(({ graphQLErrors, networkError }) => {
-  if (graphQLErrors) {
-    graphQLErrors.forEach(({ message, locations, path }) => {
-      console.error(
-        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
-      );
-    });
-  }
-  if (networkError) {
-    console.error(`[Network error]: ${networkError}`);
-  }
+// Error handling link - перехватываем ошибки только для логирования, но не показываем в консоли
+// Отображение ошибок будет происходить в самих компонентах через toast уведомления
+const errorLink = onError(() => {
+  // Просто перехватываем ошибки, но не логируем их в консоли
+  // Это позволит обрабатывать ошибки в компонентах через onError или try/catch
 });
 
 // Auth link to add token to requests

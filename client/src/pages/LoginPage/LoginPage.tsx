@@ -33,6 +33,19 @@ const LoginPage: React.FC = () => {
   const [login, { loading }] = useMutation(LOGIN_MUTATION, {
     errorPolicy: "all",
     fetchPolicy: "no-cache",
+    onError: (error) => {
+      if (error.graphQLErrors && error.graphQLErrors.length > 0) {
+        const gqlError = error.graphQLErrors[0];
+        const errorMessage = gqlError.message || "Ошибка при входе в систему";
+        toast.error(errorMessage);
+      } else if (error.networkError) {
+        toast.error("Ошибка сети. Пожалуйста, проверьте подключение.");
+      } else {
+        toast.error(
+          "Не удалось войти в систему. Пожалуйста, попробуйте снова."
+        );
+      }
+    },
   });
 
   const {
@@ -68,13 +81,10 @@ const LoginPage: React.FC = () => {
     } catch (err: unknown) {
       const apolloError = err as ApolloError;
 
-      console.error("Login error:", err);
-
-      // More detailed error handling
-      let errorMessage = "Login failed. Please try again.";
+      let errorMessage =
+        "Не удалось войти в систему. Пожалуйста, попробуйте снова.";
 
       if (apolloError.networkError) {
-        // Use proper type for network error
         type NetworkErrorWithStatus = {
           statusCode?: number;
           response?: { status?: number };
@@ -86,22 +96,28 @@ const LoginPage: React.FC = () => {
           networkError?.statusCode || networkError?.response?.status;
 
         if (status === 405) {
-          errorMessage =
-            "Method not allowed. API endpoint configuration issue.";
-          console.error(
-            "The server is responding with a 405 error. This is likely a backend API configuration issue."
-          );
+          errorMessage = "Метод не разрешен. Проблема с конфигурацией API.";
         } else {
-          errorMessage = `Network error: ${networkError.message}. Please check your connection.`;
+          errorMessage = `Ошибка сети: ${networkError.message}. Пожалуйста, проверьте подключение.`;
         }
-
-        console.error("Network error details:", apolloError.networkError);
       } else if (
         apolloError.graphQLErrors &&
         apolloError.graphQLErrors.length > 0
       ) {
-        errorMessage = apolloError.graphQLErrors[0].message;
-        console.error("GraphQL error details:", apolloError.graphQLErrors);
+        const gqlError = apolloError.graphQLErrors[0];
+        errorMessage = gqlError.message;
+
+        if (gqlError.extensions && gqlError.extensions.code) {
+          console.log(`Error code: ${gqlError.extensions.code}`);
+        }
+
+        if (gqlError.path) {
+          console.log(`Error path: ${gqlError.path.join(".")}`);
+        }
+
+        if (gqlError.locations) {
+          console.log("Error locations:", gqlError.locations);
+        }
       }
 
       toast.error(errorMessage);
