@@ -1,6 +1,8 @@
 import { Outlet, Navigate, useLocation } from "react-router-dom";
+import { Suspense } from "react";
 import Header from "../Header/Header";
 import Sidebar from "../Sidebar/Sidebar";
+import Loader from "../Loader/Loader";
 import styles from "./SharedLayout.module.css";
 import { useAuth } from "../../context/AuthContext";
 
@@ -21,7 +23,9 @@ const SharedLayout = () => {
       <Header />
       <Sidebar />
       <main className={styles.content}>
-        <Outlet />
+        <Suspense fallback={<Loader fullScreen={false} />}>
+          <Outlet />
+        </Suspense>
       </main>
     </div>
   );
